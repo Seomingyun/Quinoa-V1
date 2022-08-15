@@ -1,9 +1,7 @@
 import React from "react";
 
 function InvestingList() {
-    return (
-        <div> hi</div>
-    )
+  return <div> fuck</div>;
 }
 
-export default InvestingList
+export default InvestingList;

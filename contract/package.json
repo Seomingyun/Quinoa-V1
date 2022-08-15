@@ -18,10 +18,12 @@
     "hardhat": "^2.10.1",
     "hardhat-gas-reporter": "^1.0.8",
     "solidity-coverage": "^0.7.21",
+    "ts-node": "^10.9.1",
     "typechain": "^8.1.0"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.7.3"
+    "@openzeppelin/contracts": "^4.7.3",
+    "base64-sol": "1.0.1"
   },
   "scripts": {
     "test": "hardhat test",

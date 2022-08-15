@@ -1,0 +1,15 @@
+{
+  "name": "Quinoa-V1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/QuinoaDao/Quinoa-V1.git",
+  "author": "JAE YEON KIM <65452447+jaethewiederholen@users.noreply.github.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces" : ["contract", "front"],
+  "scripts": {
+    "build": "yarn workspace contract build && yarn workspace front build",
+    "develop": "yarn workspace contract build && yarn workspace front start && wait",
+    "deploy": "yarn workspace contract hardhat node & yarn  workspace contract hardhat run --network localhost scripts/deploy.ts"
+  }
+}

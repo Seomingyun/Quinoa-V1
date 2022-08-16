@@ -17,7 +17,7 @@ contract SQui is ISQui, ERC20{
      * @dev Constructors
      * @param _treasury The address of the Treasury contract
      */
-    constructor(address _treasury) ERC20("sQuinoa", "sQui") {
+    constructor(address _treasury) ERC20("sQuinoa Token", "sQui") {
         treasury = _treasury;
     }
 
@@ -25,7 +25,7 @@ contract SQui is ISQui, ERC20{
      * @dev only the Treasury contract can call functions marked by this modifier
      */
     modifier onlyTreasury() {
-        require(treasury == _msgSender(), "onlyTreasury: caller is not the Treasury");
+        require(treasury == _msgSender(), "sQui: caller is not the Treasury");
         _;
     }
 

@@ -17,8 +17,8 @@ contract Qui is ERC20, Ownable, ERC20Burnable {
     event MerkleRootUpdated();
     event TaxUpdated(uint256 taxAmount);
 
-    constructor(uint256 initalTax, bytes32 _merkleRoot) ERC20("Quinoa Token", "QUI") {
-        tax = initalTax;
+    constructor(uint256 _tax, bytes32 _merkleRoot) ERC20("Quinoa Token", "QUI") {
+        tax = _tax;
         merkleRoot = _merkleRoot;
         airdropPhase = 0;
         _mint(msg.sender, 100);
@@ -39,7 +39,7 @@ contract Qui is ERC20, Ownable, ERC20Burnable {
 
         uint8 isClaimed = 0;
         bytes32 leaf = keccak256(abi.encodePacked(claiming, airdropPhase, amount, isClaimed ));
-        require(MerkleProof.verify(_merkleProof, merkleRoot, leaf), "Invalid Merkle Proof!");
+        require(MerkleProof.verify(_merkleProof, merkleRoot, leaf), "Qui: Invalid Merkle Proof!");
         
         updateMerkleRoot(_newMerkleRoot);
         _mint(claiming, amount);
@@ -63,7 +63,7 @@ contract Qui is ERC20, Ownable, ERC20Burnable {
     }
 
     function setTreasuryAddress(address _treasury) external onlyOwner{
-        require(_treasury != address(0), "setTreasuryAddress: Zero address");
+        require(_treasury != address(0), "Qui: TreasuryAddress is Zero address");
         treasury = _treasury;
         emit TreasuryAddressUpdated(_treasury);
     }

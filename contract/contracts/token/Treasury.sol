@@ -22,7 +22,7 @@ contract Treasury is ITreasury, Ownable {
      */
     modifier onlyDAO {
         require(guruMembership.balanceOf(_msgSender()) > 0 || generalMembership.balanceOf(_msgSender()) > 0, 
-                "onlyDAO: caller is not a DAO member");
+                "Treasury: Only DAO member can stake in treausy");
         _;
     }
 

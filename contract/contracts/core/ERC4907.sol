@@ -16,7 +16,7 @@ contract ERC4907 is ERC721, ERC721URIStorage, IERC4907 {
   constructor(string memory name_, string memory symbol_) ERC721(name_, symbol_) {}
 
   function setUser(uint256 tokenId, address user, uint64 expires) public virtual {
-    require(_isApprovedOrOwner(msg.sender, tokenId), "ERC721: transfer caller is not owner nor approved");
+    require(_isApprovedOrOwner(msg.sender, tokenId), "ERC4907: transfer caller is not owner nor approved");
     UserInfo storage info = _users[tokenId];
     info.user = user;
     info.expires = expires;

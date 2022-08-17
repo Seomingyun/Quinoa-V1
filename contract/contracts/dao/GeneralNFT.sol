@@ -9,7 +9,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 interface IQui {
     function burnQui(address owner, address spender, uint256 amount) external;
-
 }
 
 contract GeneralNFT is BaseNFT, ERC2981, Ownable {
@@ -37,12 +36,12 @@ contract GeneralNFT is BaseNFT, ERC2981, Ownable {
     }
 
     function setQUiAddress(address _qui) external onlyOwner {
-        require(_qui != address(0), "setQuiaddress: Zero address");
+        require(_qui != address(0), "GeneralNFT: Qui contract address is zero address");
         qui = _qui;
     }
 
     function setTreasuryAddress(address _treasury) external onlyOwner{
-        require(_treasury != address(0), "setQuiaddress: Zero address");
+        require(_treasury != address(0), "GeneralNFT: Treasury contract address is zero address");
         treasury = _treasury;
         setRoyaltyInfo(treasury, _defaultRoyaltyInfo.royaltyFraction);
     }

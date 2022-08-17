@@ -95,7 +95,7 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
     // @TODO partial withdraw logic 이 vault 당 NFT 가 한개일 경우만 가정함. 기능 추가 시 수정필요.
     function withdraw(uint256 tokenId, address vault, uint256 amount)external onlyRouter {
     
-        require(IERC20(vault).balanceOf(address(this)) == amount, "Don't have enough qToken to redeem!");
+        require(IERC20(vault).balanceOf(address(this)) == amount, "NftWrappingManager: Don't have enough qToken to redeem!");
 
         if (isFullWithdraw(tokenId, amount) ) {// full withdraw      
             burn(tokenId); 
@@ -113,7 +113,7 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
      ///@dev redeem the whole deposit amount
     function burn(uint256 tokenId) internal {
         //solhint-disable-next-line max-line-length
-        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
+        require(_isApprovedOrOwner(_msgSender(), tokenId), "NftWrappingManager: caller is not token owner nor approved");
         _burn(tokenId);
     }
 

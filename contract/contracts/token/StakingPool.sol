@@ -17,11 +17,11 @@ contract StakingPool is ERC20, IStakingPool {
         _qui = qui_;
     }
 
-    function getQuiAddress() view override external returns (address){
+    function getQuiAddress() view override public returns (address){
         return (address(_qui));
     }
 
-    function getQuiBalance() view public returns (uint256) {
+    function getQuiBalance() view override public returns (uint256) {
         return _qui.balanceOf(address(this));
     }
 
@@ -37,7 +37,7 @@ contract StakingPool is ERC20, IStakingPool {
         uint256 supply = totalSupply();
         return (qui == 0 || supply == 0)
             ? qui.mulDiv(10**decimals(), 10**_qui.decimals(), rounding)
-            : qui.mulDiv(supply, totalQui(), rounding);
+            : qui.mulDiv(supply, getQuiBalance(), rounding);
     }
 
     function _convertToQui(uint256 sQui, Math.Rounding rounding) internal view returns (uint256) {
@@ -45,7 +45,7 @@ contract StakingPool is ERC20, IStakingPool {
         return
             (supply == 0)
                 ? sQui.mulDiv(10**_qui.decimals(), 10**decimals(), rounding) // return x * y / z;
-                : sQui.mulDiv(totalQui(), supply, rounding);
+                : sQui.mulDiv(getQuiBalance(), supply, rounding);
     }
 
     // qui token 기준 amount

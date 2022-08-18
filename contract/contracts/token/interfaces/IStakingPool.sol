@@ -9,5 +9,6 @@ interface IStakingPool {
     function deposit(uint256 quinoa) external;
     function withdraw(uint256 quinoa) external;
     function redeem(uint256 sQuinoa) external;
-    function getQuinoa() external returns (address);
+    function getQuiAddress() external returns (address);
+    function getQuiBalance() external returns (uint256);
 }

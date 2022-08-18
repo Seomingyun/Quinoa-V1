@@ -24,9 +24,9 @@ contract Qui is ERC20, Ownable, ERC20Burnable {
 
     constructor(uint256 _taxPercent_, bytes32 _merkleRoot_) ERC20("Quinoa Token", "QUI") {
         _airdropPhase = 1;
+        _mintPhase = 0;
         _taxPercent = _taxPercent_;
         _merkleRoot = _merkleRoot_;
-        _mint(msg.sender, 100 * 10**18);
         
     }
 
@@ -37,7 +37,8 @@ contract Qui is ERC20, Ownable, ERC20Burnable {
     **/
     function updateMintPhase(uint256 amount) public onlyOwner {
         _mintPhase += 1;
-        _mint(owner(), amount);
+        _mint(address(this), amount);
+        _approve(address(this), owner(), this.balanceOf(address(this)));
         emit MintPhaseUpdated(_mintPhase, amount);
     }
 
@@ -70,7 +71,9 @@ contract Qui is ERC20, Ownable, ERC20Burnable {
     }
     
     function changeOwner(address newOwner) public onlyOwner {
+        _approve(address(this), owner(), 0);
         _transferOwnership(newOwner);
+        _approve(address(this), newOwner, this.balanceOf(address(this)));
     }
 
     function setTreasuryAddress(address _treasury) external onlyOwner{

@@ -6,52 +6,63 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
+
 contract Qui is ERC20, Ownable, ERC20Burnable {
 
     address public treasury;
-    bytes32 public merkleRoot;
-    uint32 public airdropPhase;
-    uint256 public tax;
+    bytes32 private _merkleRoot;
+    uint256 private _taxPercent;
+    uint256 private _airdropPhase;
+    uint256 private _mintPhase;
+
+    mapping(uint256 => mapping(address => bool)) private _WhilelistClaimedByPhase;
     
     event TreasuryAddressUpdated(address newTreasury);
-    event MerkleRootUpdated();
+    event MerkleRootUpdated(bytes32 merkleRoot);
     event TaxUpdated(uint256 taxAmount);
+    event MintPhaseUpdated(uint256 phase, uint256 mintedAmount); 
 
-    constructor(uint256 _tax, bytes32 _merkleRoot) ERC20("Quinoa Token", "QUI") {
-        tax = _tax;
-        merkleRoot = _merkleRoot;
-        airdropPhase = 0;
-        _mint(msg.sender, 100);
+    constructor(uint256 _taxPercent_, bytes32 _merkleRoot_) ERC20("Quinoa Token", "QUI") {
+        _airdropPhase = 1;
+        _taxPercent = _taxPercent_;
+        _merkleRoot = _merkleRoot_;
+        _mint(msg.sender, 100 * 10**18);
         
     }
 
      /**
     merkle leaf consists :
-    address, airdrop phase(int), token amount, isClaimed(0 or 1)
-    when client claims, make new leaf with isClaimed value = 1, 
-    then calculate new merkleRoot and send it as airdrop function arguments
+    address, token amount, isClaimed(0 or 1)
+    when client claims, verify proof and send it as airdrop function arguments
     **/
+    function updateMintPhase(uint256 amount) public onlyOwner {
+        _mintPhase += 1;
+        _mint(owner(), amount);
+        emit MintPhaseUpdated(_mintPhase, amount);
+    }
+
+    function getAirdropPhase() external view returns(uint256) {
+        return _airdropPhase;
+    }
+
     function airDrop(
-        bytes32 _newMerkleRoot,
         bytes32[] calldata _merkleProof, 
-        address claiming, 
+        address claimer, 
         uint256 amount)public {
 
-        uint8 isClaimed = 0;
-        bytes32 leaf = keccak256(abi.encodePacked(claiming, airdropPhase, amount, isClaimed ));
-        require(MerkleProof.verify(_merkleProof, merkleRoot, leaf), "Qui: Invalid Merkle Proof!");
-        
-        updateMerkleRoot(_newMerkleRoot);
-        _mint(claiming, amount);
+        bytes32 leaf = keccak256(abi.encodePacked(claimer, amount ));
+        require(MerkleProof.verify(_merkleProof, _merkleRoot, leaf), "Qui: Invalid Merkle Proof!");
+        require(!_WhilelistClaimedByPhase[_airdropPhase][msg.sender], "Address already claimed!");
+
+        _WhilelistClaimedByPhase[_airdropPhase][msg.sender] = true;
+        _mint(claimer, amount);
     }
 
-    function updateAirdropPhase(bytes32 newRoot, uint32 newAirdropPhase) public onlyOwner {
-        airdropPhase = newAirdropPhase;
-        merkleRoot = newRoot;
-    }
-
+    /* update whitelist in new phase */
     function updateMerkleRoot(bytes32 newRoot) internal {
-        merkleRoot = newRoot;
+        _airdropPhase +=1;
+        _merkleRoot = newRoot;
+        emit MerkleRootUpdated(_merkleRoot);
     }
 
     function mint(address to, uint256 amount) public onlyOwner {
@@ -68,12 +79,13 @@ contract Qui is ERC20, Ownable, ERC20Burnable {
         emit TreasuryAddressUpdated(_treasury);
     }
 
-    function setTax(uint256 _tax) external onlyOwner{
-        tax = _tax;
-        emit TaxUpdated(tax);
+    function setTax(uint256 newTaxPercent) external onlyOwner{
+        _taxPercent = newTaxPercent;
+        emit TaxUpdated(_taxPercent);
     }
 
-    function transfer( address sender,
+    function transfer( 
+        address sender,
         address recipient,
         uint256 amount
     ) external{
@@ -85,10 +97,10 @@ contract Qui is ERC20, Ownable, ERC20Burnable {
         address recipient,
         uint256 amount
     ) internal virtual override{   
-        if (sender == treasury || recipient == treasury)
+        if (sender == treasury || recipient == treasury || sender == address(this))
             super._transfer(sender, recipient, amount);
         else{
-            uint256 taxAmount= (amount*tax)/1000;
+            uint256 taxAmount= (amount*_taxPercent)/100;
             // treasury 에 tax 보내기
             super._transfer(sender,treasury,taxAmount);
             // tax를 제외한 amount 만큼 보내기 
@@ -103,6 +115,10 @@ contract Qui is ERC20, Ownable, ERC20Burnable {
 
     function getBalance(address addr) public view returns(uint256) {
         return this.balanceOf(addr);
+    }
+
+    function getTaxPercent()public view returns(uint256) {
+        return _taxPercent;
     }
 
 }

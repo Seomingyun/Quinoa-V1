@@ -9,89 +9,89 @@ import "./interfaces/IStakingPool.sol";
 contract StakingPool is ERC20, IStakingPool {
     using Math for uint256;
 
-    IERC20Metadata private immutable _quinoa;
+    IERC20Metadata private immutable _qui;
     uint8 private _decimals;
 
-    constructor(IERC20Metadata quinoa_)
+    constructor(IERC20Metadata qui_)
     ERC20("Staked-Quinao Token", "sQui") {
-        _quinoa = quinoa_;
+        _qui = qui_;
     }
 
-    function getQuinoa() view override external returns (address){
-        return (address(_quinoa));
+    function getQuiAddress() view override external returns (address){
+        return (address(_qui));
     }
 
-    function totalQuinoa() view public returns (uint256) {
-        return _quinoa.balanceOf(address(this));
+    function getQuiBalance() view public returns (uint256) {
+        return _qui.balanceOf(address(this));
     }
 
-    function convertToSQuinoa(uint256 quinoa) public view returns (uint256) {
-        return _convertToSQuinoa(quinoa, Math.Rounding.Down);
+    function convertToSQui(uint256 qui) public view returns (uint256) {
+        return _convertToSQui(qui, Math.Rounding.Down);
     }
 
-    function convertToQuinoa(uint256 sQuinoa) public view returns (uint256) {
-        return _convertToQuinoa(sQuinoa, Math.Rounding.Down);
+    function convertToQui(uint256 sQui) public view returns (uint256) {
+        return _convertToQui(sQui, Math.Rounding.Down);
     }
 
-    function _convertToSQuinoa(uint256 quinoa, Math.Rounding rounding) internal view returns (uint256) {
+    function _convertToSQui(uint256 qui, Math.Rounding rounding) internal view returns (uint256) {
         uint256 supply = totalSupply();
-        return (quinoa == 0 || supply == 0)
-            ? quinoa.mulDiv(10**decimals(), 10**_quinoa.decimals(), rounding)
-            : quinoa.mulDiv(supply, totalQuinoa(), rounding);
+        return (qui == 0 || supply == 0)
+            ? qui.mulDiv(10**decimals(), 10**_qui.decimals(), rounding)
+            : qui.mulDiv(supply, totalQui(), rounding);
     }
 
-    function _convertToQuinoa(uint256 sQuinoa, Math.Rounding rounding) internal view returns (uint256) {
+    function _convertToQui(uint256 sQui, Math.Rounding rounding) internal view returns (uint256) {
         uint256 supply = totalSupply();
         return
             (supply == 0)
-                ? sQuinoa.mulDiv(10**_quinoa.decimals(), 10**decimals(), rounding) // return x * y / z;
-                : sQuinoa.mulDiv(totalQuinoa(), supply, rounding);
+                ? sQui.mulDiv(10**_qui.decimals(), 10**decimals(), rounding) // return x * y / z;
+                : sQui.mulDiv(totalQui(), supply, rounding);
     }
 
     // qui token 기준 amount
-    function deposit(uint256 quinoa) override external {
-        uint256 sQuinoa = convertToSQuinoa(quinoa);
-        require(sQuinoa > 0, "StakingPool: deposit less than minimum");
-        _quinoa.transferFrom(_msgSender(), address(this), quinoa);
-        _mint(_msgSender(), sQuinoa);
-        emit Deposit(_msgSender(), quinoa, sQuinoa);
+    function deposit(uint256 qui) override external {
+        uint256 sQui = convertToSQui(qui);
+        require(sQui > 0, "StakingPool: deposit less than minimum");
+        _qui.transferFrom(_msgSender(), address(this), qui);
+        _mint(_msgSender(), sQui);
+        emit Deposit(_msgSender(), qui, sQui);
     }
 
     // qui token 기준 amount
-    function withdraw(uint256 quinoa) override external {
-        uint256 sQuinoa;
+    function withdraw(uint256 qui) override external {
+        uint256 sQui;
 
-        if(quinoa == type(uint256).max) { // withdraw all
-            sQuinoa = balanceOf(_msgSender());
-            quinoa = convertToQuinoa(sQuinoa);
+        if(qui == type(uint256).max) { // withdraw all
+            sQui = balanceOf(_msgSender());
+            qui = convertToQui(sQui);
         }
         else{
-            sQuinoa = convertToSQuinoa(quinoa);
+            sQui = convertToSQui(qui);
         }
 
-        require(sQuinoa > 0, "StakingPool: withdraw less than minimum");
-        require(sQuinoa <= balanceOf(_msgSender()), "StakingPool: withdraw more than max");
-        _burn(_msgSender(), sQuinoa);
-        _quinoa.transfer(_msgSender(), quinoa);
+        require(sQui > 0, "StakingPool: withdraw less than minimum");
+        require(sQui <= balanceOf(_msgSender()), "StakingPool: withdraw more than max");
+        _burn(_msgSender(), sQui);
+        _qui.transfer(_msgSender(), qui);
 
-        emit Withdraw(_msgSender(), quinoa, sQuinoa);
+        emit Withdraw(_msgSender(), qui, sQui);
     }
 
-    // sQuinoa token 기준 amount
-    function redeem(uint256 sQuinoa) override external {
-        uint256 quinoa;
+    // sQui token 기준 amount
+    function redeem(uint256 sQui) override external {
+        uint256 qui;
 
-        if(sQuinoa == type(uint256).max) {
-            sQuinoa = balanceOf(_msgSender());
+        if(sQui == type(uint256).max) {
+            sQui = balanceOf(_msgSender());
         }
-        quinoa = convertToQuinoa(sQuinoa);
+        qui = convertToQui(sQui);
 
-        require(quinoa > 0, "StakingPool: redeem less than minimum");
-        require(sQuinoa <= balanceOf(_msgSender()), "StakingPool: redeem more than max");
-        _burn(_msgSender(), sQuinoa);
-        _quinoa.transfer(_msgSender(), quinoa);
+        require(qui > 0, "StakingPool: redeem less than minimum");
+        require(sQui <= balanceOf(_msgSender()), "StakingPool: redeem more than max");
+        _burn(_msgSender(), sQui);
+        _qui.transfer(_msgSender(), qui);
 
-        emit Redeem(_msgSender(), quinoa, sQuinoa);
+        emit Redeem(_msgSender(), qui, sQui);
     }
 
 }

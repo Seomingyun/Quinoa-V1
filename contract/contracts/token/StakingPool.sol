@@ -35,6 +35,7 @@ contract StakingPool is ERC20, IStakingPool {
 
     function _convertToSQui(uint256 qui, Math.Rounding rounding) internal view returns (uint256) {
         uint256 supply = totalSupply();
+        // qui나 supply가 0일 때에 decimal을 맞춰주기 위한 코드
         return (qui == 0 || supply == 0)
             ? qui.mulDiv(10**decimals(), 10**_qui.decimals(), rounding)
             : qui.mulDiv(supply, getQuiBalance(), rounding);
@@ -57,7 +58,9 @@ contract StakingPool is ERC20, IStakingPool {
         emit Deposit(_msgSender(), qui, sQui);
     }
 
-    // qui token 기준 amount
+    /// @notice withdraw는 qui token을 기준으로 하여 unstaking 하는 로직
+    /// @param qui withdraw 하고자 하는 qui token의 양
+    /// qui token의 양에 따라서 burn 해야 하는 sQui token의 양을 계산한 후, sQui burn과 qui transfer 진행
     function withdraw(uint256 qui) override external {
         uint256 sQui;
 
@@ -77,7 +80,9 @@ contract StakingPool is ERC20, IStakingPool {
         emit Withdraw(_msgSender(), qui, sQui);
     }
 
-    // sQui token 기준 amount
+    /// @notice redeem은 sQui token를 기준으로 하여 unstaking 하는 로직
+    /// @param sQui redeem 하고자 하는 sQui token의 양
+    /// sQui token의 양에 따라 인출할 수 있는 qui token의 양을 계산하고, sQui burn과 qui transfer 진행 
     function redeem(uint256 sQui) override external {
         uint256 qui;
 

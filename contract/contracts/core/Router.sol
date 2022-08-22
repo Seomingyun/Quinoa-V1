@@ -5,6 +5,7 @@ import {IVault} from "./interfaces/IVault.sol";
 import {INFTWrappingManager} from "./interfaces/INftWrappingManager.sol";
 import {Vault} from "./Vault.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 
@@ -25,10 +26,21 @@ contract Router is Ownable {
     }
 
     address public protocolTreasury;
+    IERC721 public generalNFT;
+    IERC721 public guruNFT;
 
-    function setProtocolTreasury(address _protocolTreasury) public onlyOwner {
+    constructor(address _protocolTreasury, address _generalNFT, address _guruNFT) {
+        require(_generalNFT != address(0), "Router: General NFT address cannot be zero address");
+        generalNFT = IERC721(_generalNFT);
+        require(_generalNFT != address(0), "Router: Guru NFT address cannot be zero address");
+        guruNFT = IERC721(_guruNFT);
         require(_protocolTreasury != address(0), "Router: Protocol Treasury cannot be zero address");
         protocolTreasury = _protocolTreasury;
+    }
+
+    function updateProtocolTreasury(address newProtocolTreasury) public onlyOwner {
+        require(newProtocolTreasury != address(0), "Router: Protocol Treasury cannot be zero address");
+        protocolTreasury = newProtocolTreasury;
     }
 
     /*///////////////////////////////////////////////////////////////
@@ -45,9 +57,12 @@ contract Router is Ownable {
         assetToken.transferFrom(msg.sender, address(this), _amount);
 
         // get protocol fee and send it to protocol treasury
-        uint256 protocolFeeAmount = _amount.mulDiv(protocolFeePercent, 1e18, Math.Rounding.Down);
-        uint256 depositAmount = _amount - protocolFeeAmount;
-        assetToken.transfer(protocolTreasury, protocolFeeAmount);
+        uint256 depositAmount = _amount;
+        if(guruNFT.balanceOf(msg.sender) == 0 && generalNFT.balanceOf(msg.sender) == 0){
+            uint256 protocolFeeAmount = _amount.mulDiv(protocolFeePercent, 1e18, Math.Rounding.Down);
+            depositAmount -= protocolFeeAmount;
+            assetToken.transfer(protocolTreasury, protocolFeeAmount);
+        }
 
         // exchange asset - qvToken with Vault
         uint256 currentAmount = qvToken.balanceOf(address(this));

@@ -10,7 +10,7 @@ interface IVault is IERC20, IERC20Metadata {
     function isAdmin(address user) external view returns(bool);
     function isSubDAO(address user) external view returns(bool);
 
-    function setFeePercent(uint256 newFeePercent) external;
+    function setPerformanceFeePercent(uint256 newPerformanceFeePercent) external;
     function setHarvestDelay(uint256 newHarvestDelay) external;
     function setTargetFloatPercent(uint256 newTargetFloatPercent) external;
     function setStrategy(Strategy newStrategy) external;

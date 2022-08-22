@@ -8,22 +8,25 @@ import "@openzeppelin/contracts/utils/math/Math.sol";
 import "./interfaces/IVault.sol";
 import {Strategy, ERC20Strategy} from "./Strategy.sol";
 
+// performance fee : harves때마다 떼는 수수료(treasury로 이동 필요)
+// protocol fee : 입/출금 때마다 떼는 수수료(membership NFT 확인 필요)
 
 contract Vault is ERC20, IVault, AccessControl {
     using Math for uint256;
 
     address private immutable _router;
+    address private immutable _protocolTreasury;
     IERC20Metadata private immutable _asset;
     uint8 private _decimals;
 
-    bytes32 public constant SUBDAO_ROLE = keccak256("SUBDAO_ROLE"); // strategy team
+    bytes32 public constant DAC_ROLE = keccak256("DAC_ROLE"); // strategy team
     bytes32 public constant ROUTER_ROLE = keccak256("ROUTER_ROLE"); // router에서만 호출 가능
 
     /// @notice 특정한 ERC20 token을 asset으로 받는 새로운 vault를 생성.
     /// @param asset_ asset으로 받을 ERC20 토큰.
-    /// @param caller_ vault를 생성하고자 하는 유저. role의 admin이 되어 SUBDAO 멤버들을 추가하거나 삭제할 수 있다.
+    /// @param caller_ vault를 생성하고자 하는 유저. role의 admin이 되어 DAC 멤버들을 추가하거나 삭제할 수 있다.
     /// @param router_ vault와 소통할 수 있는 router.
-    constructor(IERC20Metadata asset_, address caller_, address router_) 
+    constructor(IERC20Metadata asset_, address caller_, address router_, address protocolTreasury_) 
         ERC20(
             string(abi.encodePacked("Quinoa ", asset_.name(), " Vault")), 
             string(abi.encodePacked("qv", asset_.symbol()))
@@ -32,9 +35,11 @@ contract Vault is ERC20, IVault, AccessControl {
         _asset = asset_;
         _decimals = asset_.decimals();
         _router = router_;
+        _protocolTreasury = protocolTreasury_;
+        performanceFeePercent = 15e16; // 기본 fee 세팅 : 15%
 
         _grantRole(DEFAULT_ADMIN_ROLE, caller_);
-        _setupRole(SUBDAO_ROLE, caller_); // 나중에 caller_가 다른 SUBDAO 멤버를 추가할 수 있음
+        _setupRole(DAC_ROLE, caller_); // 나중에 caller_가 다른 DAC 멤버를 추가할 수 있음
         _setupRole(ROUTER_ROLE, router_);
     }
 
@@ -42,8 +47,8 @@ contract Vault is ERC20, IVault, AccessControl {
         return hasRole(DEFAULT_ADMIN_ROLE, user);
     }
 
-    function isSubDAO(address user) public view returns(bool) {
-        return hasRole(SUBDAO_ROLE, user);
+    function isDAC(address user) public view returns(bool) {
+        return hasRole(DAC_ROLE, user);
     }
 
     /// @notice 이 vault contract의 decimal을 반환.
@@ -52,15 +57,15 @@ contract Vault is ERC20, IVault, AccessControl {
         return _decimals;
     }
 
-    /// @notice SUBDAO들이 가져가는 performance fee. 1e18이 100%에 해당
-    uint256 public feePercent;
+    /// @notice DAC들이 가져가는 performance fee. 1e18이 100%에 해당
+    uint256 public performanceFeePercent;
 
-    event FeePercentUpdated(address indexed user, uint256 newFeePercent);
+    event performanceFeePercentUpdated(address indexed user, uint256 newPerformanceFeePercent);
 
-    function setFeePercent(uint256 newFeePercent) external override onlyRole(SUBDAO_ROLE) {
-        require(newFeePercent <= 1e18, "Vault: Fee too high");
-        feePercent = newFeePercent;
-        emit FeePercentUpdated(_msgSender(), newFeePercent);
+    function setPerformanceFeePercent(uint256 newPerformanceFeePercent) external override onlyRole(DAC_ROLE) {
+        require(newPerformanceFeePercent <= 1e18, "Vault: Fee too high");
+        performanceFeePercent = newPerformanceFeePercent;
+        emit performanceFeePercentUpdated(_msgSender(), newPerformanceFeePercent);
     }
 
     /// @notice harvest와 harvest 사이의 delay를 지정. 만약 nextHarvest가 0이라면 계속 똑같은 harvestDelay를 유지.
@@ -72,7 +77,7 @@ contract Vault is ERC20, IVault, AccessControl {
     event HarvestDelayUpdated(address indexed user, uint256 newHarvestDelay);
     event NextHarvestDelayUpdated(address indexed user, uint256 newNextHarvestDelay);
 
-    function setHarvestDelay(uint256 newHarvestDelay) external override onlyRole(SUBDAO_ROLE) {
+    function setHarvestDelay(uint256 newHarvestDelay) external override onlyRole(DAC_ROLE) {
         require(newHarvestDelay != 0, "Vault: Delay duration cannot be zero");
         // Q. block.timestamp는 sec 단위 아님 ? 왜 365라고 하는지 알 수 X
         require(newHarvestDelay <= 365, "Vault: Delay too long");
@@ -91,7 +96,7 @@ contract Vault is ERC20, IVault, AccessControl {
     uint256 public targetFloatPercent; 
     event targetFloatPercentUpdated(address indexed user, uint256 newTargetFloatPercent);
 
-    function setTargetFloatPercent(uint256 newTargetFloatPercent) external override onlyRole(SUBDAO_ROLE) {
+    function setTargetFloatPercent(uint256 newTargetFloatPercent) external override onlyRole(DAC_ROLE) {
         require(newTargetFloatPercent <= 1e18, "Vault: Target float percent too high");
         targetFloatPercent = newTargetFloatPercent;
         emit targetFloatPercentUpdated(_msgSender(), newTargetFloatPercent);
@@ -106,7 +111,7 @@ contract Vault is ERC20, IVault, AccessControl {
 
     event StrategyUpdated(address indexed user, Strategy newStrategy);
 
-    function setStrategy(Strategy newStrategy) external override onlyRole(SUBDAO_ROLE) {
+    function setStrategy(Strategy newStrategy) external override onlyRole(DAC_ROLE) {
         // strategy는 딱 하나만 설정할 수 있음
         require(address(strategy) == address(0), "Vault: Already set strategy");
         strategy = newStrategy;
@@ -121,7 +126,7 @@ contract Vault is ERC20, IVault, AccessControl {
     event Harvest(address indexed user, Strategy strategy);
 
     /// @notice harvest를 진행. strategy에서 얻은 수익들이 실제 수익이라고 인정됨.
-    function harvest() external override onlyRole(SUBDAO_ROLE) {
+    function harvest() external override onlyRole(DAC_ROLE) {
         if(block.timestamp >= lastHarvest + harvestDelay) {
             lastHarvest = uint64(block.timestamp); 
         }
@@ -134,8 +139,12 @@ contract Vault is ERC20, IVault, AccessControl {
         uint256 totalProfitAccured = strategyDebt - oldStrategyDebt;
 
         // fee -> 일단 이 vault contract에 share 저장.
-        uint256 feesAccured = totalProfitAccured.mulDiv(feePercent, 1e18, Math.Rounding.Down);
-        _mint(address(this), feesAccured.mulDiv(10**decimals(), convertToAssets(10**decimals()), Math.Rounding.Down));
+        uint256 feesAccured = totalProfitAccured.mulDiv(performanceFeePercent, 1e18, Math.Rounding.Down);
+        uint256 forDAC = feesAccured.mulDiv(1, 2, Math.Rounding.Down);
+        uint256 forTreasury = feesAccured - forDAC;
+
+        _mint(address(this), forDAC.mulDiv(10**decimals(), convertToAssets(10**decimals()), Math.Rounding.Down));
+        SafeERC20.safeTransfer(_asset, _protocolTreasury, forTreasury);
 
         maxLockedProfit = (calculateLockedProfit() + totalProfitAccured - feesAccured);
         
@@ -153,7 +162,7 @@ contract Vault is ERC20, IVault, AccessControl {
 
     event FeesClaimed(address indexed user, uint256 rvTokenAmount);
 
-    /// @notice SUBDAO는 자신의 fee(qvToken)를 claim할 수 있음.
+    /// @notice DAC는 자신의 fee(qvToken)를 claim할 수 있음.
     function claimFees(uint256 qvTokenAmount) external override onlyRole(ROUTER_ROLE) {
         emit FeesClaimed(_msgSender(), qvTokenAmount);
         SafeERC20.safeTransfer(this, _msgSender(), qvTokenAmount);
@@ -163,8 +172,8 @@ contract Vault is ERC20, IVault, AccessControl {
     event StrategyWithdrawal(address indexed user, Strategy indexed strategy, uint256 assetAmount);
 
     /// @notice assetAmount만큼 strategy로 deposit.
-    /// 외부에서 호출 가능한 함수로, SUBDAO만이 이를 호출 가능.
-    function depositIntoStrategy(uint256 assetAmount) external override onlyRole(SUBDAO_ROLE) {
+    /// 외부에서 호출 가능한 함수로, DAC만이 이를 호출 가능.
+    function depositIntoStrategy(uint256 assetAmount) external override onlyRole(DAC_ROLE) {
         _depositIntoStrategy(assetAmount);
     }
 
@@ -179,7 +188,7 @@ contract Vault is ERC20, IVault, AccessControl {
     }
 
     /// @notice assetAmount만큼 strategy에서 withdraw.
-    function withdrawFromStrategy(uint256 assetAmount) external override onlyRole(SUBDAO_ROLE) {
+    function withdrawFromStrategy(uint256 assetAmount) external override onlyRole(DAC_ROLE) {
         _withdrawFromStrategy(assetAmount);
     }
 

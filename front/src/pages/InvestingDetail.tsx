@@ -1,7 +1,7 @@
 import React from "react";
 
 function InvestingDetail() {
-    return
+  return;
 }
 
-export default InvestingDetail
+export default InvestingDetail;

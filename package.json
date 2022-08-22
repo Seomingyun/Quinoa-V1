@@ -16,6 +16,7 @@
     "deploy": "yarn workspace contract hardhat node & yarn  workspace contract hardhat run --network localhost scripts/deploy.ts"
   },
   "dependencies": {
+    "swiper": "^8.3.2",
     "yarn": "^1.22.19"
   }
 }

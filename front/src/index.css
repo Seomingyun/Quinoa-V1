@@ -1,13 +1,240 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  padding: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+::selection {
+  background-color: #e4f222;
+}
+.cursor_pointer {
+  cursor: pointer;
+}
+.QUINOAheadline1 {
+  font-family: "Inter", sans-serif;
+  font-size: 96px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.5px;
+}
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.QUINOAheadline2 {
+  font-family: "Inter", sans-serif;
+  font-size: 60px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.5px;
+}
+
+.QUINOAheadline3 {
+  font-family: "Inter", sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.5px;
+}
+
+.QUINOAheadline4 {
+  font-family: "Inter", sans-serif;
+  font-size: 34px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.5px;
+}
+
+.QUINOATitle-1 {
+  font-family: "Inter", sans-serif;
+  font-size: 34px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.5px;
+}
+
+.QUINOATitle-2 {
+  font-family: "Inter", sans-serif;
+  font-size: 28px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.25px;
+}
+
+.QUINOAheadline5 {
+  font-family: "Inter", sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.5px;
+}
+
+.QUINOATitle-3 {
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.25px;
+}
+
+.QUINOAheadline6 {
+  font-family: "Inter", sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.91;
+  letter-spacing: -0.5px;
+}
+
+.QUINOASubTitle-1 {
+  font-family: "Inter", sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.22;
+  letter-spacing: normal;
+}
+
+.QUINOABody-1 {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.25px;
+}
+
+.QUINOABody-2 {
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.25;
+  letter-spacing: normal;
+}
+
+.QUINOABody-3 {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.43;
+  letter-spacing: -0.25px;
+}
+
+.QUINOASubtitle-2 {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.54;
+  letter-spacing: -0.25px;
+}
+
+.QUINOABody-4 {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.25px;
+}
+:root {
+  --teritiary-light-qui-star-yellow-000: #fffded;
+  --teritiary-light-qui-star-yellow-100: #fefce4;
+  --teritiary-light-qui-star-yellow-200: #fdf8c8;
+  --teritiary-light-qui-star-yellow-300: #f5de18;
+  --teritiary-light-qui-star-yellow-400: #e1d145;
+  --teritiary-light-qui-star-yellow-500: #c8ba3e;
+  --teritiary-light-qui-star-yellow-600: #bcae3a;
+  --teritiary-light-qui-star-yellow-700: #968b2e;
+  --teritiary-light-qui-star-yellow-800: #706823;
+  --teritiary-light-qui-star-yellow-900: #58511b;
+  --secondary-light-qui-blue-000: #eaf0fb;
+  --secondary-light-qui-blue-100: #dfe8f9;
+  --secondary-light-qui-blue-200: #bed0f3;
+  --secondary-light-qui-blue-300: #2c67d8;
+  --secondary-light-qui-blue-400: #285dc2;
+  --secondary-light-qui-blue-500: #2352ad;
+  --secondary-light-qui-blue-600: #214da2;
+  --secondary-light-qui-blue-700: #1a3e82;
+  --secondary-light-qui-blue-800: #142e61;
+  --secondary-light-qui-blue-900: #0f244c;
+  --secondary-dark-sl-400: #fcff6a;
+  --primary-light-qui-green-000: #eaf9e6;
+  --primary-light-qui-green-100: #dff7da;
+  --primary-light-qui-green-200: #bdeeb2;
+  --primary-light-qui-green-300: #29c708;
+  --primary-light-qui-green-400: #25b307;
+  --primary-light-qui-green-500: #219f06;
+  --primary-light-qui-green-600: #1f9506;
+  --primary-light-qui-green-700: #197705;
+  --primary-light-qui-green-800: #125a04;
+  --primary-light-qui-green-900: #0e4603;
+  --neutral-qui-neu-50: #ececec;
+  --neutral-qui-neu-100: #d7d7d7;
+  --neutral-qui-neu-200: #a7a7a7;
+  --neutral-qui-neu-300: #7f7f7f;
+  --neutral-qui-neu-400: #666;
+  --neutral-qui-neu-500: #404040;
+  --neutral-qui-neu-600: #3a3a3a;
+  --neutral-qui-neu-700: #2d2d2d;
+  --neutral-qui-neu-800: #232323;
+  --neutral-qui-neu-900: #1b1b1b;
+  --neutral-varient-qui-neu-vari-50: #fcfcfc;
+  --neutral-varient-qui-neu-vari-100: #f5f5f5;
+  --neutral-varient-qui-neu-vari-200: #f1f1f1;
+  --neutral-varient-qui-neu-vari-300: #eaeaea;
+  --neutral-varient-qui-neu-vari-400: #e6e6e6;
+  --neutral-varient-qui-neu-vari-500: #e0e0e0;
+  --neutral-varient-qui-neu-vari-600: #ccc;
+  --neutral-varient-qui-neu-vari-700: #9f9f9f;
+  --neutral-varient-qui-neu-vari-800: #7b7b7b;
+  --neutral-varient-qui-neu-vari-900: #5e5e5e;
+  --error-error-50: #ffeaee;
+  --error-error-100: #ffbfcb;
+  --error-error-200: #ffa0b1;
+  --error-error-300: #ff758e;
+  --error-error-400: #ff5a78;
+  --error-error-500: #ff3156;
+  --error-error-600: #e82d4e;
+  --error-error-700: #b5233d;
+  --error-error-800: #8c1b2f;
+  --error-error-900: #6b1524;
+  --warning-warning-50: #fff5ec;
+  --warning-warning-100: #ffdfc3;
+  --warning-warning-200: #ffd0a5;
+  --warning-warning-300: #ffbb7c;
+  --warning-warning-400: #ffad63;
+  --warning-warning-500: #ff993c;
+  --warning-warning-600: #e88b37;
+  --warning-warning-700: #b56d2b;
+  --warning-warning-800: #8c5421;
+  --warning-warning-900: #6b4019;
+  --00-on-surface-high-emphasis: rgba(0, 0, 0, 0.87);
+  --primary-neutral-500: #111;
 }

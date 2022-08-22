@@ -8,7 +8,7 @@ import {Strategy, ERC20Strategy} from "../Strategy.sol";
 interface IVault is IERC20, IERC20Metadata {
 
     function isAdmin(address user) external view returns(bool);
-    function isSubDAO(address user) external view returns(bool);
+    function isDAC(address user) external view returns(bool);
 
     function setPerformanceFeePercent(uint256 newPerformanceFeePercent) external;
     function setHarvestDelay(uint256 newHarvestDelay) external;

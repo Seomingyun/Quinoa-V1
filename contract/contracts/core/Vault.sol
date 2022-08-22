@@ -43,11 +43,11 @@ contract Vault is ERC20, IVault, AccessControl {
         _setupRole(ROUTER_ROLE, router_);
     }
 
-    function isAdmin(address user) public view returns(bool) {
+    function isAdmin(address user) public view override returns(bool) {
         return hasRole(DEFAULT_ADMIN_ROLE, user);
     }
 
-    function isDAC(address user) public view returns(bool) {
+    function isDAC(address user) public view override returns(bool) {
         return hasRole(DAC_ROLE, user);
     }
 

@@ -8,9 +8,6 @@ import "@openzeppelin/contracts/utils/math/Math.sol";
 import "./interfaces/IVault.sol";
 import {Strategy, ERC20Strategy} from "./Strategy.sol";
 
-// performance fee : harves때마다 떼는 수수료(treasury로 이동 필요)
-// protocol fee : 입/출금 때마다 떼는 수수료(membership NFT 확인 필요)
-
 contract Vault is ERC20, IVault, AccessControl {
     using Math for uint256;
 
@@ -20,7 +17,7 @@ contract Vault is ERC20, IVault, AccessControl {
     uint8 private _decimals;
 
     bytes32 public constant DAC_ROLE = keccak256("DAC_ROLE"); // strategy team
-    bytes32 public constant ROUTER_ROLE = keccak256("ROUTER_ROLE"); // router에서만 호출 가능
+
 
     /// @notice 특정한 ERC20 token을 asset으로 받는 새로운 vault를 생성.
     /// @param asset_ asset으로 받을 ERC20 토큰.
@@ -40,7 +37,10 @@ contract Vault is ERC20, IVault, AccessControl {
 
         _grantRole(DEFAULT_ADMIN_ROLE, caller_);
         _setupRole(DAC_ROLE, caller_); // 나중에 caller_가 다른 DAC 멤버를 추가할 수 있음
-        _setupRole(ROUTER_ROLE, router_);
+    }
+
+    function isRouter() view internal {
+        require(_msgSender() == _router, "Vault: Only router can call this func");
     }
 
     function isAdmin(address user) public view override returns(bool) {
@@ -163,7 +163,8 @@ contract Vault is ERC20, IVault, AccessControl {
     event FeesClaimed(address indexed user, uint256 rvTokenAmount);
 
     /// @notice DAC는 자신의 fee(qvToken)를 claim할 수 있음.
-    function claimFees(uint256 qvTokenAmount) external override onlyRole(ROUTER_ROLE) {
+    function claimFees(uint256 qvTokenAmount) external override {
+        isRouter();
         emit FeesClaimed(_msgSender(), qvTokenAmount);
         SafeERC20.safeTransfer(this, _msgSender(), qvTokenAmount);
     }
@@ -275,7 +276,8 @@ contract Vault is ERC20, IVault, AccessControl {
         return _convertToAssets(shares, Math.Rounding.Down);
     }
 
-    function deposit(uint256 assets, address receiver) public override onlyRole(ROUTER_ROLE) returns (uint256) {
+    function deposit(uint256 assets, address receiver) public override returns (uint256) {
+        isRouter();
         require(assets + totalAssets() <= maxDeposit(receiver), "Vault: deposit more than max");
         uint256 shares = previewDeposit(assets);
         require(shares > 0, "Vault: deposit less than minimum");
@@ -283,7 +285,8 @@ contract Vault is ERC20, IVault, AccessControl {
         return shares;
     }
 
-    function mint(uint256 shares, address receiver) public override onlyRole(ROUTER_ROLE) returns (uint256) {
+    function mint(uint256 shares, address receiver) public override returns (uint256) {
+        isRouter();
         require(shares + totalSupply() <= maxMint(receiver), "Vault: mint more than max");
         uint256 assets = previewMint(shares);
         require(assets > 0, "Vault: mint less than minimum");
@@ -295,7 +298,8 @@ contract Vault is ERC20, IVault, AccessControl {
         uint256 assets,
         address receiver, // receiver는 router가 되는 것
         address owner // owner는 share를 가지고 있는 사람. 이것도 router
-    ) public override onlyRole(ROUTER_ROLE) returns (uint256) {
+    ) public override returns (uint256) {
+        isRouter();
         require(assets <= maxWithdraw(owner), "Vault: withdraw more than max");
         // float 채워 넣기
         uint256 shares = previewWithdraw(assets);
@@ -309,7 +313,8 @@ contract Vault is ERC20, IVault, AccessControl {
         uint256 shares,
         address receiver, // router
         address owner // router
-    ) public override onlyRole(ROUTER_ROLE) returns (uint256) {
+    ) public override returns (uint256) {
+        isRouter();
         require(shares <= maxRedeem(owner), "Vault: redeem more than max");
         uint256 assets = previewRedeem(shares);
         require(assets > 0, "Vault: redeem less than minimum");

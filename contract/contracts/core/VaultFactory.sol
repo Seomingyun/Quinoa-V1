@@ -14,12 +14,12 @@ contract VaultFactory {
         _protocolTreasury = protocolTreasury_;
     }
 
-    //event VaultDeployed(address indexed vaultAddress, string assetName, address indexed user);
+    event VaultDeployed(address indexed vaultAddress, string assetName, address indexed user);
 
     function deployVault(ERC20 asset) external returns (address) {
         Vault newVault = new Vault(asset, msg.sender, _router, _protocolTreasury);
         vaults.push(address(newVault));
-        //emit VaultDeployed(address(newVault), asset.name(), msg.sender);
+        emit VaultDeployed(address(newVault), asset.name(), msg.sender);
         return address(newVault);
     }
 

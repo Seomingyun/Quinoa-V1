@@ -6,6 +6,7 @@ import "@nomiclabs/hardhat-etherscan";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
+import "hardhat-contract-sizer";
 
 dotenv.config();
 
@@ -30,6 +31,10 @@ const config: HardhatUserConfig | {} = {
         count: 20,
       },
       chainId: 1337,
+      // forking : {
+      //   url : "https://polygon-mumbai.g.alchemy.com/v2/" + process.env.ALCHEMY_MUMBAI_KEY,
+      //   enabled : false
+      // }
     },
     rinkeby: {
       url: process.env.RINKEBY_URL || "",

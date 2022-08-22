@@ -11,12 +11,12 @@ import {Strategy, ERC20Strategy} from "./Strategy.sol";
 contract Vault is ERC20, IVault, AccessControl {
     using Math for uint256;
 
-    address private immutable _router;
     address private immutable _protocolTreasury;
     IERC20Metadata private immutable _asset;
     uint8 private _decimals;
 
     bytes32 public constant DAC_ROLE = keccak256("DAC_ROLE"); // strategy team
+    bytes32 public constant ROUTER_ROLE = keccak256("ROUTER_ROLE"); // router에서만 호출 가능
 
 
     /// @notice 특정한 ERC20 token을 asset으로 받는 새로운 vault를 생성.
@@ -31,16 +31,12 @@ contract Vault is ERC20, IVault, AccessControl {
     {
         _asset = asset_;
         _decimals = asset_.decimals();
-        _router = router_;
         _protocolTreasury = protocolTreasury_;
         performanceFeePercent = 15e16; // 기본 fee 세팅 : 15%
 
         _grantRole(DEFAULT_ADMIN_ROLE, caller_);
         _setupRole(DAC_ROLE, caller_); // 나중에 caller_가 다른 DAC 멤버를 추가할 수 있음
-    }
-
-    function isRouter() view internal {
-        require(_msgSender() == _router, "Vault: Only router can call this func");
+        _setupRole(ROUTER_ROLE, router_);
     }
 
     function isAdmin(address user) public view override returns(bool) {
@@ -57,15 +53,12 @@ contract Vault is ERC20, IVault, AccessControl {
         return _decimals;
     }
 
-    /// @notice DAC들이 가져가는 performance fee. 1e18이 100%에 해당
+    /// @notice DAC들이 가져가는 performance fee. 단위는 %
     uint256 public performanceFeePercent;
-
-    event performanceFeePercentUpdated(address indexed user, uint256 newPerformanceFeePercent);
 
     function setPerformanceFeePercent(uint256 newPerformanceFeePercent) external override onlyRole(DAC_ROLE) {
         require(newPerformanceFeePercent <= 1e18, "Vault: Fee too high");
         performanceFeePercent = newPerformanceFeePercent;
-        emit performanceFeePercentUpdated(_msgSender(), newPerformanceFeePercent);
     }
 
     /// @notice harvest와 harvest 사이의 delay를 지정. 만약 nextHarvest가 0이라면 계속 똑같은 harvestDelay를 유지.
@@ -74,20 +67,15 @@ contract Vault is ERC20, IVault, AccessControl {
     uint256 public harvestDelay;
     uint256 public nextHarvestDelay;
 
-    event HarvestDelayUpdated(address indexed user, uint256 newHarvestDelay);
-    event NextHarvestDelayUpdated(address indexed user, uint256 newNextHarvestDelay);
-
     function setHarvestDelay(uint256 newHarvestDelay) external override onlyRole(DAC_ROLE) {
-        require(newHarvestDelay != 0, "Vault: Delay duration cannot be zero");
+        require(newHarvestDelay != 0, "Vault: Delay duration is 0");
         // Q. block.timestamp는 sec 단위 아님 ? 왜 365라고 하는지 알 수 X
         require(newHarvestDelay <= 365, "Vault: Delay too long");
         if(harvestDelay == 0){
             harvestDelay = newHarvestDelay;
-            emit HarvestDelayUpdated(_msgSender(), newHarvestDelay);
         }
         else {
             nextHarvestDelay = newHarvestDelay;
-            emit HarvestDelayUpdated(_msgSender(), newHarvestDelay);
         }
 
     }
@@ -109,13 +97,11 @@ contract Vault is ERC20, IVault, AccessControl {
     /// @notice 이 vault에서 사용하는 strategy. 
     Strategy public strategy;
 
-    event StrategyUpdated(address indexed user, Strategy newStrategy);
 
     function setStrategy(Strategy newStrategy) external override onlyRole(DAC_ROLE) {
         // strategy는 딱 하나만 설정할 수 있음
         require(address(strategy) == address(0), "Vault: Already set strategy");
         strategy = newStrategy;
-        emit StrategyUpdated(_msgSender(), newStrategy);
     }
 
     /// @notice 제일 최근에 진행된 harvest. harvest는 딱 한번만 실행되며, strategy는 1개로 고정되어 있음.
@@ -156,15 +142,13 @@ contract Vault is ERC20, IVault, AccessControl {
         if(newHarvestDelay != 0) {
             harvestDelay  = newHarvestDelay;
             nextHarvestDelay = 0;
-            emit HarvestDelayUpdated(_msgSender(), newHarvestDelay);
         }
     }
 
     event FeesClaimed(address indexed user, uint256 rvTokenAmount);
 
     /// @notice DAC는 자신의 fee(qvToken)를 claim할 수 있음.
-    function claimFees(uint256 qvTokenAmount) external override {
-        isRouter();
+    function claimFees(uint256 qvTokenAmount) external override onlyRole(ROUTER_ROLE) {
         emit FeesClaimed(_msgSender(), qvTokenAmount);
         SafeERC20.safeTransfer(this, _msgSender(), qvTokenAmount);
     }
@@ -185,7 +169,7 @@ contract Vault is ERC20, IVault, AccessControl {
         
         emit StrategyDeposit(_msgSender(), strategy, assetAmount);
         SafeERC20.safeApprove(_asset, address(strategy), assetAmount);
-        require(ERC20Strategy(address(strategy)).mint(assetAmount) == 0, "Vault: Strategy token minting is failed");
+        require(ERC20Strategy(address(strategy)).mint(assetAmount) == 0, "Vault: Deposit into strategy failed");
     }
 
     /// @notice assetAmount만큼 strategy에서 withdraw.
@@ -195,11 +179,11 @@ contract Vault is ERC20, IVault, AccessControl {
 
     /// @dev assetAmount만큼 strategy에서 withdraw.
     function _withdrawFromStrategy(uint256 assetAmount) internal {
-        require(assetAmount <= strategyDebt, "Vault: Too much amount for withdrawal from strategy");
+        require(assetAmount <= strategyDebt, "Vault: Too much amount");
         strategyDebt -= assetAmount;
         
         emit StrategyWithdrawal(_msgSender(), strategy, assetAmount);
-        require(strategy.redeemUnderlying(assetAmount)==0, "Vault: Withdrawal from strategy is faild");
+        require(strategy.redeemUnderlying(assetAmount)==0, "Vault: Withdraw into strategy failed");
     }
 
     /// @notice 현재 vault의 asset이 무엇인지 반환.
@@ -276,8 +260,7 @@ contract Vault is ERC20, IVault, AccessControl {
         return _convertToAssets(shares, Math.Rounding.Down);
     }
 
-    function deposit(uint256 assets, address receiver) public override returns (uint256) {
-        isRouter();
+    function deposit(uint256 assets, address receiver) public override onlyRole(ROUTER_ROLE) returns (uint256) {
         require(assets + totalAssets() <= maxDeposit(receiver), "Vault: deposit more than max");
         uint256 shares = previewDeposit(assets);
         require(shares > 0, "Vault: deposit less than minimum");
@@ -285,8 +268,7 @@ contract Vault is ERC20, IVault, AccessControl {
         return shares;
     }
 
-    function mint(uint256 shares, address receiver) public override returns (uint256) {
-        isRouter();
+    function mint(uint256 shares, address receiver) public override onlyRole(ROUTER_ROLE) returns (uint256) {
         require(shares + totalSupply() <= maxMint(receiver), "Vault: mint more than max");
         uint256 assets = previewMint(shares);
         require(assets > 0, "Vault: mint less than minimum");
@@ -298,8 +280,7 @@ contract Vault is ERC20, IVault, AccessControl {
         uint256 assets,
         address receiver, // receiver는 router가 되는 것
         address owner // owner는 share를 가지고 있는 사람. 이것도 router
-    ) public override returns (uint256) {
-        isRouter();
+    ) public override onlyRole(ROUTER_ROLE) returns (uint256) {
         require(assets <= maxWithdraw(owner), "Vault: withdraw more than max");
         // float 채워 넣기
         uint256 shares = previewWithdraw(assets);
@@ -313,8 +294,7 @@ contract Vault is ERC20, IVault, AccessControl {
         uint256 shares,
         address receiver, // router
         address owner // router
-    ) public override returns (uint256) {
-        isRouter();
+    ) public override onlyRole(ROUTER_ROLE) returns (uint256) {
         require(shares <= maxRedeem(owner), "Vault: redeem more than max");
         uint256 assets = previewRedeem(shares);
         require(assets > 0, "Vault: redeem less than minimum");

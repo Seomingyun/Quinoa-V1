@@ -6,13 +6,29 @@ import {INFTWrappingManager} from "./interfaces/INftWrappingManager.sol";
 import {Vault} from "./Vault.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 
 contract Router is Ownable {
+    using Math for uint256;
     
     INFTWrappingManager public NFTWrappingManager;
 
     function setNFTWrappingManager(address _NFTWrappingManager) public onlyOwner {
         NFTWrappingManager = INFTWrappingManager(_NFTWrappingManager);
+    }
+
+    uint256 public protocolFeePercent = 2e16; // 기본 fee : 2%
+
+    function updateProtocolFeePercent(uint newProtocolFee) public onlyOwner {
+        require(0 <= newProtocolFee && newProtocolFee <= 1e18, "Router: Invalid Protocol Fee Percent");
+        protocolFeePercent = newProtocolFee;
+    }
+
+    address public protocolTreasury;
+
+    function setProtocolTreasury(address _protocolTreasury) public onlyOwner {
+        require(_protocolTreasury != address(0), "Router: Protocol Treasury cannot be zero address");
+        protocolTreasury = _protocolTreasury;
     }
 
     /*///////////////////////////////////////////////////////////////
@@ -28,10 +44,15 @@ contract Router is Ownable {
         // get asset from client
         assetToken.transferFrom(msg.sender, address(this), _amount);
 
+        // get protocol fee and send it to protocol treasury
+        uint256 protocolFeeAmount = _amount.mulDiv(protocolFeePercent, 1e18, Math.Rounding.Down);
+        uint256 depositAmount = _amount - protocolFeeAmount;
+        assetToken.transfer(protocolTreasury, protocolFeeAmount);
+
         // exchange asset - qvToken with Vault
         uint256 currentAmount = qvToken.balanceOf(address(this));
-        assetToken.approve(address(vault), _amount);
-        uint256 qvTokenAdded = vault.deposit(_amount, address(this));
+        assetToken.approve(address(vault), depositAmount);
+        uint256 qvTokenAdded = vault.deposit(depositAmount, address(this));
         
         require(qvToken.balanceOf(address(this)) - currentAmount == qvTokenAdded, "Router: Amount of qvToken to relay has unexpected value");
         

@@ -70,6 +70,7 @@ function InvestingList(): JSX.Element {
           <div className="ei_title">
             <span className="explore">Explore</span>
             <span className="investing">&nbsp;Investing</span>
+            <span className="investing_blur">&nbsp;Investing</span>
           </div>
           <span className="subtitle">
             San Franciscan contrarian Conference attendee Out of touch, ad
@@ -652,7 +653,7 @@ function InvestingList(): JSX.Element {
               <div className="list_Rowheader">
                 <p className="header_Wish">Wish</p>
                 <p className="header_Strategy">Strategy</p>
-                <p className="header_Risk">Risk</p>
+                <p className="header_Propensity">Propensity</p>
                 <p className="header_Apy">APY</p>
                 <p className="header_Volume">Volume(24h)</p>
                 <p className="header_totalVolume">Total Volume</p>
@@ -753,7 +754,7 @@ function InvestingList(): JSX.Element {
                 </div>
               </div>
               <div className="assistivceChip_wrap">
-                <div className="chipbox_high"></div>
+                <div className="chipbox_low"></div>
               </div>
               <div className="apy_number_wrap">
                 <div className="apy_number">
@@ -1068,8 +1069,26 @@ function InvestingList(): JSX.Element {
               <div className="ls_underline"></div>
             </div>
           </div>
+          <span className="text-button">
+            Create a strategy with the experts <span>&#8594;</span>
+          </span>
+          <div className="lt_moreBtn">
+            <span className="moreBtn_txt">
+              Load more<div className="moreBtn_arrow"></div>
+            </span>
+          </div>
         </div>
       </section>
+      <footer id="footer_wrap">
+        <div className="qui_footer">
+          <a className="footer_txtBtn">Docs</a>
+          <a className="footer_txtBtn">Governance</a>
+          <a className="channel_link twitter">a</a>
+          <a className="channel_link telegram">a</a>
+          <a className="channel_link discord">a</a>
+          <a className="coachBtn">need help?</a>
+        </div>
+      </footer>
     </body>
   );
 }

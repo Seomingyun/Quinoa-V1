@@ -1,7 +1,3 @@
-body {
-  height: 3000px;
-}
-
 #heaeder_wrap {
   z-index: 9999;
   position: fixed;
@@ -72,7 +68,7 @@ body {
   flex-grow: 0;
   font-family: Inter;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   font-stretch: normal;
   font-style: normal;
   line-height: normal;
@@ -318,6 +314,7 @@ body {
   justify-content: center;
   align-items: flex-start;
   padding: 0;
+  position: relative;
 }
 .explore {
   flex-grow: 0;
@@ -349,6 +346,27 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+.investing_blur {
+  flex-grow: 0;
+  background-image: linear-gradient(
+    131deg,
+    var(--secondary-dark-sl-400) -127%,
+    #7ec538 159%
+  );
+  font-family: Inter;
+  font-size: 46px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.5px;
+  text-align: left;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: absolute;
+  right: 0;
 }
 .subtitle {
   width: 834px;
@@ -501,7 +519,7 @@ body {
 .swiper-pagination-bullets.swiper-pagination-horizontal,
 .swiper-pagination-custom,
 .swiper-pagination-fraction {
-  bottom: 94px !important;
+  bottom: 104px !important;
 }
 .swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
 .swiper-pagination-horizontal.swiper-pagination-bullets
@@ -527,7 +545,7 @@ body {
 }
 .mySwiper .hi_swiperslide {
   text-align: center;
-  height: 566px;
+  height: 556px;
   margin-top: 10px;
   font-size: 18px;
   border-radius: 12px;
@@ -962,7 +980,7 @@ body {
   height: 17px;
   border-radius: 8.5px;
   background-color: #fff;
-  z-index: 9999;
+  z-index: 9992;
 }
 .il_table {
   position: relative;
@@ -1017,6 +1035,9 @@ body {
   color: var(--neutral_qui_neu_900);
   user-select: none;
 }
+.il_table_header .list_Rowheader p.focused {
+  height: 100%;
+}
 .il_table_header .list_Rowheader .header_Wish {
   width: 79px;
 }
@@ -1024,17 +1045,17 @@ body {
   width: 79px;
   margin-right: 131px;
 }
-.il_table_header .list_Rowheader .header_Risk {
+.il_table_header .list_Rowheader .header_Propensity {
   width: 79px;
-  margin-right: 377px;
+  margin-right: 397px;
 }
 .il_table_header .list_Rowheader .header_Apy {
   width: 29px;
-  margin-right: 96px;
+  margin-right: 86px;
 }
 .il_table_header .list_Rowheader .header_Volume {
   width: 87px;
-  margin-right: 96px;
+  margin-right: 86px;
 }
 .il_table_header .list_Rowheader .header_totalVolume {
   width: 87px;
@@ -1164,7 +1185,7 @@ body {
   z-index: 0;
 }
 .il_table .list_strategy .assistivceChip_wrap {
-  width: 83px;
+  width: 142px;
   height: 100%;
   flex-grow: 0;
   display: flex;
@@ -1183,24 +1204,20 @@ body {
   box-sizing: border-box;
 }
 .il_table .list_strategy .assistivceChip_wrap .chipbox_high {
-  width: 63px;
-  background-color: var(--error-error-500);
-}
-.il_table .list_strategy .assistivceChip_wrap .chipbox_high {
-  width: 63px;
-  background-color: var(--error-error-500);
-}
+  width: 106px;
+  background-color: var(--error-error-50);
+} /*
 .il_table .list_strategy .assistivceChip_wrap .chipbox_medium {
-  width: 81px;
+  width: 92px;
   background-color: var(--warning-warning-500);
-}
+}*/
 .il_table .list_strategy .assistivceChip_wrap .chipbox_low {
-  width: 59px;
-  background-color: #00b712;
+  width: 126px;
+  background-color: #e9fceb;
 }
 .il_table .list_strategy .assistivceChip_wrap .chipbox_high::after {
   margin: 0 auto;
-  content: "risk";
+  content: "Agressive";
   font-family: Inter;
   font-size: 14px;
   font-weight: 500;
@@ -1209,11 +1226,12 @@ body {
   line-height: 1.57;
   letter-spacing: normal;
   text-align: center;
-  color: #fff;
+  color: var(--error-error-400);
 }
+/*
 .il_table .list_strategy .assistivceChip_wrap .chipbox_medium::after {
   margin: 0 auto;
-  content: "medium";
+  content: "Neutral";
   font-family: Inter;
   font-size: 14px;
   font-weight: 500;
@@ -1223,10 +1241,10 @@ body {
   letter-spacing: normal;
   text-align: center;
   color: #fff;
-}
+}*/
 .il_table .list_strategy .assistivceChip_wrap .chipbox_low::after {
   margin: 0 auto;
-  content: "low";
+  content: "Conservative";
   font-family: Inter;
   font-size: 14px;
   font-weight: 500;
@@ -1235,10 +1253,10 @@ body {
   line-height: 1.57;
   letter-spacing: normal;
   text-align: center;
-  color: #fff;
+  color: var(--primary-light-qui-green-400);
 }
 .il_table .list_strategy .apy_number_wrap {
-  width: 401px;
+  width: 364px;
   height: 100%;
   flex-grow: 0;
   display: flex;
@@ -1299,7 +1317,7 @@ body {
   font-weight: bold;
 }
 .il_table .list_strategy .volume24h_wrap {
-  width: 184px;
+  width: 173px;
   height: 100%;
   flex-grow: 0;
   display: flex;
@@ -1326,7 +1344,7 @@ body {
   background: none;
 }
 .il_table .list_strategy .totalVolume_wrap {
-  width: 183px;
+  width: 172px;
   height: 100%;
   flex-grow: 0;
   display: flex;
@@ -1345,6 +1363,159 @@ body {
   letter-spacing: -0.25px;
   text-align: left;
   color: #000;
+}
+.investList .text-button {
+  position: absolute;
+  bottom: -36px;
+  right: 10px;
+  height: 23px;
+  flex-grow: 0;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.43;
+  letter-spacing: normal;
+  text-align: left;
+  color: #61c43b;
+  border-bottom: 1px solid #61c43b;
+  cursor: pointer;
+  user-select: none;
+}
+.investList .text-button > span {
+  font-size: 15px;
+  font-family: system-ui;
+}
+.investList .text-button:hover {
+  color: var(--primary-light-qui-green-200);
+  border-bottom: 1px solid var(--primary-light-qui-green-200);
+}
+.investList .lt_moreBtn {
+  position: absolute;
+  width: 140px;
+  height: 32px;
+  left: 50%;
+  bottom: -76px;
+  transform: translate(-50%, 0);
+  cursor: pointer;
+}
+.investList .lt_moreBtn .moreBtn_txt {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-grow: 0;
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 32px;
+  letter-spacing: -0.25px;
+  text-align: center;
+  color: #000;
+}
+.investList .lt_moreBtn .moreBtn_arrow {
+  width: 18px;
+  height: 32px;
+  justify-content: center;
+  text-align: center;
+  margin-left: 9px;
+  background: url(../components/asset/morebtn_arrow.svg) no-repeat 50% 55%;
+}
+#footer_wrap {
+  position: relative;
+  width: 100%;
+  height: 94px;
+  border-top: 1px solid #d8d8d8;
+  box-sizing: border-box;
+  margin-top: 240px;
+}
+#footer_wrap .qui_footer {
+  position: relative;
+  display: flex;
+  width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+}
+#footer_wrap .qui_footer a {
+  height: 22px;
+  display: flex;
+  flex-grow: 0;
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: 0;
+  margin-top: 37px;
+  color: var(--neutral-qui-neu-900);
+}
+#footer_wrap .qui_footer a:nth-child(2) {
+  margin-right: 746px;
+}
+#footer_wrap .qui_footer .footer_txtBtn {
+  margin-right: 44.6px;
+  cursor: pointer;
+}
+#footer_wrap .qui_footer .channel_link {
+  width: 21px;
+  height: 21px;
+  margin-right: 23px;
+  text-indent: -9999px;
+  cursor: pointer;
+}
+#footer_wrap .qui_footer .discord {
+  width: 25px;
+}
+.twitter {
+  background: url(../components/asset/icon_twitter.svg) no-repeat 0 0;
+}
+.telegram {
+  background: url(../components/asset/icon_telegram.svg) no-repeat 0 0;
+}
+.discord {
+  background: url(../components/asset/icon_discord.svg) no-repeat 0 0;
+}
+.twitter:hover {
+  background: url(../components/asset/icon_twitter_hovered.svg) no-repeat 0 0;
+}
+.telegram:hover {
+  background: url(../components/asset/icon_telegram_hovered.svg) no-repeat 0 0;
+}
+.discord:hover {
+  background: url(../components/asset/icon_discord_hovered.svg) no-repeat 0 0;
+}
+#footer_wrap .qui_footer .channel_link .discord {
+  margin-right: 0;
+}
+#footer_wrap .qui_footer .coachBtn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  height: 48px;
+  width: 133px;
+  margin-top: 0;
+  text-align: center;
+  line-height: 48px;
+  background: #fff;
+  color: var(--primary-light-qui-green-400);
+  border: 1px solid var(--primary-light-qui-green-400);
+  user-select: none;
+  border-radius: 66.5px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.075, 0.82, 0.165, 1) 0s;
+}
+#footer_wrap .qui_footer .coachBtn:hover {
+  background: var(--primary-light-qui-green-400);
+  color: var(--neutral-varient-qui-neu-vari-100);
+  transition: all 0.15s cubic-bezier(0.075, 0.82, 0.165, 1) 0s;
 }
 /* animation keyframe  */
 @-webkit-keyframes animation-primaryBtnBg {

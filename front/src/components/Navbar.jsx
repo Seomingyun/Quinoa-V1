@@ -15,9 +15,19 @@ export const Navbar = ({currentAccount, correctNetwork, connectWallet, changeNet
               <a className="nav_txt_default">Draft</a>
             </div>
           </div>
-          <button className="wallet-status stateDefault-connectFalse cursor_pointer">
-            <p className="start">Get started</p>
-          </button>
+          {currentAccount === ''? (
+            <button onClick = {connectWallet} type="button" className="wallet-status stateDefault-connectFalse cursor_pointer">
+              <p className="start">Get started</p>
+            </button>
+            ) : !correctNetwork ? (
+                <button onClick = {changeNetwork} type="button" className="wallet-status stateDefault-connectFalse cursor_pointer">
+                  <p className="start">Change Network</p>
+                </button>
+            ) : (
+                <button disabled  className="wallet-status stateDefault-connectFalse cursor_pointer">
+                  <p className="start">{currentAccount}</p>
+                </button>
+            )}
         </div>
       </header>
     )

@@ -28,6 +28,7 @@ function App() {
   };
 
   const connectWallet = async () => {
+    console.log("clicked");
     try {
       const {ethereum} = window;
 

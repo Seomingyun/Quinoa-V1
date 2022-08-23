@@ -32,7 +32,7 @@ contract Router is Ownable {
     constructor(address _protocolTreasury, address _generalNFT, address _guruNFT) {
         require(_generalNFT != address(0), "Router: General NFT address cannot be zero address");
         generalNFT = IERC721(_generalNFT);
-        require(_generalNFT != address(0), "Router: Guru NFT address cannot be zero address");
+        require(_guruNFT != address(0), "Router: Guru NFT address cannot be zero address");
         guruNFT = IERC721(_guruNFT);
         require(_protocolTreasury != address(0), "Router: Protocol Treasury cannot be zero address");
         protocolTreasury = _protocolTreasury;

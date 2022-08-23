@@ -11,35 +11,22 @@ import { ReactComponent as WishList } from "../components/asset/wishlist_default
 import SwiperCore, { Navigation, Pagination, Scrollbar } from "swiper";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-
+import {ethers} from "ethers";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
+import {useVaultList} from "../hooks/useVaultList";
+
 SwiperCore.use([Navigation, Pagination, Scrollbar]);
 
-function InvestingList(): JSX.Element {
+function InvestingList({currentAccount}:any) {
+  console.log(useVaultList())
+
   return (
-    <body>
-      {/* <header id="heaeder_wrap">
-        <div className="navbar">
-          <div className="nav_logo">
-            <Quinoalogo />
-          </div>
-          <div className="nav_menu_wrap">
-            <div className="nav_menu cursor_pointer">
-              <a className="nav_txt_default">Portfolio</a>
-              <a className="nav_txt_focused">Investing</a>
-              <a className="nav_txt_default">Draft</a>
-            </div>
-          </div>
-          <div className="wallet-status stateDefault-connectFalse cursor_pointer">
-            <p className="start">Get started</p>
-          </div>
-        </div>
-      </header> */}
+    <div> 
       <section className="myinvest_banner">
         <div className="my-investments">
           <div className="mi_title">
@@ -1089,7 +1076,7 @@ function InvestingList(): JSX.Element {
           <a className="coachBtn">need help?</a>
         </div>
       </footer>
-    </body>
+    </div>
   );
 }
 

@@ -18,7 +18,6 @@ contract Vault is ERC20, IVault, AccessControl {
     bytes32 public constant DAC_ROLE = keccak256("DAC_ROLE"); // strategy team
     bytes32 public constant ROUTER_ROLE = keccak256("ROUTER_ROLE"); // router에서만 호출 가능
 
-
     /// @notice 특정한 ERC20 token을 asset으로 받는 새로운 vault를 생성.
     /// @param asset_ asset으로 받을 ERC20 토큰.
     /// @param caller_ vault를 생성하고자 하는 유저. role의 admin이 되어 DAC 멤버들을 추가하거나 삭제할 수 있다.
@@ -61,17 +60,24 @@ contract Vault is ERC20, IVault, AccessControl {
     function setEmergencyExit(bool isEmergency) external onlyRole(DAC_ROLE){
         require(isEmergency != emergencyExit, "Vault: Already Set Emergency Shutdown");
         emergencyExit = isEmergency;
-        strategy.setEmergency(true);
-        strategy = Strategy(address(0));
+        strategy.setEmergency(isEmergency);
+
+        if(isEmergency){ // emergency 상태임
+            strategy = Strategy(address(0));
+        }
+
         emit EmergencyUpdated(_msgSender(), isEmergency);
     }
 
     /// @notice DAC들이 가져가는 performance fee. 단위는 %
     uint256 public performanceFeePercent;
 
+    event PerformanceFeePercentUpdated(address indexed user, uint256 newPerformanceFeePercent);
+
     function setPerformanceFeePercent(uint256 newPerformanceFeePercent) external override onlyRole(DAC_ROLE) {
         require(newPerformanceFeePercent <= 1e18, "Vault: Fee too high");
         performanceFeePercent = newPerformanceFeePercent;
+        emit PerformanceFeePercentUpdated(_msgSender(), newPerformanceFeePercent);
     }
 
     /// @notice harvest와 harvest 사이의 delay를 지정. 만약 nextHarvest가 0이라면 계속 똑같은 harvestDelay를 유지.
@@ -80,15 +86,20 @@ contract Vault is ERC20, IVault, AccessControl {
     uint256 public harvestDelay;
     uint256 public nextHarvestDelay;
 
+    event HarvestDelayUpdated(address indexed user, uint256 newHarvestDelay);
+    event NextHarvestDelayUpdated(address indexed user, uint256 newNextHarvestDelay);
+
     function setHarvestDelay(uint256 newHarvestDelay) external override onlyRole(DAC_ROLE) {
-        require(newHarvestDelay != 0, "Vault: Delay duration is 0");
+        require(newHarvestDelay >= 6 hours, "Vault: Delay too short");
         // Q. block.timestamp는 sec 단위 아님 ? 왜 365라고 하는지 알 수 X
-        require(newHarvestDelay <= 365, "Vault: Delay too long");
+        require(newHarvestDelay <= 365 days, "Vault: Delay too long");
         if(harvestDelay == 0){
             harvestDelay = newHarvestDelay;
+            emit HarvestDelayUpdated(_msgSender(), newHarvestDelay);
         }
         else {
             nextHarvestDelay = newHarvestDelay;
+            emit HarvestDelayUpdated(_msgSender(), newHarvestDelay);
         }
 
     }
@@ -110,11 +121,13 @@ contract Vault is ERC20, IVault, AccessControl {
     /// @notice 이 vault에서 사용하는 strategy. 
     Strategy public strategy;
 
+    event StrategyUpdated(address indexed user, Strategy newStrategy);
 
     function setStrategy(Strategy newStrategy) external override onlyRole(DAC_ROLE) {
         // strategy는 딱 하나만 설정할 수 있음
         require(address(strategy) == address(0), "Vault: Already set strategy");
         strategy = newStrategy;
+        emit StrategyUpdated(_msgSender(), newStrategy);
     }
 
     /// @notice 제일 최근에 진행된 harvest. harvest는 딱 한번만 실행되며, strategy는 1개로 고정되어 있음.
@@ -156,6 +169,7 @@ contract Vault is ERC20, IVault, AccessControl {
         if(newHarvestDelay != 0) {
             harvestDelay  = newHarvestDelay;
             nextHarvestDelay = 0;
+            emit HarvestDelayUpdated(_msgSender(), newHarvestDelay);
         }
     }
 

@@ -88,7 +88,7 @@
   .wallet-status {
     position: absolute;
     right: 0;
-    width: 103px;
+    width: auto;
     height: 40px;
     display: flex;
     box-sizing: border-box;
@@ -101,7 +101,7 @@
     background-color: var(--neutral-qui-neu-900);
   }
   .stateDefault-connectFalse:hover {
-    width: 103px;
+    width: auto;
     height: 40px;
     display: flex;
     flex-direction: row;
@@ -117,7 +117,7 @@
     color: var(--neutral-varient-qui-neu-vari-300);
   }
   .stateDefault-connectFalse {
-    width: 103px;
+    width: auto;
     height: 40px;
     display: flex;
     box-sizing: border-box;
@@ -143,6 +143,22 @@
     animation-iteration-count: infinite;
   }
   .wallet-status .start {
+    user-select: none;
+    width: auto;
+    height: 20px;
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: -0.25px;
+    text-align: right;
+    color: var(--neutral-varient-qui-neu-vari-50);
+  }
+
+  p.start {
     user-select: none;
     width: 73px;
     height: 20px;

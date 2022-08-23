@@ -23,7 +23,7 @@ SwiperCore.use([Navigation, Pagination, Scrollbar]);
 function InvestingList(): JSX.Element {
   return (
     <body>
-      <header id="heaeder_wrap">
+      {/* <header id="heaeder_wrap">
         <div className="navbar">
           <div className="nav_logo">
             <Quinoalogo />
@@ -39,7 +39,7 @@ function InvestingList(): JSX.Element {
             <p className="start">Get started</p>
           </div>
         </div>
-      </header>
+      </header> */}
       <section className="myinvest_banner">
         <div className="my-investments">
           <div className="mi_title">

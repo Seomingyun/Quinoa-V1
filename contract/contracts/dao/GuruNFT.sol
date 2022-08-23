@@ -13,9 +13,9 @@ contract GuruNFT is BaseNFT{
     bytes32 public merkleRoot;
 
     
-    constructor (bytes32 _merkelRoot )
+    constructor (bytes32 _merkleRoot )
     ERC721("Quinoa-Guru", "GURU"){
-        merkleRoot = _merkelRoot;
+        merkleRoot = _merkleRoot;
     }
 
     function hasRole(address addr) public view override returns (bool){

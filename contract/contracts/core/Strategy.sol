@@ -22,6 +22,11 @@ abstract contract Strategy is ERC20 {
     /// @return The user's strategy balance in underlying tokens.
     /// @dev May mutate the state of the strategy by accruing interest.
     function balanceOfUnderlying(address user) external virtual returns (uint256);
+
+    /// @notice set emergency status
+    /// @param isEmergency If emergency situation is occured, isEmergency value is true
+    /// @dev Add withdraw all underlying balance to vault
+    function setEmergency(bool isEmergency) external virtual returns(bool);
 }
 
 /// @notice Minimal interface for Vault strategies that accept ERC20s.

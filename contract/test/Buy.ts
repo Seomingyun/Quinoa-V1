@@ -2,6 +2,7 @@ const { expect } = require("chai");
 const {MerkleTree} = require("merkletreejs");
 const keccak256 = require('keccak256');
 import { Result } from "@ethersproject/abi";
+import { BigNumber } from "ethers";
 import {ethers} from "hardhat";
 import { 
     Router__factory, 
@@ -12,6 +13,8 @@ import {
     Vault__factory, 
     GeneralNFT__factory, 
     GuruNFT__factory,
+    IVault__factory,
+    Vault
 } from "../typechain-types";
 //import "hardhat/console.sol";
 
@@ -49,7 +52,7 @@ async function deployContracts(){
     const router = await new Router__factory(deployer).deploy(treausry.address, generalNFT.address, gurulNFT.address );
     await router.deployed();
 
-    // #4. Deploy NFT Manager
+    // #4. Deploy sNFT Manager
     const nftManager = await new NftWrappingManager__factory(deployer).deploy(router.address);
     await nftManager.deployed();
 
@@ -75,12 +78,11 @@ async function deployContracts(){
             testToken,
             nftManager,
             vaultFactory,
-            vaultAddress };
+            vaultAddress,
+            treausry
+            };
 }
 
-// describe("Buy", async() => {
-//     const {deployer, user, router, nftManager, vaultFactory, vaultAddress}  = await deployContracts();
-// })
 
 describe("VaultDeployment",() => {
 
@@ -102,14 +104,22 @@ describe("VaultDeployment",() => {
 
 describe("Buy fund NFT", () => {
     it("Should mint fund NFT", async() => {
-        const {deployer, user, router, testToken, nftManager, vaultAddress} = await deployContracts();
-        const tx = await testToken.connect(deployer).mint(user.address, 10**5); 
+        const {deployer, user, router, testToken, nftManager, vaultAddress, treausry} = await deployContracts();
+        const tx = await testToken.connect(deployer).mint(user.address, "100000"); 
         await tx.wait();
-        expect(testToken.balanceOf(user.address)).to.equal(10**5);
-
-        const buy = await router.connect(user).buy(vaultAddress, 10**2);
+        const balance = await testToken.balanceOf(user.address);
+        expect(balance.toNumber()).to.equal(100000);
+        
+        console.log("userAddress:", user.address);
+        console.log("routerAddress:", router.address);
+        
+        await testToken.connect(user).approve(router.address, balance);
+        const buy = await router.connect(user)["buy(address,uint256)"](vaultAddress, 10**2);
         await buy.wait(); 
 
-        expect(nftManager.balanceOf(user.address)).to.equal(1);
+        const vault = await ethers.getContractAt("IVault", vaultAddress);
+        expect((await nftManager.balanceOf(user.address)).toNumber()).to.equal(1);
+        expect((await vault.balanceOf(nftManager.address)).toNumber()).to.equal(98);
+        expect((await testToken.balanceOf(treausry.address)).toNumber()).to.equal(2);
     });
 });

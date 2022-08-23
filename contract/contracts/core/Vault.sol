@@ -53,6 +53,19 @@ contract Vault is ERC20, IVault, AccessControl {
         return _decimals;
     }
 
+    /// @notice strategy에서 모든 underlying 회수, deposit 불가능
+    bool emergencyExit = false; // true면 emergency exit 진행
+
+    event EmergencyUpdated(address user, bool isEmergency);
+
+    function setEmergencyExit(bool isEmergency) external onlyRole(DAC_ROLE){
+        require(isEmergency != emergencyExit, "Vault: Already Set Emergency Shutdown");
+        emergencyExit = isEmergency;
+        strategy.setEmergency(true);
+        strategy = Strategy(address(0));
+        emit EmergencyUpdated(_msgSender(), isEmergency);
+    }
+
     /// @notice DAC들이 가져가는 performance fee. 단위는 %
     uint256 public performanceFeePercent;
 
@@ -113,6 +126,7 @@ contract Vault is ERC20, IVault, AccessControl {
 
     /// @notice harvest를 진행. strategy에서 얻은 수익들이 실제 수익이라고 인정됨.
     function harvest() external override onlyRole(DAC_ROLE) {
+        require(!emergencyExit, "Vault: It is Emergency Situation");
         if(block.timestamp >= lastHarvest + harvestDelay) {
             lastHarvest = uint64(block.timestamp); 
         }
@@ -261,6 +275,7 @@ contract Vault is ERC20, IVault, AccessControl {
     }
 
     function deposit(uint256 assets, address receiver) public override onlyRole(ROUTER_ROLE) returns (uint256) {
+        require(!emergencyExit, "Vault: It is Emergency Situation");
         require(assets + totalAssets() <= maxDeposit(receiver), "Vault: deposit more than max");
         uint256 shares = previewDeposit(assets);
         require(shares > 0, "Vault: deposit less than minimum");

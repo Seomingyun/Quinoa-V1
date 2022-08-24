@@ -24,7 +24,7 @@ SwiperCore.use([Navigation, Pagination, Scrollbar]);
 
 function InvestingList({currentAccount}:any) {
   const vaultList = useVaultList();
-  //console.log("length : ", vaultList.length);
+  
   return (
     <div> 
       <section className="myinvest_banner">
@@ -207,7 +207,7 @@ function InvestingList({currentAccount}:any) {
                   </div>
                 </div>
               </div>
-              <div className="assistivc eChip_wrap">
+              <div className="assistivceChip_wrap">
                 <div className="chipbox_low"></div>
               </div>
               <div className="apy_number_wrap">

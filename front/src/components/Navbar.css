@@ -1,0 +1,175 @@
+#heaeder_wrap {
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 66px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: 0px 4px 16px rgba(18, 90, 4, 0.06);
+  }
+  
+  .navbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: first baseline;
+    width: 1200px;
+    height: 66px;
+    background-color: #fff;
+  }
+  .navbar .nav_logo {
+    user-select: none;
+    display: flex;
+    align-items: center;
+    width: 116px;
+    height: 100%;
+  }
+  .navbar .nav_menu_wrap {
+    user-select: none;
+    display: flex;
+    width: auto;
+    height: 100%;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 96px;
+    padding: 0px;
+  }
+  .navbar .nav_menu_wrap .nav_menu {
+    display: flex;
+    align-items: center;
+  }
+  .navbar .nav_menu_wrap .nav_menu a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 17px;
+    height: 66px;
+  }
+  .navbar .nav_menu_wrap .nav_menu .nav_txt_default {
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: var(--neutral-qui-neu-900);
+  }
+  .nav_txt_focused {
+    display: flex;
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: var(--primary-light-qui-green-300);
+  }
+  .nav_txt_focused::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    left: 0;
+    bottom: 0;
+    background-color: var(--primary-light-qui-green-300);
+  }
+  .wallet-status {
+    position: absolute;
+    right: 0;
+    width: auto;
+    height: 40px;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background-color: var(--neutral-qui-neu-900);
+  }
+  .stateDefault-connectFalse:hover {
+    width: auto;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background: var(--neutral-qui-neu-600);
+    animation: none;
+  }
+  .statedefault-connectfalse:hover .start {
+    color: var(--neutral-varient-qui-neu-vari-300);
+  }
+  .stateDefault-connectFalse {
+    width: auto;
+    height: 40px;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background: linear-gradient(
+        90deg,
+        var(--neutral-qui-neu-900) 0%,
+        var(--neutral-qui-neu-800) 33.33%,
+        var(--neutral-qui-neu-700) 43.83%,
+        var(--neutral-qui-neu-600) 50%,
+        var(--neutral-qui-neu-700) 55.9%,
+        var(--neutral-qui-neu-800) 66.66%,
+        var(--neutral-qui-neu-900) 100%
+      )
+      right top / 300% 100% var(--neutral-qui-neu-900);
+    animation-name: animation-primaryBtnBg;
+    animation-duration: 4000ms;
+    animation-iteration-count: infinite;
+  }
+  .wallet-status .start {
+    user-select: none;
+    width: auto;
+    height: 20px;
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: -0.25px;
+    text-align: right;
+    color: var(--neutral-varient-qui-neu-vari-50);
+  }
+
+  p.start {
+    user-select: none;
+    width: 73px;
+    height: 20px;
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: -0.25px;
+    text-align: right;
+    color: var(--neutral-varient-qui-neu-vari-50);
+  }

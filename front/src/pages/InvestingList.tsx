@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./InvestingList.css";
 import { ReactComponent as Quinoalogo } from "../components/asset/quinoa_logo.svg";
 import { ReactComponent as Mibtnarrow } from "../components/asset/mibtn_arrow.svg";
@@ -17,14 +17,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-
+import { VaultInfo } from "../models/VaultInfo";
 import {useVaultList} from "../hooks/useVaultList";
 
 SwiperCore.use([Navigation, Pagination, Scrollbar]);
 
 function InvestingList({currentAccount}:any) {
   const vaultList = useVaultList();
-  
+  //console.log("length : ", vaultList.length);
   return (
     <div> 
       <section className="myinvest_banner">
@@ -94,7 +94,7 @@ function InvestingList({currentAccount}:any) {
               <div className="hi_headline">
                 <div className="list_Strategy_name">
                   <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
+                    {item.name}
                   </span>
                   <div className="ls_STtoken">
                     <img
@@ -143,7 +143,7 @@ function InvestingList({currentAccount}:any) {
                     Volume
                   </span>
                   <span className="volume_amount QUINOAheadline6">
-                    $24.2K
+                    {Number(item.totalAssets)}&nbsp;{item.symbol}
                   </span>
                 </div>
               </div>
@@ -198,7 +198,7 @@ function InvestingList({currentAccount}:any) {
               <div className="ls_strategyname_wrap">
                 <div className="list_Strategy_name">
                   <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
+                    {item.name}
                   </span>
                   <div className="ls_STtoken">
                     <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
@@ -207,7 +207,7 @@ function InvestingList({currentAccount}:any) {
                   </div>
                 </div>
               </div>
-              <div className="assistivceChip_wrap">
+              <div className="assistivc eChip_wrap">
                 <div className="chipbox_low"></div>
               </div>
               <div className="apy_number_wrap">
@@ -222,7 +222,7 @@ function InvestingList({currentAccount}:any) {
                 <span className="volume24h QUINOABody-1">$246.7K</span>
               </div>
               <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
+                <span className="totalVolume QUINOABody-1">{Number(item.totalAssets)}&nbsp;{item.symbol}</span>
               </div>
               <div className="ls_underline"></div>
               </div>

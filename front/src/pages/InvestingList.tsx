@@ -23,8 +23,8 @@ import {useVaultList} from "../hooks/useVaultList";
 SwiperCore.use([Navigation, Pagination, Scrollbar]);
 
 function InvestingList({currentAccount}:any) {
-  console.log(useVaultList())
-
+  const vaultList = useVaultList();
+  
   return (
     <div> 
       <section className="myinvest_banner">
@@ -73,7 +73,7 @@ function InvestingList({currentAccount}:any) {
             <span className="ha_title_sub QUINOABody-3">
               San Franciscan contrarian Conference attendee Out of touch.
             </span>
-          </div>
+            </div>
           <Swiper
             slidesPerView={4}
             spaceBetween={27}
@@ -88,534 +88,74 @@ function InvestingList({currentAccount}:any) {
             modules={[Pagination, Navigation]}
             className="mySwiper"
           >
+          {vaultList?.map((item)=> (
             <SwiperSlide className="hi_swiperslide">
-              <div className="stateDefault">
-                <div className="hi_headline">
-                  <div className="list_Strategy_name">
-                    <span className="ls_name_title QUINOABody-2">
-                      Perfect Invest
-                    </span>
-                    <div className="ls_STtoken">
-                      <img
-                        src="img/STtoken_img_01.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_02.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_03.svg"
-                        className="sTtoken_img"
-                      />
-                    </div>
-                  </div>
-                  <div className="wishlist">
-                    <div className="default"></div>
-                  </div>
-                </div>
-                <div className="hi_nftImg_wrap">
-                  <div className="hi_nftImg">
+            <div className="stateDefault">
+              <div className="hi_headline">
+                <div className="list_Strategy_name">
+                  <span className="ls_name_title QUINOABody-2">
+                    Perfect Invest
+                  </span>
+                  <div className="ls_STtoken">
                     <img
-                      src="img/strategy_img_01.png"
+                      src="img/STtoken_img_01.svg"
+                      className="sTtoken_img"
+                    />
+                    <img
+                      src="img/STtoken_img_02.svg"
+                      className="sTtoken_img"
+                    />
+                    <img
+                      src="img/STtoken_img_03.svg"
                       className="sTtoken_img"
                     />
                   </div>
                 </div>
-                <div className="hi_description">
-                  <span className="desc_txt QUINOABody-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    seddo dskfna;
-                  </span>
-                </div>
-                <div className="hi_info">
-                  <div className="apy_wrap">
-                    <span className="apy_title QUINOASubtitle-2">APY</span>
-                    <div className="apy_per">
-                      <div className="up_arrow"></div>
-                      <span className="up_Num QUINOAheadline6">8.9%</span>
-                    </div>
-                  </div>
-                  <div className="middleLine"></div>
-                  <div className="volume_wrap">
-                    <span className="volume_title QUINOASubtitle-2">
-                      Volume
-                    </span>
-                    <span className="volume_amount QUINOAheadline6">
-                      $24.2K
-                    </span>
-                  </div>
-                </div>
-                <div className="hi_byStrategy">
-                  <div className="byIcon">
-                    <img src="img/byIcon_img_01.png" className="byIcon_img" />
-                  </div>
-                  <span className="By_Strategy_name">By SuperDAO friends</span>
+                <div className="wishlist">
+                  <div className="default"></div>
                 </div>
               </div>
-            </SwiperSlide>
-            <SwiperSlide className="hi_swiperslide">
-              <div className="stateDefault">
-                <div className="hi_headline">
-                  <div className="list_Strategy_name">
-                    <span className="ls_name_title QUINOABody-2">
-                      Perfect Invest
-                    </span>
-                    <div className="ls_STtoken">
-                      <img
-                        src="img/STtoken_img_01.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_02.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_03.svg"
-                        className="sTtoken_img"
-                      />
-                    </div>
-                  </div>
-                  <div className="wishlist">
-                    <div className="default"></div>
-                  </div>
-                </div>
-                <div className="hi_nftImg_wrap">
-                  <div className="hi_nftImg">
-                    <img
-                      src="img/strategy_img_01.png"
-                      className="sTtoken_img"
-                    />
-                  </div>
-                </div>
-                <div className="hi_description">
-                  <span className="desc_txt QUINOABody-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    seddo dskfna;
-                  </span>
-                </div>
-                <div className="hi_info">
-                  <div className="apy_wrap">
-                    <span className="apy_title QUINOASubtitle-2">APY</span>
-                    <div className="apy_per">
-                      <div className="up_arrow"></div>
-                      <span className="up_Num QUINOAheadline6">8.9%</span>
-                    </div>
-                  </div>
-                  <div className="middleLine"></div>
-                  <div className="volume_wrap">
-                    <span className="volume_title QUINOASubtitle-2">
-                      Volume
-                    </span>
-                    <span className="volume_amount QUINOAheadline6">
-                      $24.2K
-                    </span>
-                  </div>
-                </div>
-                <div className="hi_byStrategy">
-                  <div className="byIcon">
-                    <img src="img/byIcon_img_01.png" className="byIcon_img" />
-                  </div>
-                  <span className="By_Strategy_name">By SuperDAO friends</span>
+              <div className="hi_nftImg_wrap">
+                <div className="hi_nftImg">
+                  <img
+                    src="img/strategy_img_01.png"
+                    className="sTtoken_img"
+                  />
                 </div>
               </div>
-            </SwiperSlide>
-            <SwiperSlide className="hi_swiperslide">
-              <div className="stateDefault">
-                <div className="hi_headline">
-                  <div className="list_Strategy_name">
-                    <span className="ls_name_title QUINOABody-2">
-                      Perfect Invest
-                    </span>
-                    <div className="ls_STtoken">
-                      <img
-                        src="img/STtoken_img_01.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_02.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_03.svg"
-                        className="sTtoken_img"
-                      />
-                    </div>
-                  </div>
-                  <div className="wishlist">
-                    <div className="default"></div>
+              <div className="hi_description">
+                <span className="desc_txt QUINOABody-3">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                  seddo dskfna;
+                </span>
+              </div>
+              <div className="hi_info">
+                <div className="apy_wrap">
+                  <span className="apy_title QUINOASubtitle-2">APY</span>
+                  <div className="apy_per">
+                    <div className="up_arrow"></div>
+                    <span className="up_Num QUINOAheadline6">8.9%</span>
                   </div>
                 </div>
-                <div className="hi_nftImg_wrap">
-                  <div className="hi_nftImg">
-                    <img
-                      src="img/strategy_img_01.png"
-                      className="sTtoken_img"
-                    />
-                  </div>
-                </div>
-                <div className="hi_description">
-                  <span className="desc_txt QUINOABody-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    seddo dskfna;
+                <div className="middleLine"></div>
+                <div className="volume_wrap">
+                  <span className="volume_title QUINOASubtitle-2">
+                    Volume
+                  </span>
+                  <span className="volume_amount QUINOAheadline6">
+                    $24.2K
                   </span>
                 </div>
-                <div className="hi_info">
-                  <div className="apy_wrap">
-                    <span className="apy_title QUINOASubtitle-2">APY</span>
-                    <div className="apy_per">
-                      <div className="up_arrow"></div>
-                      <span className="up_Num QUINOAheadline6">8.9%</span>
-                    </div>
-                  </div>
-                  <div className="middleLine"></div>
-                  <div className="volume_wrap">
-                    <span className="volume_title QUINOASubtitle-2">
-                      Volume
-                    </span>
-                    <span className="volume_amount QUINOAheadline6">
-                      $24.2K
-                    </span>
-                  </div>
-                </div>
-                <div className="hi_byStrategy">
-                  <div className="byIcon">
-                    <img src="img/byIcon_img_01.png" className="byIcon_img" />
-                  </div>
-                  <span className="By_Strategy_name">By SuperDAO friends</span>
-                </div>
               </div>
-            </SwiperSlide>
-            <SwiperSlide className="hi_swiperslide">
-              <div className="stateDefault">
-                <div className="hi_headline">
-                  <div className="list_Strategy_name">
-                    <span className="ls_name_title QUINOABody-2">
-                      Perfect Invest
-                    </span>
-                    <div className="ls_STtoken">
-                      <img
-                        src="img/STtoken_img_01.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_02.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_03.svg"
-                        className="sTtoken_img"
-                      />
-                    </div>
-                  </div>
-                  <div className="wishlist">
-                    <div className="default"></div>
-                  </div>
+              <div className="hi_byStrategy">
+                <div className="byIcon">
+                  <img src="img/byIcon_img_01.png" className="byIcon_img" />
                 </div>
-                <div className="hi_nftImg_wrap">
-                  <div className="hi_nftImg">
-                    <img
-                      src="img/strategy_img_01.png"
-                      className="sTtoken_img"
-                    />
-                  </div>
-                </div>
-                <div className="hi_description">
-                  <span className="desc_txt QUINOABody-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    seddo dskfna;
-                  </span>
-                </div>
-                <div className="hi_info">
-                  <div className="apy_wrap">
-                    <span className="apy_title QUINOASubtitle-2">APY</span>
-                    <div className="apy_per">
-                      <div className="up_arrow"></div>
-                      <span className="up_Num QUINOAheadline6">8.9%</span>
-                    </div>
-                  </div>
-                  <div className="middleLine"></div>
-                  <div className="volume_wrap">
-                    <span className="volume_title QUINOASubtitle-2">
-                      Volume
-                    </span>
-                    <span className="volume_amount QUINOAheadline6">
-                      $24.2K
-                    </span>
-                  </div>
-                </div>
-                <div className="hi_byStrategy">
-                  <div className="byIcon">
-                    <img src="img/byIcon_img_01.png" className="byIcon_img" />
-                  </div>
-                  <span className="By_Strategy_name">By SuperDAO friends</span>
-                </div>
+                <span className="By_Strategy_name">By SuperDAO friends</span>
               </div>
-            </SwiperSlide>
-            <SwiperSlide className="hi_swiperslide">
-              <div className="stateDefault">
-                <div className="hi_headline">
-                  <div className="list_Strategy_name">
-                    <span className="ls_name_title QUINOABody-2">
-                      Perfect Invest
-                    </span>
-                    <div className="ls_STtoken">
-                      <img
-                        src="img/STtoken_img_01.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_02.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_03.svg"
-                        className="sTtoken_img"
-                      />
-                    </div>
-                  </div>
-                  <div className="wishlist">
-                    <div className="default"></div>
-                  </div>
-                </div>
-                <div className="hi_nftImg_wrap">
-                  <div className="hi_nftImg">
-                    <img
-                      src="img/strategy_img_01.png"
-                      className="sTtoken_img"
-                    />
-                  </div>
-                </div>
-                <div className="hi_description">
-                  <span className="desc_txt QUINOABody-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    seddo dskfna;
-                  </span>
-                </div>
-                <div className="hi_info">
-                  <div className="apy_wrap">
-                    <span className="apy_title QUINOASubtitle-2">APY</span>
-                    <div className="apy_per">
-                      <div className="up_arrow"></div>
-                      <span className="up_Num QUINOAheadline6">8.9%</span>
-                    </div>
-                  </div>
-                  <div className="middleLine"></div>
-                  <div className="volume_wrap">
-                    <span className="volume_title QUINOASubtitle-2">
-                      Volume
-                    </span>
-                    <span className="volume_amount QUINOAheadline6">
-                      $24.2K
-                    </span>
-                  </div>
-                </div>
-                <div className="hi_byStrategy">
-                  <div className="byIcon">
-                    <img src="img/byIcon_img_01.png" className="byIcon_img" />
-                  </div>
-                  <span className="By_Strategy_name">By SuperDAO friends</span>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide className="hi_swiperslide">
-              <div className="stateDefault">
-                <div className="hi_headline">
-                  <div className="list_Strategy_name">
-                    <span className="ls_name_title QUINOABody-2">
-                      Perfect Invest
-                    </span>
-                    <div className="ls_STtoken">
-                      <img
-                        src="img/STtoken_img_01.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_02.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_03.svg"
-                        className="sTtoken_img"
-                      />
-                    </div>
-                  </div>
-                  <div className="wishlist">
-                    <div className="default"></div>
-                  </div>
-                </div>
-                <div className="hi_nftImg_wrap">
-                  <div className="hi_nftImg">
-                    <img
-                      src="img/strategy_img_01.png"
-                      className="sTtoken_img"
-                    />
-                  </div>
-                </div>
-                <div className="hi_description">
-                  <span className="desc_txt QUINOABody-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    seddo dskfna;
-                  </span>
-                </div>
-                <div className="hi_info">
-                  <div className="apy_wrap">
-                    <span className="apy_title QUINOASubtitle-2">APY</span>
-                    <div className="apy_per">
-                      <div className="up_arrow"></div>
-                      <span className="up_Num QUINOAheadline6">8.9%</span>
-                    </div>
-                  </div>
-                  <div className="middleLine"></div>
-                  <div className="volume_wrap">
-                    <span className="volume_title QUINOASubtitle-2">
-                      Volume
-                    </span>
-                    <span className="volume_amount QUINOAheadline6">
-                      $24.2K
-                    </span>
-                  </div>
-                </div>
-                <div className="hi_byStrategy">
-                  <div className="byIcon">
-                    <img src="img/byIcon_img_01.png" className="byIcon_img" />
-                  </div>
-                  <span className="By_Strategy_name">By SuperDAO friends</span>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide className="hi_swiperslide">
-              <div className="stateDefault">
-                <div className="hi_headline">
-                  <div className="list_Strategy_name">
-                    <span className="ls_name_title QUINOABody-2">
-                      Perfect Invest
-                    </span>
-                    <div className="ls_STtoken">
-                      <img
-                        src="img/STtoken_img_01.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_02.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_03.svg"
-                        className="sTtoken_img"
-                      />
-                    </div>
-                  </div>
-                  <div className="wishlist">
-                    <div className="default"></div>
-                  </div>
-                </div>
-                <div className="hi_nftImg_wrap">
-                  <div className="hi_nftImg">
-                    <img
-                      src="img/strategy_img_01.png"
-                      className="sTtoken_img"
-                    />
-                  </div>
-                </div>
-                <div className="hi_description">
-                  <span className="desc_txt QUINOABody-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    seddo dskfna;
-                  </span>
-                </div>
-                <div className="hi_info">
-                  <div className="apy_wrap">
-                    <span className="apy_title QUINOASubtitle-2">APY</span>
-                    <div className="apy_per">
-                      <div className="up_arrow"></div>
-                      <span className="up_Num QUINOAheadline6">8.9%</span>
-                    </div>
-                  </div>
-                  <div className="middleLine"></div>
-                  <div className="volume_wrap">
-                    <span className="volume_title QUINOASubtitle-2">
-                      Volume
-                    </span>
-                    <span className="volume_amount QUINOAheadline6">
-                      $24.2K
-                    </span>
-                  </div>
-                </div>
-                <div className="hi_byStrategy">
-                  <div className="byIcon">
-                    <img src="img/byIcon_img_01.png" className="byIcon_img" />
-                  </div>
-                  <span className="By_Strategy_name">By SuperDAO friends</span>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide className="hi_swiperslide">
-              <div className="stateDefault">
-                <div className="hi_headline">
-                  <div className="list_Strategy_name">
-                    <span className="ls_name_title QUINOABody-2">
-                      Perfect Invest
-                    </span>
-                    <div className="ls_STtoken">
-                      <img
-                        src="img/STtoken_img_01.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_02.svg"
-                        className="sTtoken_img"
-                      />
-                      <img
-                        src="img/STtoken_img_03.svg"
-                        className="sTtoken_img"
-                      />
-                    </div>
-                  </div>
-                  <div className="wishlist">
-                    <div className="default"></div>
-                  </div>
-                </div>
-                <div className="hi_nftImg_wrap">
-                  <div className="hi_nftImg">
-                    <img
-                      src="img/strategy_img_01.png"
-                      className="sTtoken_img"
-                    />
-                  </div>
-                </div>
-                <div className="hi_description">
-                  <span className="desc_txt QUINOABody-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    seddo dskfna;
-                  </span>
-                </div>
-                <div className="hi_info">
-                  <div className="apy_wrap">
-                    <span className="apy_title QUINOASubtitle-2">APY</span>
-                    <div className="apy_per">
-                      <div className="up_arrow"></div>
-                      <span className="up_Num QUINOAheadline6">8.9%</span>
-                    </div>
-                  </div>
-                  <div className="middleLine"></div>
-                  <div className="volume_wrap">
-                    <span className="volume_title QUINOASubtitle-2">
-                      Volume
-                    </span>
-                    <span className="volume_amount QUINOAheadline6">
-                      $24.2K
-                    </span>
-                  </div>
-                </div>
-                <div className="hi_byStrategy">
-                  <div className="byIcon">
-                    <img src="img/byIcon_img_01.png" className="byIcon_img" />
-                  </div>
-                  <span className="By_Strategy_name">By SuperDAO friends</span>
-                </div>
-              </div>
-            </SwiperSlide>
+            </div>
+          </SwiperSlide>
+          ))}
           </Swiper>
         </div>
       </section>
@@ -648,7 +188,8 @@ function InvestingList({currentAccount}:any) {
             </header>
             <div className="header_line"></div>
             {/* 1st */}
-            <div className="list_strategy">
+            {vaultList?.map((item)=> (
+              <div className="list_strategy">
               <div className="ls_wishlist_wrap">
                 <div className="wishlist">
                   <div className="focused"></div>
@@ -684,377 +225,9 @@ function InvestingList({currentAccount}:any) {
                 <span className="totalVolume QUINOABody-1">$2,346.7M</span>
               </div>
               <div className="ls_underline"></div>
-            </div>
-            <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="default"></div>
-                </div>
               </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_high"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_up"></div>
-                  <span className="apy_number_txt_up">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="default"></div>
-                </div>
-              </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_low"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_up"></div>
-                  <span className="apy_number_txt_up">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="default"></div>
-                </div>
-              </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_high"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_up"></div>
-                  <span className="apy_number_txt_up">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="default"></div>
-                </div>
-              </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_high"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_up"></div>
-                  <span className="apy_number_txt_up">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="default"></div>
-                </div>
-              </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_high"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_up"></div>
-                  <span className="apy_number_txt_up">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="default"></div>
-                </div>
-              </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_high"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_up"></div>
-                  <span className="apy_number_txt_up">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="default"></div>
-                </div>
-              </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_high"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_up"></div>
-                  <span className="apy_number_txt_up">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="default"></div>
-                </div>
-              </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_high"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_up"></div>
-                  <span className="apy_number_txt_up">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="default"></div>
-                </div>
-              </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_high"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_up"></div>
-                  <span className="apy_number_txt_up">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="default"></div>
-                </div>
-              </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    Perfect Invest
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_high"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_up"></div>
-                  <span className="apy_number_txt_up">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">$2,346.7M</span>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
+            ))}
+            
           </div>
           <span className="text-button">
             Create a strategy with the experts <span>&#8594;</span>

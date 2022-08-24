@@ -10,4 +10,5 @@ cache
 artifacts
 
 dist
+yarn-error.log
 

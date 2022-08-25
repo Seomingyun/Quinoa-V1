@@ -1,0 +1,31 @@
+.default {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+  background: url(asset/wishlist_default.svg) no-repeat 0 0;
+  cursor: pointer;
+  z-index: 9999;
+}
+.hovered {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+  background: url(asset/wishlist_hovered.svg) no-repeat 0 0;
+  cursor: pointer;
+  z-index: 9999;
+}
+.pressed {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+  background: url(asset/wishlist_pressed.svg) no-repeat 0 0;
+  cursor: pointer;
+  z-index: 9999;
+}
+.focused {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+  background: url(asset/wishlist_focused.svg) no-repeat 0 0;
+  cursor: pointer;
+}

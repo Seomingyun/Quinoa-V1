@@ -137,8 +137,8 @@ function App() {
           />
       <Routes>
         <Route path="/investing" element={<InvestingList currentAccount={currentAccount}/>}>
-          <Route path="/investing:address" element={<InvestingDetail />} />
         </Route>
+        <Route path='/investing/detail/:address' element={<InvestingDetail currentAccount={currentAccount}/>} />
       </Routes>
       </BrowserRouter>
     </div>

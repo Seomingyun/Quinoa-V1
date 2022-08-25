@@ -14,7 +14,7 @@ export const Navbar = ({currentAccount, correctNetwork, connectWallet, changeNet
           </div>
           <div className="nav_menu_wrap">
             <div className="nav_menu cursor_pointer">
-              <Link to="/porfolio" className="nav_txt_default">Portfolio</Link>
+              <Link to="/portfolio" className="nav_txt_default">Portfolio</Link>
               <Link to="/investing" className="nav_txt_focused">Investing</Link>
               <Link to="draft" className="nav_txt_default">Draft</Link>
             </div>

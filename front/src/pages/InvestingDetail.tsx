@@ -23,17 +23,10 @@ function InvestingDetail({currentAccount}:any) {
     setAmount(e.target.value);
   }
 
-  // const buy = () => {
-    
-  // }
-  const sell = () =>{
-      
-  }
   return (
   <div className="myinvest_banner">
     <input type="text" name="buyAmount" placeholder="Enter amount to buy" value={amount.toString()} onChange={handleChange}></input>
     <button type="button" onClick={() => buy(amount, currentAccount, address, state.assetAddress)}>buy</button>
-    <button type="button" onClick={sell}>sell</button>
   </div>
   )
 

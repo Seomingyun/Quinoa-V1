@@ -14,7 +14,7 @@ export const useBuy = (amount:number, address:any, assetAddress:any, currentAddr
             const routerAddress:string = process.env.REACT_APP_ROUTER_ADDRESS || ""
             const router = Router__factory.connect(routerAddress, signer);
             
-            // **Testtoken minting just for testing **
+            //**Testtoken minting just for testing **
             // const testToken = TestToken__factory.connect(assetAddress, signer);
             // const mintTx = await testToken.mint(currentAddress, "100000");
             // await mintTx.wait();

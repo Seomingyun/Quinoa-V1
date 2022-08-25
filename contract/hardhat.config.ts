@@ -59,6 +59,14 @@ const config: HardhatUserConfig | {} = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    matic: {
+      url: process.env.MATIC_URL || "https://polygon-rpc.com/",
+      accounts: [process.env.PRIVATE_KEY1, process.env.PRIVATE_KEY2, process.env.PRIVATE_KEY3]
+    },
+    mumbai : {
+      url: process.env.MUMBAI_URL || "https://rpc-mumbai.maticvigil.com",
+      accounts: [process.env.PRIVATE_KEY1, process.env.PRIVATE_KEY2, process.env.PRIVATE_KEY3]
+    }
   },
   gasReporter: {
     enabled: true,

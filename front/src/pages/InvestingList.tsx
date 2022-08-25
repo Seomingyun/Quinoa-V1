@@ -4,27 +4,46 @@ import { ReactComponent as Quinoalogo } from "../components/asset/quinoa_logo.sv
 import { ReactComponent as Mibtnarrow } from "../components/asset/mibtn_arrow.svg";
 import { ReactComponent as Infoicon } from "../components/asset/info_icon.svg";
 import { ReactComponent as WishList } from "../components/asset/wishlist_default.svg";
-// import WishButton from "../components/WishButton";
-// import "../components/WishButton.css";
 
-// import Swiper core and required modules
 import SwiperCore, { Navigation, Pagination, Scrollbar } from "swiper";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-import {ethers} from "ethers";
+import Investment from "../components/Investment";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { VaultInfo } from "../models/VaultInfo";
+
+//Import hooks
 import {useVaultList} from "../hooks/useVaultList";
 
-SwiperCore.use([Navigation, Pagination, Scrollbar]);
 
+SwiperCore.use([Navigation, Pagination, Scrollbar]);
+// {key :val, key:val}
 function InvestingList({currentAccount}:any) {
   const vaultList = useVaultList();
-  
+  const [like, setLike] = useState<Map<number,boolean>>(new Map());
+  //const [like, setLike] = useState([false])
+  const handleLike = (index:number) => {
+    if (like.has(index)) {
+      console.log("has");
+      
+      let newLike = new Map(like);
+      newLike.set(index, !like.get(index))
+      setLike(newLike);
+      console.log("after if" ,like);
+    } 
+    else{
+      console.log("new");
+      let newLike = new Map(like);
+      newLike.set(index,  true)
+      setLike(newLike);
+      console.log("after els" ,like);
+
+    }
+  }
+
   return (
     <div> 
       <section className="myinvest_banner">
@@ -88,7 +107,8 @@ function InvestingList({currentAccount}:any) {
             modules={[Pagination, Navigation]}
             className="mySwiper"
           >
-          {vaultList?.map((item)=> (
+          {vaultList?.map((item, idx)=> (
+            //<Slide item = {item}/>
             <SwiperSlide className="hi_swiperslide">
             <div className="stateDefault">
               <div className="hi_headline">
@@ -112,7 +132,7 @@ function InvestingList({currentAccount}:any) {
                   </div>
                 </div>
                 <div className="wishlist">
-                  <div className="default"></div>
+                  <div className= {like.get(idx) ? "default focused": "default"} onClick={() => handleLike(idx)}></div>
                 </div>
               </div>
               <div className="hi_nftImg_wrap">
@@ -188,46 +208,10 @@ function InvestingList({currentAccount}:any) {
             </header>
             <div className="header_line"></div>
             {/* 1st */}
-            {vaultList?.map((item)=> (
-              <div className="list_strategy">
-              <div className="ls_wishlist_wrap">
-                <div className="wishlist">
-                  <div className="focused"></div>
-                </div>
-              </div>
-              <div className="ls_strategyname_wrap">
-                <div className="list_Strategy_name">
-                  <span className="ls_name_title QUINOABody-2">
-                    {item.name}
-                  </span>
-                  <div className="ls_STtoken">
-                    <img src="img/STtoken_img_01.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_02.svg" className="sTtoken_img" />
-                    <img src="img/STtoken_img_03.svg" className="sTtoken_img" />
-                  </div>
-                </div>
-              </div>
-              <div className="assistivceChip_wrap">
-                <div className="chipbox_low"></div>
-              </div>
-              <div className="apy_number_wrap">
-                <div className="apy_number">
-                  <div className="apy_down"></div>
-                  <span className="apy_number_txt_down">
-                    8.9<span className="percent_bold">%</span>
-                  </span>
-                </div>
-              </div>
-              <div className="volume24h_wrap">
-                <span className="volume24h QUINOABody-1">$246.7K</span>
-              </div>
-              <div className="totalVolume_wrap">
-                <span className="totalVolume QUINOABody-1">{Number(item.totalAssets)}&nbsp;{item.symbol}</span>
-              </div>
-              <div className="ls_underline"></div>
-              </div>
+            {vaultList?.map((item, idx)=> (
+            <Investment item={item}/>
             ))}
-            
+
           </div>
           <span className="text-button">
             Create a strategy with the experts <span>&#8594;</span>

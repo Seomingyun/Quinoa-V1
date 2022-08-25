@@ -1,0 +1,356 @@
+.il_table .list_strategy {
+    position: relative;
+    width: 100%;
+    height: 90px;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  .il_table .list_strategy:hover {
+    background-color: #f9f9f9;
+  }
+  .il_table .list_strategy .ls_wishlist_wrap {
+    width: 99px;
+    height: 100%;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 0 0 38px;
+    box-sizing: border-box;
+  }
+  .il_table .list_strategy .ls_wishlist_wrap .wishlist {
+    opacity: 1;
+    width: 17px;
+    height: 17px;
+    object-fit: contain;
+    transition: all 400ms cubic-bezier(0.075, 0.82, 0.165, 1);
+    z-index: 9992;
+  }
+  .il_table .list_strategy .ls_wishlist_wrap .wishlist .default {
+    width: 17px;
+    height: 17px;
+    object-fit: contain;
+    background: url(../components/asset/wishlist_default.svg) no-repeat 0 0;
+    cursor: pointer;
+    z-index: 9992;
+  }
+  .il_table .list_strategy .ls_wishlist_wrap .wishlist:hover.wishlist .default {
+    background: url(../components/asset/il_wishlist_hovered.svg) no-repeat 0 0;
+  }
+  .il_table .list_strategy .ls_wishlist_wrap .wishlist:active.wishlist .default {
+    background: url(../components/asset/il_wishlist_pressed.svg) no-repeat 0 0;
+  }
+  .il_table .list_strategy .ls_wishlist_wrap .wishlist .focused {
+    width: 17px;
+    height: 17px;
+    object-fit: contain;
+    background: url(../components/asset/il_wishlist_focused.svg) no-repeat 0 0;
+    cursor: pointer;
+    z-index: 9992;
+  }
+  .il_table .list_strategy .ls_strategyname_wrap {
+    width: 219px;
+    height: 100%;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  .il_table .list_strategy .ls_strategyname_wrap .list_Strategy_name {
+    width: 180px;
+    height: 38px;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 3px;
+    padding: 0;
+  }
+  .il_table
+    .list_strategy
+    .ls_strategyname_wrap
+    .list_Strategy_name
+    .ls_name_title {
+    height: 20px;
+    flex-grow: 0;
+    color: var(--neutral-qui-neu-900);
+  }
+  .il_table .list_strategy .ls_strategyname_wrap .ls_STtoken {
+    width: auto;
+    height: 13px;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    isolation: isolate;
+  }
+  .il_table .list_strategy .ls_strategyname_wrap .sTtoken_img {
+    position: relative;
+    width: 13px;
+    height: 13px;
+    border-radius: 7.5px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px -1.5px;
+  }
+  .il_table .list_strategy .ls_strategyname_wrap .sTtoken_img:nth-child(1) {
+    z-index: 2;
+  }
+  .il_table .list_strategy .ls_strategyname_wrap .sTtoken_img:nth-child(2) {
+    z-index: 1;
+  }
+  .il_table .list_strategy .ls_strategyname_wrap .sTtoken_img:nth-child(3) {
+    z-index: 0;
+  }
+  .il_table .list_strategy .assistivceChip_wrap {
+    width: 142px;
+    height: 100%;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+  }
+  .il_table .list_strategy .assistivceChip_wrap div {
+    height: 36px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 18px;
+    box-sizing: border-box;
+  }
+  .il_table .list_strategy .assistivceChip_wrap .chipbox_high {
+    width: 106px;
+    background-color: var(--error-error-50);
+  } /*
+  .il_table .list_strategy .assistivceChip_wrap .chipbox_medium {
+    width: 92px;
+    background-color: var(--warning-warning-500);
+  }*/
+  .il_table .list_strategy .assistivceChip_wrap .chipbox_low {
+    width: 126px;
+    background-color: #e9fceb;
+  }
+  .il_table .list_strategy .assistivceChip_wrap .chipbox_high::after {
+    margin: 0 auto;
+    content: "Agressive";
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.57;
+    letter-spacing: normal;
+    text-align: center;
+    color: var(--error-error-400);
+  }
+  /*
+  .il_table .list_strategy .assistivceChip_wrap .chipbox_medium::after {
+    margin: 0 auto;
+    content: "Neutral";
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.57;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+  }*/
+  .il_table .list_strategy .assistivceChip_wrap .chipbox_low::after {
+    margin: 0 auto;
+    content: "Conservative";
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.57;
+    letter-spacing: normal;
+    text-align: center;
+    color: var(--primary-light-qui-green-400);
+  }
+  .il_table .list_strategy .apy_number_wrap {
+    width: 364px;
+    height: 100%;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .il_table .list_strategy .apy_number_wrap .apy_number {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 3px;
+  }
+  .il_table .list_strategy .apy_number_wrap .apy_number .apy_up {
+    width: 11px;
+    height: 11px;
+    object-fit: contain;
+    background: url(../components/asset/apy_up_arrow.svg) no-repeat 0 0;
+    z-index: 9992;
+  }
+  .apy_number_txt_up {
+    height: 100%;
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.25;
+    letter-spacing: -0.25px;
+    text-align: left;
+    color: var(--primary-light-qui-green-300);
+  }
+  .il_table .list_strategy .apy_number_wrap .apy_number .apy_down {
+    width: 11px;
+    height: 11px;
+    object-fit: contain;
+    background: url(../components/asset/apy_down_arrow.svg) no-repeat 0 0;
+    z-index: 9992;
+  }
+  .apy_number_txt_down {
+    height: 100%;
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.25;
+    letter-spacing: -0.25px;
+    text-align: left;
+    color: var(--error-error-500);
+  }
+  .percent_bold {
+    font-weight: bold;
+  }
+  .il_table .list_strategy .volume24h_wrap {
+    width: 173px;
+    height: 100%;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+  }
+  .il_table .list_strategy .volume24h_wrap .volume24h {
+    flex-grow: 0;
+    color: #000;
+  }
+  .il_table .list_strategy .ls_underline {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 1140px;
+    height: 1px;
+    flex-grow: 0;
+    background-color: var(--neutral-qui-neu-100);
+  }
+  .il_table div.list_strategy:last-child .ls_underline {
+    background: none;
+  }
+  .il_table .list_strategy .totalVolume_wrap {
+    width: 172px;
+    height: 100%;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .il_table .list_strategy .totalVolume_wrap .totalVolume {
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.25;
+    letter-spacing: -0.25px;
+    text-align: left;
+    color: #000;
+  }
+  .investList .text-button {
+    position: absolute;
+    bottom: -36px;
+    right: 10px;
+    height: 23px;
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: normal;
+    text-align: left;
+    color: #61c43b;
+    border-bottom: 1px solid #61c43b;
+    cursor: pointer;
+    user-select: none;
+  }
+  .investList .text-button > span {
+    font-size: 15px;
+    font-family: system-ui;
+  }
+  .investList .text-button:hover {
+    color: var(--primary-light-qui-green-200);
+    border-bottom: 1px solid var(--primary-light-qui-green-200);
+  }
+  .investList .lt_moreBtn {
+    position: absolute;
+    width: 140px;
+    height: 32px;
+    left: 50%;
+    bottom: -76px;
+    transform: translate(-50%, 0);
+    cursor: pointer;
+  }
+  .investList .lt_moreBtn .moreBtn_txt {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 18px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 32px;
+    letter-spacing: -0.25px;
+    text-align: center;
+    color: #000;
+  }
+  .investList .lt_moreBtn .moreBtn_arrow {
+    width: 18px;
+    height: 32px;
+    justify-content: center;
+    text-align: center;
+    margin-left: 9px;
+    background: url(../components/asset/morebtn_arrow.svg) no-repeat 50% 55%;
+  }

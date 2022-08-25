@@ -10,7 +10,7 @@ export const useVaultList = () => {
     
     const getVaultList= async() => {
         const vaultFactoryAddress = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
-        //if (vaults.length > 0) return 
+        if (vaults.length > 0) return 
         const vaultFactory = VaultFactory__factory.connect(vaultFactoryAddress, provider);
         const vaultList = await vaultFactory.getVault();
         for(let i=0; i<vaultList.length ; i++) {

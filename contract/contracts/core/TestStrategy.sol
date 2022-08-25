@@ -12,6 +12,7 @@ contract StrategyQuickSwapMaticMaticX is ERC20Strategy {
     // internal
     address public vaultAddress;
     ERC20 UNDERLYING;
+    bool emergency = false;
 
     address public wmatic = address(0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270);
     // address public maticX = address(0xfa68FB4628DFF1028CFEc22b4162FCcd0d45efb6); // Liquid Staking Matic (PoS) (MaticX)
@@ -20,11 +21,9 @@ contract StrategyQuickSwapMaticMaticX is ERC20Strategy {
 
     BeefyZapUniswapV2 beefyUniV2Zap = BeefyZapUniswapV2(beefyZap);
     address public beefyQuickMaticMaticXPoolVault = address(0xa448e9833095ad50693B025c275F48b271aDe882);
-
-
     
-    constructor(address _UNDERLYING_ADDRESS) ERC20("StrategyQuickSwapMaticMaticX", "QSMMX") {
-        // vaultAddress = _vaultAddress;
+    constructor(address _UNDERLYING_ADDRESS, address _vaultAddress) ERC20("StrategyQuickSwapMaticMaticX", "QSMMX") {
+        vaultAddress = _vaultAddress;
         UNDERLYING = ERC20(_UNDERLYING_ADDRESS);
         // require(IVault(_vault).asset() == matic_maticX, "Underlying mismatch");
     }
@@ -45,15 +44,13 @@ contract StrategyQuickSwapMaticMaticX is ERC20Strategy {
         // _mint(msg.sender, amount.mulDivDown(BASE_UNIT, exchangeRate()));
 
         UNDERLYING.safeTransferFrom(msg.sender, address(this), amount);
+        UNDERLYING.approve(address(beefyZap), amount);
         beefyUniV2Zap.beefIn(beefyQuickMaticMaticXPoolVault, amount/2, wmatic, amount);
         return 0;
     }
 
     function redeemUnderlying(uint256 amount) external override returns (uint256) {
-        require(amount <= UNDERLYING.balanceOf(address(this)));
-
-        UNDERLYING.safeTransfer(msg.sender, amount);
-
+        _redeemUnderlying(amount, vaultAddress);
         return 0;
     }
 
@@ -61,4 +58,22 @@ contract StrategyQuickSwapMaticMaticX is ERC20Strategy {
     function balanceOfUnderlying(address) external view override returns (uint256) {
         return UNDERLYING.balanceOf(address(this));
     }
+
+        
+    // TODO sender check;
+    function setEmergency(bool isEmergency) external override returns(bool) {
+        emergency = isEmergency;
+        if(emergency) {
+            _redeemUnderlying(UNDERLYING.balanceOf(address(this)), vaultAddress);
+        }
+        return true;
+    }
+
+    function _redeemUnderlying(uint256 amount, address to) internal returns (uint256) {
+        require(amount <= UNDERLYING.balanceOf(address(this)));
+        beefyUniV2Zap.beefOutAndSwap(beefyQuickMaticMaticXPoolVault, amount/2, wmatic, amount);
+        UNDERLYING.safeTransfer(to, amount);
+        return 0;
+    }
+
 }

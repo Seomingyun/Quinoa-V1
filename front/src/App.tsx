@@ -3,9 +3,11 @@ import logo from "./logo.svg";
 import "./App.css";
 import "./index.css";
 import {ethers} from 'ethers';
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import InvestingList from "./pages/InvestingList";
 import { Navbar } from "./components/Navbar";
+import InvestingDetail from "./pages/InvestingDetail";
+import Portfolio from "./pages/Portfolio";
 
 function App() {
   const [currentAccount, setCurrentAccount] = useState<String|undefined>();
@@ -127,13 +129,20 @@ function App() {
 
   return (
     <div>
+      <BrowserRouter>
       <Navbar 
-        currentAccount={currentAccount}
-        correctNetwork={correctNetwork}
-        connectWallet={connectWallet}
-        changeNetwork={changeNetwork}
-      />
-      <InvestingList currentAccount={currentAccount}/>
+          currentAccount={currentAccount}
+          correctNetwork={correctNetwork}
+          connectWallet={connectWallet}
+          changeNetwork={changeNetwork}
+          />
+      <Routes>
+        <Route path="/investing" element={<InvestingList currentAccount={currentAccount}/>}>
+        </Route>
+        <Route path='/investing/detail/:address' element={<InvestingDetail currentAccount={currentAccount}/>} />
+        <Route path='/portfolio' element={<Portfolio />} />
+      </Routes>
+      </BrowserRouter>
     </div>
   )
 }

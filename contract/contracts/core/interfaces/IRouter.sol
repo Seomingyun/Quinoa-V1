@@ -9,4 +9,5 @@ interface IRouter{
 
     function sell(uint256 tokenId, uint256 amount) external;
 
+    function getNfts(address _vault) external view returns(uint256[] memory tokenIds);
 }

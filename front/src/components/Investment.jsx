@@ -1,7 +1,21 @@
-import React, {useState} from "react"
+import React, {useState, useEffect, useInsertionEffect} from "react"
 import { Link } from "react-router-dom";
+import {ethers} from 'ethers';
+import { PriceConversion } from "../utils/PriceConversion";
+
 const Investment = ({item}) => {
     const [like, setLike] = useState(false); 
+    const [fiatPrice, setFiatPrice] = useState(0);
+    
+    const getFiatPrice = async () => {
+      const price = await PriceConversion(item.symbol, Number(ethers.utils.formatEther(item.totalAssets)));
+      console.log(price);
+      setFiatPrice(price);
+    }
+
+    useInsertionEffect(() => {
+      getFiatPrice();
+    },[]);
     return(
       <div className="list_strategy">
       <div className="ls_wishlist_wrap">
@@ -36,7 +50,8 @@ const Investment = ({item}) => {
         <span className="volume24h QUINOABody-1">$246.7K</span>
       </div>
       <div className="totalVolume_wrap">
-        <span className="totalVolume QUINOABody-1">{Number(item.totalAssets)}&nbsp;{item.symbol}</span>
+        <span className="totalVolume QUINOABody-1">
+          ${fiatPrice.toFixed(2)}</span>
       </div>
       <div className="ls_underline"></div>
     </div>

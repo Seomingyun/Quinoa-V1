@@ -5,8 +5,16 @@ import { ReactComponent as ETHicon} from "../components/asset/ETH_Token_icon.svg
 import { ReactComponent as AVAXicon } from "../components/asset/AVAX_Token_icon.svg";
 import { ReactComponent as SendIcon } from "../components/asset/send_icon.svg";
 import { ReactComponent as ReceiveIcon } from "../components/asset/receive-icon.svg";
+import { Link } from "react-router-dom";
+import { NftInfo } from "../models/NftInfo";
+import { useNftInfo } from "../hooks/useNftInfo";
+import { isConstructorDeclaration } from "typescript";
+import {useHoldingInfo} from "../hooks/useHoldingInfo";
 
-function Portfolio () {
+function Portfolio ({currentAccount}:any) {
+    const tokenList  = useNftInfo();
+    const holdingInfo = useHoldingInfo(currentAccount);
+    console.log(tokenList);
     return(
       <div>
         <section className="totalBalance_wrap">
@@ -28,12 +36,12 @@ function Portfolio () {
                   </div>
                 </div>
                 <div className="tb_buttons">
-                  <div className="tb_contents_bnt cursor_pointer">
+                  {/* <div className="tb_contents_bnt cursor_pointer">
                     <p>
                       <ReceiveIcon className="tb_contents_bnt_icon"></ReceiveIcon>
                       <span className="tb_contents_bnt_text">Receive</span>
                     </p>
-                  </div>
+                  </div> */}
                   <div className="tb_contents_bnt cursor_pointer">
                     <p>
                       <SendIcon className="tb_contents_bnt_icon"></SendIcon>
@@ -155,8 +163,10 @@ function Portfolio () {
               <div className="myTotal_Contents">
                 <div className="mTC_title QUINOASubTitle-1">Total Holdings</div>
                 <div className="mTC_contents QUINOAheadline4">
-                  <span className = "text_color_900">$234,102</span>
-                  <span className="text_color_100">.01</span>
+                  <span className = "text_color_900">${Math.floor(holdingInfo?.totalHoldings||0)}</span>
+                  <span className="text_color_100">.
+                  {(Number(((holdingInfo?.totalHoldings|| 0)%1).toFixed(2)))*100}
+                  </span>
                 </div>                
                 <div className="text_color_green300">+ $201.15 (5.26%)</div>
               </div>
@@ -176,8 +186,8 @@ function Portfolio () {
               <div className="myTotal_Contents">
                 <div className="mTC_title QUINOASubTitle-1">QUI Tokens</div>
                 <div className="mTC_contents QUINOAheadline4">
-                  <span className="text_color_900">3,401</span>
-                  <span className="text_color_100">.82</span>
+                  <span className="text_color_900">{Math.floor(holdingInfo?.quiTokens||0)}</span>
+                  <span className="text_color_100">.{Number(((holdingInfo?.quiTokens||0)%1).toFixed(2)) * 100}</span>
                 </div>
                 <div className="text_color_200">USD 32.15</div>
               </div>
@@ -194,227 +204,44 @@ function Portfolio () {
             <div className="mIL_lists_wrap">
               {/* NFT Row #2 */}
               <div className="mIL_lists_row">
-                {/* NFT #1 */}
-                <div className="mIL_lists_NFT">
-                  <div className="NFT_headline">
-                    <div className="NFT_dac_name">
-                      By SuperDAC
-                    </div>
-                    <div className="NFT_investments_desc">
-                      <div className="NFT_investmetns_name">
-                        Super Yield farming Fund
-                      </div>
-                      <div className="NFT_sTtoken_list">
-                          <img
-                            src="img/STtoken_img_01.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_02.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_03.svg"
-                            className="sTtoken_img"
-                          />
-                        </div>
-                    </div>
+              {tokenList.map((item: NftInfo) => (
+                <Link to={'../investing/detail/'+ item.vault} state={{ assetAddress : item.asset}}  style={{ textDecoration: 'none' }} className="mIL_lists_NFT">
+                <div className="NFT_headline">
+                  <div className="NFT_dac_name">
+                    By SuperDAC
                   </div>
-
-                    <div className="NFT_Img_wrap">
-                      <div className="NFT_Img">
+                  <div className="NFT_investments_desc">
+                    <div className="NFT_investmetns_name">
+                      Super Yield farming Fund
+                    </div>
+                    <div className="NFT_sTtoken_list">
                         <img
-                          src="img/strategy_img_01.png"
+                          src="img/STtoken_img_01.svg"
+                          className="sTtoken_img"
+                        />
+                        <img
+                          src="img/STtoken_img_02.svg"
+                          className="sTtoken_img"
+                        />
+                        <img
+                          src="img/STtoken_img_03.svg"
                           className="sTtoken_img"
                         />
                       </div>
-                    </div>
+                  </div>
                 </div>
-                {/* NFT #2 */}
-                <div className="mIL_lists_NFT">
-                  <div className="NFT_headline">
-                    <div className="NFT_dac_name">
-                      By SuperDAC
-                    </div>
-                    <div className="NFT_investments_desc">
-                      <div className="NFT_investmetns_name">
-                        Super Yield farming Fund
-                      </div>
-                      <div className="NFT_sTtoken_list">
-                          <img
-                            src="img/STtoken_img_01.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_02.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_03.svg"
-                            className="sTtoken_img"
-                          />
-                        </div>
+
+                  <div className="NFT_Img_wrap">
+                    <div className="NFT_Img">
+                      <img
+                        src="img/strategy_img_01.png"
+                        className="sTtoken_img"
+                      />
                     </div>
                   </div>
-
-                    <div className="NFT_Img_wrap">
-                      <div className="NFT_Img">
-                        <img
-                          src="img/strategy_img_01.png"
-                          className="sTtoken_img"
-                        />
-                      </div>
-                    </div>
-                </div>
-                {/* NFT #3 */}
-                <div className="mIL_lists_NFT">
-                  <div className="NFT_headline">
-                    <div className="NFT_dac_name">
-                      By SuperDAC
-                    </div>
-                    <div className="NFT_investments_desc">
-                      <div className="NFT_investmetns_name">
-                        Super Yield farming Fund
-                      </div>
-                      <div className="NFT_sTtoken_list">
-                          <img
-                            src="img/STtoken_img_01.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_02.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_03.svg"
-                            className="sTtoken_img"
-                          />
-                        </div>
-                    </div>
-                  </div>
-
-                    <div className="NFT_Img_wrap">
-                      <div className="NFT_Img">
-                        <img
-                          src="img/strategy_img_01.png"
-                          className="sTtoken_img"
-                        />
-                      </div>
-                    </div>
-                </div>
+              </Link>
+              ))}
               </div>
-              {/* NFT Row #2 */}
-              <div className="mIL_lists_row">
-                {/* NFT #1 */}
-                <div className="mIL_lists_NFT">
-                  <div className="NFT_headline">
-                    <div className="NFT_dac_name">
-                      By SuperDAC
-                    </div>
-                    <div className="NFT_investments_desc">
-                      <div className="NFT_investmetns_name">
-                        Super Yield farming Fund
-                      </div>
-                      <div className="NFT_sTtoken_list">
-                          <img
-                            src="img/STtoken_img_01.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_02.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_03.svg"
-                            className="sTtoken_img"
-                          />
-                        </div>
-                    </div>
-                  </div>
-
-                    <div className="NFT_Img_wrap">
-                      <div className="NFT_Img">
-                        <img
-                          src="img/strategy_img_01.png"
-                          className="sTtoken_img"
-                        />
-                      </div>
-                    </div>
-                </div>
-                {/* NFT #2 */}
-                <div className="mIL_lists_NFT">
-                  <div className="NFT_headline">
-                    <div className="NFT_dac_name">
-                      By SuperDAC
-                    </div>
-                    <div className="NFT_investments_desc">
-                      <div className="NFT_investmetns_name">
-                        Super Yield farming Fund
-                      </div>
-                      <div className="NFT_sTtoken_list">
-                          <img
-                            src="img/STtoken_img_01.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_02.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_03.svg"
-                            className="sTtoken_img"
-                          />
-                        </div>
-                    </div>
-                  </div>
-
-                    <div className="NFT_Img_wrap">
-                      <div className="NFT_Img">
-                        <img
-                          src="img/strategy_img_01.png"
-                          className="sTtoken_img"
-                        />
-                      </div>
-                    </div>
-                </div>
-                {/* NFT #3 */}
-                <div className="mIL_lists_NFT">
-                  <div className="NFT_headline">
-                    <div className="NFT_dac_name">
-                      By SuperDAC
-                    </div>
-                    <div className="NFT_investments_desc">
-                      <div className="NFT_investmetns_name">
-                        Super Yield farming Fund
-                      </div>
-                      <div className="NFT_sTtoken_list">
-                          <img
-                            src="img/STtoken_img_01.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_02.svg"
-                            className="sTtoken_img"
-                          />
-                          <img
-                            src="img/STtoken_img_03.svg"
-                            className="sTtoken_img"
-                          />
-                        </div>
-                    </div>
-                  </div>
-
-                    <div className="NFT_Img_wrap">
-                      <div className="NFT_Img">
-                        <img
-                          src="img/strategy_img_01.png"
-                          className="sTtoken_img"
-                        />
-                      </div>
-                    </div>
-                </div>
-              </div>
-
             </div>
           </div>
           

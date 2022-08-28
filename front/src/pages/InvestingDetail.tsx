@@ -17,7 +17,7 @@ function InvestingDetail({currentAccount}:any) {
 
   const {state} = useLocation() as RouteState;
 
-  const [amount,setAmount] = useState(0);
+  const [amount,setAmount] = useState("0");
   const {buy} = useBuy(amount, currentAccount, address, state.assetAddress);
   const handleChange= (e:any) => {
     setAmount(e.target.value);

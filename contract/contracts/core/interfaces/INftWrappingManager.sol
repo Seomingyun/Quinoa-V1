@@ -18,4 +18,7 @@ interface INFTWrappingManager is IERC721 {
     function deposit (uint256 qvTokenAmount, uint256 tokenId) external;
 
     function getTokenIds(address _user, address _vault) external view returns(uint256[] memory  tokenIds);
+
+    function getQvtokenAmount(address _user, address _vault) external view returns(uint256);
+
 }

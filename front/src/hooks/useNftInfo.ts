@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NftInfo } from "../models/NftInfo"
 import {ethers} from 'ethers';
-import { Router__factory, VaultFactory__factory } from "contract";
+import { Router__factory, VaultFactory__factory, Vault__factory } from "contract";
 import {BigNumber} from 'ethers';
 import { VaultInfo } from "../models/VaultInfo";
 
@@ -20,8 +20,10 @@ export const useNftInfo = () => {
         const router = Router__factory.connect(routerAddress, signer);
         for(let i =0; i<vaultList.length; i++) {
             const nftList: BigNumber[] = await router.getNfts(vaultList[i]);
+            const vault = Vault__factory.connect(vaultList[i], provider);
+            const [vaultName, asset] = await Promise.all([vault.name(), vault.asset()]);
             //console.log("vault", vaultList[i], nftList);
-            const info : NftInfo[] = nftList.map(item => <NftInfo>{vault: vaultList[i], tokenId: item});
+            const info : NftInfo[] = nftList.map(item => <NftInfo>{vault: vaultList[i], vaultName: vaultName, tokenId: item, asset:asset});
             setNfts((prev) => [...prev, ...info]);
         }
     }

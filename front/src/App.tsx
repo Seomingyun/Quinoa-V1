@@ -140,7 +140,7 @@ function App() {
         <Route path="/investing" element={<InvestingList currentAccount={currentAccount}/>}>
         </Route>
         <Route path='/investing/detail/:address' element={<InvestingDetail currentAccount={currentAccount}/>} />
-        <Route path='/portfolio' element={<Portfolio />} />
+        <Route path='/portfolio' element={<Portfolio currentAccount={currentAccount}/>} />
       </Routes>
       </BrowserRouter>
     </div>

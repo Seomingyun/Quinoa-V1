@@ -84,6 +84,14 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
         return _userAssets[_user][_vault];
     }
 
+    function getQvtokenAmount(address _user, address _vault) external view returns(uint256){
+        uint256[] memory tokens = _userAssets[_user][_vault];
+        uint256 sum = 0;
+        for(uint i=0; i<tokens.length; i++) {
+            sum += _deposits[tokens[i]].qTokenAmount;
+        }
+        return sum;
+    }
 
     /*///////////////////////////////////////////////////////////////
                 Withdraw Process - burn or update NFT

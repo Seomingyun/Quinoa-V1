@@ -49,6 +49,13 @@ contract Router is Ownable {
     function getNfts(address _vault )external view returns(uint256[] memory tokenIds) {
         return NFTWrappingManager.getTokenIds(msg.sender, _vault);
     }
+
+    // returns amount of holding asset amount and the asset's address
+    function getHoldingAssetAmount(address _vault) external view returns(address asset, uint256 amount) {
+        uint256 shares = NFTWrappingManager.getQvtokenAmount(msg.sender, _vault);
+        IVault vault = IVault(_vault);
+        return (vault.asset(), vault.convertToAssets(shares));
+    }
     /*///////////////////////////////////////////////////////////////
                             Buying
     //////////////////////////////////////////////////////////////*/

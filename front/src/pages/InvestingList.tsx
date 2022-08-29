@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./InvestingList.css";
+import {ethers} from 'ethers';
 import { ReactComponent as Quinoalogo } from "../components/asset/quinoa_logo.svg";
 import { ReactComponent as Mibtnarrow } from "../components/asset/mibtn_arrow.svg";
 import { ReactComponent as Infoicon } from "../components/asset/info_icon.svg";
@@ -166,7 +167,7 @@ function InvestingList({currentAccount}:any) {
                     Volume
                   </span>
                   <span className="volume_amount QUINOAheadline6">
-                    {Number(item.totalAssets)}&nbsp;{item.symbol}
+                    {ethers.utils.formatEther(item.totalAssets)}&nbsp;{item.symbol}
                   </span>
                 </div>
               </div>

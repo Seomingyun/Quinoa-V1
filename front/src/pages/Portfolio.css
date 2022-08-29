@@ -1,0 +1,632 @@
+.myinvest_banner {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 289px;
+    flex-grow: 0;
+    margin-top: 66px;
+    background: linear-gradient(360deg, #084a0e 7.54%, #0e6717 102.62%);
+    overflow: hidden;
+  }
+
+.totalBalance_wrap {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  margin-top: 66px;
+  margin-bottom: 130px;
+}
+
+.totalBalance{
+  position: relative;
+  width: 1200px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  margin-top: 91px;
+  margin-bottom: 74px;
+}
+
+.tb_title{
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3px;
+  margin-top: 11px;
+  margin-bottom: 11px;
+  padding: 0;
+}
+
+.tb_title_main {
+  flex-grow: 0;
+  color: var(--neutral-qui-neu-900);
+}
+
+.info_Icon {
+  width: 11px;
+  height: 11px;
+  text-align: right;
+  cursor: pointer;
+}
+
+.tb_contents_wrap{
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  gap: 7px;
+}
+
+.tb_contents_main {
+  display: flex;
+  flex-direction: row;
+  margin-top: 26px;
+}
+
+.tb_contents_sub {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: #7F7F7F;
+
+  margin-left: 67px;
+  
+}
+
+.tb_balance {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: auto;
+}
+
+.tb_buttons{
+  float: right;
+  margin-left: auto;
+}
+
+.text_color_900 {
+  flex-grow: 0;
+  color: var(--neutral-qui-neu-900);
+}
+
+.text_color_200 {
+  flex-grow: 0;
+  color: var(--neutral-qui-neu-200);
+}
+.text_color_100 {
+  flex-grow: 0;
+  color: var(--neutral-qui-neu-100);
+}
+
+.text_color_green300 {
+  flex-grow: 0;
+  color: var(--primary-light-qui-green-300);
+}
+
+.wallet_Icon{
+  width: 47px;
+  height: 47px;
+  margin-right: 17px;
+}
+
+.tb_contents_bnt{
+  border: 1px solid #3A3A3A;
+  border-radius: 30px;
+  background: #FFFFFF;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 48px;
+  gap: 10px;
+
+  width: 90px;
+  height: 30px;
+  margin-left: 10px;
+  float: right;
+}
+
+.tb_contents_bnt_icon{
+  height: 15px;
+  width: 15px;
+  margin-right: 10px;
+
+}
+
+.tb_contents_bnt_text{  
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #3A3A3A; 
+}
+
+
+.walletList {
+  position: relative;
+  width: 1200px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.wl_table {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 8px;
+  border-radius: 12px;
+  border: solid 1px var(--neutral-qui-neu-100);
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 2px 7px 14px rgba(0, 0, 0, 0.04);
+}
+
+.wl_table .wl_table_header {
+  width: 1120px;
+  height: 67px;
+  flex-grow: 0;
+}
+
+.wl_table_header .list_Rowheader {
+  width: 100%;
+  height: 100%;
+  line-height: 67px;
+  align-self: stretch;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+}
+
+.wl_table_header .list_Rowheader p:hover {
+  color: var(--secondary-light-qui-blue-200);
+}
+.wl_table_header .list_Rowheader p:active {
+  color: var(--secondary-light-qui-blue-300);
+}
+.wl_table_header .list_Rowheader p {
+  height: 100%;
+  flex-grow: 0;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: var(--neutral_qui_neu_900);
+  user-select: none;
+}
+
+.wl_table .list_tokens .ls_underline {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 1140px;
+  height: 1px;
+  flex-grow: 0;
+  background-color: var(--neutral-qui-neu-100);
+}
+
+.wl_table_header .list_Rowheader .header_Tokens {
+  width: 700px;
+}
+.wl_table_header .list_Rowheader .header_Balance {
+  width: 200px;
+  text-align: right;
+  margin-left: auto;
+}
+.wl_table_header .list_Rowheader .header_Amount {
+  width: 200px;
+  margin-left: auto;
+  text-align: right;
+}
+
+.wl_table .header_line {
+  position: absolute;
+  top: 66px;
+  width: 100%;
+  height: 1px;
+  background-color: #d9d9d9;
+} 
+
+.wl_table .list_tokens {
+  position: relative;
+  width: 100%;
+  height: 90px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.wl_table .list_tokens:hover {
+  background-color: #f9f9f9;
+}
+
+.wl_table .list_tokens .ls_tokenname_wrap {
+  width: 700px;
+  height: 100%;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+  margin-left: 40px;
+}
+
+.wl_table .list_tokens .ls_tokenname_wrap .list_token_name {
+  height: 38px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3px;
+  padding: 0;
+}
+
+.wl_table
+  .list_tokens
+  .ls_tokenname_wrap
+  .list_token_name
+  .ls_name_title {
+  height: 20px;
+  flex-grow: 0;
+  color: var(--neutral-qui-neu-900);
+}
+
+.wl_table
+  .list_tokens
+  .ls_tokenname_wrap
+  .list_token_name
+  .ls_token_icon {
+  height: 34px;
+  width: 34px;
+  margin-right: 13px;
+}
+
+.wl_table .list_tokens .ls_tokenbalance_wrap {
+  width: 200px;
+  height: 100%;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  box-sizing: border-box;
+  margin-left: auto;
+}
+
+.wl_table .list_tokens .ls_tokenbalance_wrap .list_token_balance {
+  width: 106px;
+  height: 38px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0;
+  
+}
+
+.wl_table
+  .list_tokens
+  .ls_tokenbalance_wrap
+  .list_token_balance
+  .ls_token_balance {
+  height: 20px;
+  flex-grow: 0;
+  color: var(--neutral-qui-neu-900);
+}
+
+.wl_table .list_tokens .ls_tokenamount_wrap {
+  width: 240px;
+  height: 100%;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  box-sizing: border-box;
+  margin-left: auto;
+}
+
+.wl_table .list_tokens .ls_tokenamount_wrap .list_token_amount {
+  width: 106px;
+  height: 38px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0;
+  
+}
+
+.wl_table
+  .list_tokens
+  .ls_tokenamount_wrap
+  .list_token_amount
+  .ls_token_amount {
+  height: 20px;
+  flex-grow: 0;
+  color: var(--neutral-qui-neu-900);
+  margin-right: 40px;
+}
+
+.myInvestment_wrap {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  margin-bottom: 150px;
+}
+
+.myInvestmentList {
+  position: relative;
+  width: 1200px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.mIV_title {
+  display: flex;
+  width: 100%;
+  height: 95px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 0;
+  margin-bottom: 45px;
+}
+.mIV_title_main {
+  flex-grow: 0;
+  color: var(--neutral-qui-neu-900);
+}
+.mIV_title_sub {
+  text-align: left;
+  color: var(--neutral-qui-neu-400);
+}
+
+.myInvestment_contents_wrap {
+  position: relative;
+  width: 1200px;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 95px;
+}
+
+.myTotal_Contents {
+  position: relative;
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin-right: 96px;
+}
+
+.myTotal_Contests_Splitter {
+  width: 1px;
+  height: 114px;
+  left: 415px;
+  top: 1023px;
+  
+  background: #D7D7D7;
+
+  margin-right: 35px;
+}
+
+.mTC_title {
+  flex-grow: 0;
+  color: var(--neutral-qui-neu-900);
+}
+
+.mTC_contents {
+  flex-grow: 0;
+  margin-top: 25px;
+  margin-bottom: 6px;
+}
+
+.mIL_title_wrap {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #fff;
+
+  margin-bottom: 50px;
+}
+
+.mIL_title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  /* identical to box height, or 122% */
+
+  letter-spacing: -0.25px;
+
+  /* Neutral/QUI_Neu900 */
+
+  margin-bottom: 12px;
+  color: #1B1B1B;
+}
+
+.mIL_splitter_main{
+  width: 140px;
+  height: 2px;
+
+  background: #1B1B1B;
+}
+
+.mIL_splitter_sub{
+  width: 1200px;
+  height: 1px;
+
+  background: #D7D7D7;
+}
+
+.mIL_lists_wrap{
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #fff;
+
+  margin-bottom: 22px;
+
+}
+
+.mIL_lists_row{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content:  space-around;
+  align-items: center;
+  margin-bottom: 36px;
+}
+
+.mIL_lists_NFT{
+
+  border: 1px solid #E3E3E3;
+  border-radius: 12px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 382px;
+  height: 472px;
+
+}
+
+.NFT_headline{
+  width:343px;
+  width: 343px;
+  height: 64px;
+  height: auto;
+  align-self: stretch;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin:20px auto;
+  box-sizing: border-box;
+
+}
+
+.NFT_dac_name {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: -0.25px;
+
+  color: #7F7F7F;
+
+}
+
+.NFT_investments_desc{
+  width:100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.NFT_investmetns_name{
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #1B1B1B;
+}
+
+.NFT_sTtoken_list{
+  width: auto;
+  height: 15px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content:flex-end;
+  align-items: center;
+  isolation: isolate;
+  margin-left: auto;
+}
+
+.sTtoken_img {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 7.5px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px -2px;
+}
+
+.NFT_Img_wrap{
+  height: 374px;  
+  align-self: stretch;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.NFT_Img{
+  width: 350px;
+  height: 374px;  
+  background: #fff;
+  border-radius: 8px;
+}
+
+.NFT_Img img {
+  width: 350px;
+  height: 374px;  
+}

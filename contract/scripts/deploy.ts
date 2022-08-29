@@ -10,6 +10,7 @@ import {
     TestToken__factory, 
     GeneralNFT__factory, 
     GuruNFT__factory,
+    Qui__factory
 } from "../typechain-types";
 //import "hardhat/console.sol";
 
@@ -74,6 +75,11 @@ async function main(){
       const tx = await vaultFactory.connect(user).deployVault(testToken.address);
       await tx.wait();
     }
+
+    //#8. Deploy Qui Token
+    const qui = await new Qui__factory(deployer).deploy(10, createMerkleRoot());
+    await qui.deployed();
+    console.log("QuiToken address", qui.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

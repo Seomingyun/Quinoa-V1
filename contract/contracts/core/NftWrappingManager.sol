@@ -73,13 +73,29 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
         emit NFTImageUpdated(tokenId);
     }
 
-
     /*///////////////////////////////////////////////////////////////
-                Withdraw Process - burn or update NFT
+                         Get NFT Information
     //////////////////////////////////////////////////////////////*/
 
     /// @dev user address - ( vault address - [tokenids..])
     mapping(address => mapping(address  => uint256[])) private _userAssets;
+
+    function getTokenIds(address _user, address _vault) external view onlyRouter returns(uint256[] memory tokenIds){
+        return _userAssets[_user][_vault];
+    }
+
+    function getQvtokenAmount(address _user, address _vault) external view returns(uint256){
+        uint256[] memory tokens = _userAssets[_user][_vault];
+        uint256 sum = 0;
+        for(uint i=0; i<tokens.length; i++) {
+            sum += _deposits[tokens[i]].qTokenAmount;
+        }
+        return sum;
+    }
+
+    /*///////////////////////////////////////////////////////////////
+                Withdraw Process - burn or update NFT
+    //////////////////////////////////////////////////////////////*/
 
     ///@dev get Token id's amount
     function getQtokenAmount(uint256 tokenId) public view returns(uint256){
@@ -95,7 +111,7 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
     // @TODO partial withdraw logic 이 vault 당 NFT 가 한개일 경우만 가정함. 기능 추가 시 수정필요.
     function withdraw(uint256 tokenId, address vault, uint256 amount)external onlyRouter {
     
-        require(IERC20(vault).balanceOf(address(this)) == amount, "NftWrappingManager: Don't have enough qToken to redeem!");
+        require(IERC20(vault).balanceOf(address(this)) > amount, "NftWrappingManager: Don't have enough qToken to redeem!");
 
         if (isFullWithdraw(tokenId, amount) ) {// full withdraw      
             burn(tokenId); 
@@ -148,6 +164,7 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
         _deposits[tokenId] = _deposit;
         _tokenIdCounter.increment();
         _safeMint(user,tokenId);
+        _userAssets[user][vault].push(tokenId);
         _updateTokenURI(tokenId, qTokenAmount);
     }
 

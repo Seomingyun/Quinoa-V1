@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./InvestingList.css";
+import {ethers} from 'ethers';
 import { ReactComponent as Quinoalogo } from "../components/asset/quinoa_logo.svg";
 import { ReactComponent as Mibtnarrow } from "../components/asset/mibtn_arrow.svg";
 import { ReactComponent as Infoicon } from "../components/asset/info_icon.svg";
 import { ReactComponent as WishList } from "../components/asset/wishlist_default.svg";
-
+import { Link } from "react-router-dom";
 import SwiperCore, { Navigation, Pagination, Scrollbar } from "swiper";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,6 +18,7 @@ import "swiper/css/scrollbar";
 
 //Import hooks
 import {useVaultList} from "../hooks/useVaultList";
+import { assert } from "console";
 
 
 SwiperCore.use([Navigation, Pagination, Scrollbar]);
@@ -44,6 +46,7 @@ function InvestingList({currentAccount}:any) {
     }
   }
 
+  
   return (
     <div> 
       <section className="myinvest_banner">
@@ -111,6 +114,7 @@ function InvestingList({currentAccount}:any) {
             //<Slide item = {item}/>
             <SwiperSlide className="hi_swiperslide">
             <div className="stateDefault">
+              <Link to={'./detail/'+item.address} state={{ assetAddress : item.asset}} className="strategy_ctaBtn" style={{ textDecoration: 'none' }}>Buy</Link>
               <div className="hi_headline">
                 <div className="list_Strategy_name">
                   <span className="ls_name_title QUINOABody-2">
@@ -163,7 +167,7 @@ function InvestingList({currentAccount}:any) {
                     Volume
                   </span>
                   <span className="volume_amount QUINOAheadline6">
-                    {Number(item.totalAssets)}&nbsp;{item.symbol}
+                    {ethers.utils.formatEther(item.totalAssets)}&nbsp;{item.symbol}
                   </span>
                 </div>
               </div>

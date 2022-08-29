@@ -44,6 +44,19 @@ contract Router is Ownable {
     }
 
     /*///////////////////////////////////////////////////////////////
+                        Get NFT Information
+    //////////////////////////////////////////////////////////////*/
+    function getNfts(address _vault )external view returns(uint256[] memory tokenIds) {
+        return NFTWrappingManager.getTokenIds(msg.sender, _vault);
+    }
+
+    // returns amount of holding asset amount and the asset's address
+    function getHoldingAssetAmount(address _vault) external view returns(address asset, uint256 amount) {
+        uint256 shares = NFTWrappingManager.getQvtokenAmount(msg.sender, _vault);
+        IVault vault = IVault(_vault);
+        return (vault.asset(), vault.convertToAssets(shares));
+    }
+    /*///////////////////////////////////////////////////////////////
                             Buying
     //////////////////////////////////////////////////////////////*/
 
@@ -123,7 +136,7 @@ contract Router is Ownable {
 
         // send qvToken to Vault and redeem it
         uint256 beforeRedeem = assetToken.balanceOf(address(this));
-        qvToken.transfer(address(vault), amount);
+        //qvToken.transfer(address(vault), amount);
         uint256 addedAsset = vault.redeem(amount, address(this), address(this));
         require(assetToken.balanceOf(address(this)) - beforeRedeem == addedAsset, "Router: Amount of assetToken to relay has unexpected value");
         

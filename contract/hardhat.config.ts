@@ -60,7 +60,7 @@ const config: HardhatUserConfig | {} = {
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
     matic: {
-      url: process.env.MATIC_URL || "https://polygon-rpc.com/",`
+      url: process.env.MATIC_URL || "https://polygon-rpc.com/",
       accounts: [process.env.PRIVATE_KEY]
     },
     mumbai : {

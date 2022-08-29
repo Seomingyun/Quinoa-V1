@@ -8,12 +8,14 @@ import { ReactComponent as ReceiveIcon } from "../components/asset/receive-icon.
 import { Link } from "react-router-dom";
 import { NftInfo } from "../models/NftInfo";
 import { useNftInfo } from "../hooks/useNftInfo";
-import { isConstructorDeclaration } from "typescript";
 import {useHoldingInfo} from "../hooks/useHoldingInfo";
+import { useWalletInfo } from "../hooks/useWalletInfo";
 
 function Portfolio ({currentAccount}:any) {
     const tokenList  = useNftInfo();
     const holdingInfo = useHoldingInfo(currentAccount);
+    const walletInfo = useWalletInfo(currentAccount);
+
     console.log(tokenList);
     return(
       <div>
@@ -31,17 +33,21 @@ function Portfolio ({currentAccount}:any) {
                 <div className="tb_balance">
                   <Walleticon className="wallet_Icon"></Walleticon>
                   <div className="QUINOAheadline2">
-                    <span className="text_color_900" >$24,239</span>
-                    <span className="text_color_100">.21</span>  
+                    <span className="text_color_900" >${
+                      Math.floor(walletInfo.reduce(
+                        (acc, cv) => {
+                          return acc + cv.balance;
+                        }, 0) + (holdingInfo?.totalHoldings || 0) ) 
+                    }</span>
+                    <span className="text_color_100">.{
+                      Number(((walletInfo.reduce(
+                        (acc, cv) => {
+                          return acc + cv.balance;
+                        }, 0) + (holdingInfo?.totalHoldings || 0))%1).toFixed(2)) *100
+                    }</span>  
                   </div>
                 </div>
                 <div className="tb_buttons">
-                  {/* <div className="tb_contents_bnt cursor_pointer">
-                    <p>
-                      <ReceiveIcon className="tb_contents_bnt_icon"></ReceiveIcon>
-                      <span className="tb_contents_bnt_text">Receive</span>
-                    </p>
-                  </div> */}
                   <div className="tb_contents_bnt cursor_pointer">
                     <p>
                       <SendIcon className="tb_contents_bnt_icon"></SendIcon>
@@ -51,7 +57,10 @@ function Portfolio ({currentAccount}:any) {
                 </div>
               </div>
               <div className="tb_contents_sub">
-                available : $1,201.75
+                available : ${ (walletInfo.reduce(
+                  (acc, cv) => {
+                    return acc + cv.balance;
+                  }, 0)).toFixed(2)}
               </div>
             </div>
           </div>
@@ -67,82 +76,34 @@ function Portfolio ({currentAccount}:any) {
             </header>
             <div className="header_line"></div>
             {/* 1st */}
-            <div className="list_tokens">
+            {walletInfo.map((item) => (
+              <div className="list_tokens">
               <div className="ls_tokenname_wrap">
                 <div className="list_token_name">
-                  <ETHicon className="ls_token_icon"></ETHicon>
+                  <img src={item.logo}className="ls_token_icon" />
                   <span className="ls_name_title QUINOABody-2">
-                    ETH
+                    {item.symbol}
                   </span>
                 </div>
               </div>
               <div className="ls_tokenbalance_wrap">
                 <div className="list_token_balance">
                   <span className="ls_token_balance QUINOABody-2">
-                    $21,200.21
+                    ${(item.balance).toFixed(2)}
                   </span>
                 </div>
               </div>
               <div className="ls_tokenamount_wrap">
                 <div className="list_token_amount">
                   <span className="ls_token_amount QUINOABody-2">
-                    15.2072
+                    {item.amount}
                   </span>
                 </div>
               </div>
               <div className="ls_underline"></div>
             </div>
-            {/* 2nd */}
-            <div className="list_tokens">
-              <div className="ls_tokenname_wrap">
-                <div className="list_token_name">
-                  <AVAXicon className="ls_token_icon"></AVAXicon>
-                  <span className="ls_name_title QUINOABody-2">
-                    Matic
-                  </span>
-                </div>
-              </div>
-              <div className="ls_tokenbalance_wrap">
-                <div className="list_token_balance">
-                  <span className="ls_token_balance QUINOABody-2">
-                   $1,200
-                  </span>
-                </div>
-              </div>
-              <div className="ls_tokenamount_wrap">
-                <div className="list_token_amount">
-                  <span className="ls_token_amount QUINOABody-2">
-                    4028.2
-                  </span>
-                </div>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            {/* 3rd */}
-            <div className="list_tokens">
-              <div className="ls_tokenname_wrap">
-                <div className="list_token_name">
-                  <AVAXicon className="ls_token_icon"></AVAXicon>
-                  <span className="ls_name_title QUINOABody-2">
-                    Avalanche
-                  </span>
-                </div>
-              </div>
-              <div className="ls_tokenbalance_wrap">
-                <div className="list_token_balance">
-                  <span className="ls_token_balance QUINOABody-2">
-                    $1,693
-                  </span>
-                </div>
-              </div>
-              <div className="ls_tokenamount_wrap">
-                <div className="list_token_amount">
-                  <span className="ls_token_amount QUINOABody-2">
-                    3,215.2072
-                  </span>
-                </div>
-              </div>
-            </div>
+            ))}
+        
             </div>
           </div>
         </section>

@@ -19,12 +19,14 @@ import "swiper/css/scrollbar";
 //Import hooks
 import {useVaultList} from "../hooks/useVaultList";
 import { assert } from "console";
+import { useHoldingInfo } from "../hooks/useHoldingInfo";
 
 
 SwiperCore.use([Navigation, Pagination, Scrollbar]);
 // {key :val, key:val}
 function InvestingList({currentAccount}:any) {
   const vaultList = useVaultList();
+  const holdingInfo = useHoldingInfo(currentAccount);
   const [like, setLike] = useState<Map<number,boolean>>(new Map());
   //const [like, setLike] = useState([false])
   const handleLike = (index:number) => {
@@ -62,7 +64,7 @@ function InvestingList({currentAccount}:any) {
           <div className="banner_portfolio">
             <div className="banner_holdings">
               <span className="holdings QUINOAheadline6">Holdings</span>
-              <span className="holdings_price QUINOAheadline3">$23,304</span>
+              <span className="holdings_price QUINOAheadline3">${(holdingInfo?.totalHoldings)?.toFixed(2)}</span>
             </div>
             <div className="inner_Rectangle"></div>
             <div className="banner_earnings">

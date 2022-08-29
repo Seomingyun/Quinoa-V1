@@ -14,20 +14,31 @@ contract Vault is ERC20, IVault, AccessControl {
     address private immutable _protocolTreasury;
     IERC20Metadata private immutable _asset;
     uint8 private _decimals;
+    
+    string private _apy; // 임시 변수(추후 삭제 예정)
+    string public _dacName;
 
     bytes32 public constant DAC_ROLE = keccak256("DAC_ROLE"); // strategy team
     bytes32 public constant ROUTER_ROLE = keccak256("ROUTER_ROLE"); // router에서만 호출 가능
 
     /// @notice 특정한 ERC20 token을 asset으로 받는 새로운 vault를 생성.
+    /// @param params vaultName/vaultSymbol/dacName/APY(apy는 그냥 임시로 param 넣어주는 것)
     /// @param asset_ asset으로 받을 ERC20 토큰.
     /// @param caller_ vault를 생성하고자 하는 유저. role의 admin이 되어 DAC 멤버들을 추가하거나 삭제할 수 있다.
     /// @param router_ vault와 소통할 수 있는 router.
-    constructor(IERC20Metadata asset_, address caller_, address router_, address protocolTreasury_) 
+    constructor(
+        string[] memory params,
+        IERC20Metadata asset_, 
+        address caller_,
+        address router_,
+        address protocolTreasury_)
         ERC20(
-            string(abi.encodePacked("Quinoa ", asset_.name(), " Vault")), 
-            string(abi.encodePacked("qv", asset_.symbol()))
+            params[0],
+            params[1]
         )
     {
+        _dacName = params[2];
+        _apy = params[3];
         _asset = asset_;
         _decimals = asset_.decimals();
         _protocolTreasury = protocolTreasury_;
@@ -44,6 +55,10 @@ contract Vault is ERC20, IVault, AccessControl {
 
     function isDAC(address user) public view override returns(bool) {
         return hasRole(DAC_ROLE, user);
+    }
+
+    function vaultInfo() public view returns (string[4] memory) {
+        return [name(), symbol(), _dacName, _apy];
     }
 
     /// @notice 이 vault contract의 decimal을 반환.
@@ -91,7 +106,6 @@ contract Vault is ERC20, IVault, AccessControl {
 
     function setHarvestDelay(uint256 newHarvestDelay) external override onlyRole(DAC_ROLE) {
         require(newHarvestDelay >= 6 hours, "Vault: Delay too short");
-        // Q. block.timestamp는 sec 단위 아님 ? 왜 365라고 하는지 알 수 X
         require(newHarvestDelay <= 365 days, "Vault: Delay too long");
         if(harvestDelay == 0){
             harvestDelay = newHarvestDelay;
@@ -388,5 +402,20 @@ contract Vault is ERC20, IVault, AccessControl {
 
             _withdrawFromStrategy(amountForTargetFloat + amountForWithdrawal);
         }
+    }
+
+    // 변하지 않는 baseSVG
+    function _baseSVG() internal returns (string memory) {
+        return "";
+    }
+
+    // vault 정보 넣어서 만드는 SVG
+    function generateSVG() public returns (string memory) {
+        return "";
+    }
+
+    // data uri code 만들기
+    function generateURI() public returns (string memory) {
+        return "";
     }
 } 

@@ -129,7 +129,7 @@ function Portfolio ({currentAccount}:any) {
                   {(Number(((holdingInfo?.totalHoldings|| 0)%1).toFixed(2)))*100}
                   </span>
                 </div>                
-                <div className="text_color_green300">+ $201.15 (5.26%)</div>
+                <div className="text_color_green300">+ $132,204.52 (5.26%)</div>
               </div>
               <div className="myTotal_Contests_Splitter" />
               <div className="myTotal_Contents">
@@ -150,7 +150,7 @@ function Portfolio ({currentAccount}:any) {
                   <span className="text_color_900">{Math.floor(holdingInfo?.quiTokens||0)}</span>
                   <span className="text_color_100">.{Number(((holdingInfo?.quiTokens||0)%1).toFixed(2)) * 100}</span>
                 </div>
-                <div className="text_color_200">USD 32.15</div>
+                <div className="text_color_200">USD {((holdingInfo?.quiTokens||0)*0.5).toFixed(2)}</div>
               </div>
             </div>
           </div>

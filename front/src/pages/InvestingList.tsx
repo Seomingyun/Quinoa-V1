@@ -64,7 +64,7 @@ function InvestingList({currentAccount}:any) {
           <div className="banner_portfolio">
             <div className="banner_holdings">
               <span className="holdings QUINOAheadline6">Holdings</span>
-              <span className="holdings_price QUINOAheadline3">${(holdingInfo?.totalHoldings)?.toFixed(2)}</span>
+              <span className="holdings_price QUINOAheadline3">${(holdingInfo?.totalHoldings || 0).toFixed(2)}</span>
             </div>
             <div className="inner_Rectangle"></div>
             <div className="banner_earnings">

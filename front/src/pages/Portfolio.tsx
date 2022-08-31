@@ -34,16 +34,16 @@ function Portfolio ({currentAccount}:any) {
                   <Walleticon className="wallet_Icon"></Walleticon>
                   <div className="QUINOAheadline2">
                     <span className="text_color_900" >${
-                      Math.floor(walletInfo.reduce(
+                      (walletInfo.reduce(
                         (acc, cv) => {
                           return acc + cv.balance;
-                        }, 0) + (holdingInfo?.totalHoldings || 0) ) 
+                        }, 0) + (holdingInfo?.totalHoldings || 0)).toFixed(2).split(".")[0]
                     }</span>
                     <span className="text_color_100">.{
-                      Number(((walletInfo.reduce(
+                      (walletInfo.reduce(
                         (acc, cv) => {
                           return acc + cv.balance;
-                        }, 0) + (holdingInfo?.totalHoldings || 0))%1).toFixed(2)) *100
+                        }, 0) + (holdingInfo?.totalHoldings || 0)).toFixed(2).split(".")[1]
                     }</span>  
                   </div>
                 </div>
@@ -124,9 +124,9 @@ function Portfolio ({currentAccount}:any) {
               <div className="myTotal_Contents">
                 <div className="mTC_title QUINOASubTitle-1">Total Holdings</div>
                 <div className="mTC_contents QUINOAheadline4">
-                  <span className = "text_color_900">${Math.floor(holdingInfo?.totalHoldings||0)}</span>
+                  <span className = "text_color_900">${(holdingInfo?.totalHoldings||0).toFixed(2).split(".")[0]}</span>
                   <span className="text_color_100">.
-                  {(Number(((holdingInfo?.totalHoldings|| 0)%1).toFixed(2)))*100}
+                  {(holdingInfo?.totalHoldings||0).toFixed(2).split(".")[1]}
                   </span>
                 </div>                
                 <div className="text_color_green300">+ $132,204.52 (5.26%)</div>
@@ -147,8 +147,8 @@ function Portfolio ({currentAccount}:any) {
               <div className="myTotal_Contents">
                 <div className="mTC_title QUINOASubTitle-1">QUI Tokens</div>
                 <div className="mTC_contents QUINOAheadline4">
-                  <span className="text_color_900">{Math.floor(holdingInfo?.quiTokens||0)}</span>
-                  <span className="text_color_100">.{Number(((holdingInfo?.quiTokens||0)%1).toFixed(2)) * 100}</span>
+                  <span className="text_color_900">{(holdingInfo?.quiTokens||0).toFixed(2).split(".")[0]}</span>
+                  <span className="text_color_100">.{(holdingInfo?.quiTokens||0).toFixed(2).split(".")[1]}</span>
                 </div>
                 <div className="text_color_200">USD {((holdingInfo?.quiTokens||0)*0.5).toFixed(2)}</div>
               </div>

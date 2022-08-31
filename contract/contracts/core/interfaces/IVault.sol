@@ -18,6 +18,10 @@ interface IVault is IERC20, IERC20Metadata {
     function claimFees(uint256 qvTokenAmount) external;
     function depositIntoStrategy(uint256 assetAmount) external;
     function withdrawFromStrategy(uint256 assetAmount) external;
+    function setEmergencyExit(bool isEmergency) external;
+
+    // add interface for nft
+    function setCurrentPrice(uint256 newCurrentPrice) external;
 
     // caller(msg.sender), owner(receiver)
     event Deposit(address indexed caller, address indexed owner, uint256 assets, uint256 shares);

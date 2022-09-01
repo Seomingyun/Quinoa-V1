@@ -4,7 +4,7 @@ import {ethers} from 'ethers';
 import {BigNumber} from 'ethers';
 
 export const useDepositInfo = (currentAddress:string, vaultAddress:string) => {
-    const [deposit, setDeposit] = useState<string>("0");
+    const [deposit, setDeposit] = useState<number>(0);
     const {ethereum} = window;
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
@@ -16,16 +16,18 @@ export const useDepositInfo = (currentAddress:string, vaultAddress:string) => {
     
     const getDepositInfo = async() => {
         const nftList: BigNumber[] = await router.getNfts(vaultAddress);
-        const depositAmount = nftList.reduce(
-            (acc, cv) => {
-                return acc + Number(nftManager.getQtokenAmount(Number(cv)))
-            },0)
-        setDeposit(ethers.utils.formatEther(depositAmount));
+        console.log(nftList);
+        const depositAmount = await nftManager.getQtokenAmount(nftList[0]);
+        // for(let i=0; i<nftList.length; i++) {
+        //     console.log("qvtoken : ",Number(await nftManager.getQtokenAmount(nftList[i])));
+        // }
+        console.log(depositAmount);
+        setDeposit(Number(depositAmount));
     }
 
     useEffect(()=> {
         getDepositInfo();
-    }, [])
+    }, [vaultAddress])
     // string
     return deposit;
 

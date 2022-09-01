@@ -9,6 +9,7 @@ export interface VaultInfo {
     totalVolume : string,
     svg : string ,
     dacName : string,
-    date : string
+    date : string,
+    apy : string
 }
 

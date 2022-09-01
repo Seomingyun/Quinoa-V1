@@ -1,19 +1,44 @@
 import { Router__factory } from "contract";
-import { useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState, useEffect } from "react"
 import {BigNumber, ethers} from 'ethers';
-export const useSell = () => {
+import { VaultInfo } from "../models/VaultInfo";
+
+export const useSell = (vaultInfo : VaultInfo) => {
     const {ethereum} =window;
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = useMemo(()=>provider?.getSigner(), [provider]);
+    const [sellTxStatus, setSellTxStatus] = useState<string>("default");
 
     const sell = useCallback(
-        async(tokenId:number) => {
+        async(amount:string) => {
             const routerAddress:string = process.env.REACT_APP_ROUTER_ADDRESS || ""
             const router = Router__factory.connect(routerAddress, signer);
-            // FIX!! : amount to sell is hardcoded.
-            const sellTx = await router.sell(tokenId, 50);
-            await sellTx.wait();
-            console.log("sell!");
+
+            // Assume person owns only one nft per vault
+            const tokenId = (await router.getNfts(vaultInfo.address))[0];
+            try{
+                const sellTx = await router.sell(tokenId, ethers.utils.parseUnits(amount));
+                setSellTxStatus(sellTx.blockHash === null ? "pending" : "error");
+                const receipt = await sellTx.wait();
+                setSellTxStatus(!!receipt.blockHash ? "success" : "error" );
+                console.log("sell!");
+            }catch(e){
+                console.log(e);
+                setSellTxStatus("error");
+            }
+
         }, []);
-    return {sell}
+        useEffect(()=>{
+            if(sellTxStatus === "error"){
+                setTimeout(()=>{
+                    setSellTxStatus("default")
+                   }, 8000)
+            }
+            else if (sellTxStatus === "success"){
+                setTimeout(()=>{
+                    setSellTxStatus("default")
+                   }, 4000)
+            }
+        },[sellTxStatus]);
+        return {sell, sellTxStatus};
 };

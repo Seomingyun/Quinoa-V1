@@ -18,13 +18,18 @@ export const useBuy = (amount:string, address:any, assetAddress:any, currentAddr
             //**Testtoken minting just for testing **
             const testToken = TestToken__factory.connect(assetAddress, signer);
             try{
-                const mintTx = await testToken.mint(currentAddress, ethers.utils.parseUnits("1"));
+                const mintTx = await testToken.mint(currentAddress, ethers.utils.parseUnits("1000"));
                 console.log(mintTx);
+                await mintTx.wait();
+                console.log("token Minted");
+
+                const asset = ERC20__factory.connect(assetAddress, signer);
                 setTxStatus(mintTx.blockHash === null ? "pending" : "error");
-                const receipt = await mintTx.wait();
-                console.log(receipt);
+                await asset.approve(router.address, ethers.utils.parseUnits(amount));
+                const buyTx = await router['buy(address,uint256)'](address, ethers.utils.parseUnits(amount));
+                const receipt = await buyTx.wait();
+                console.log("buy!");
                 setTxStatus(!!receipt.blockHash ? "success" : "error" );
-                //setTxStatus("complete");
             } catch(e) {
                 console.log(e);
                 setTxStatus("error");

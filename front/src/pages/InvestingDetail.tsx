@@ -7,8 +7,12 @@ import { VaultInfo } from "../models/VaultInfo";
 import { ReactComponent as WishList } from "../components/asset/wishlist_default.svg";
 import { ReactComponent as Infoicon } from "../components/asset/info_icon.svg";
 import {ethers} from "ethers";
+import { IERC20__factory, NftWrappingManager__factory } from "contract";
 import { useDepositInfo } from "../hooks/useDepositInfo";
 import data from "../utils/TokenAddressMapper.json";
+import { useAvailableInfo } from "../hooks/useAvailableInfo";
+import { useSell } from "../hooks/useSell";
+
 
 interface RouteState {
   state: {
@@ -31,9 +35,10 @@ interface toastProperties {
 function InvestingDetail({ currentAccount }: any) {
   const { address } = useParams();
   const { state } = useLocation() as RouteState;
-  const deposit = useDepositInfo(currentAccount, state.vaultInfo.address); 
+  const available = useAvailableInfo(currentAccount, state.vaultInfo); 
 
   const [amount, setAmount] = useState("0");
+  const [sellAmount, setSellAmount] = useState("0");
   const [showMore, setShowMore] = useState(false);
   const [buySell, setBuySell] = useState<string>("buy");
 
@@ -43,9 +48,15 @@ function InvestingDetail({ currentAccount }: any) {
     address,
     state.assetAddress
   );
+
+  const {sell, sellTxStatus} = useSell(state.vaultInfo);
   const handleChange = (e: any) => {
     setAmount(e.target.value);
   };
+
+  const handleSellChange=(e:any) => {
+    setSellAmount(e.target.value);
+  }
 
   const [toastList, setToastList] = useState<
     toastProperties["data"] | undefined
@@ -160,7 +171,7 @@ function InvestingDetail({ currentAccount }: any) {
                 </div>
                 <div className="lt_Amount">
                   <span className="lt_Amount_txt QUINOABody-1">
-                    {ethers.utils.formatEther(state.vaultInfo.totalAssets)}</span>
+                    {Number(ethers.utils.formatEther(state.vaultInfo.totalAssets)).toFixed(2)}</span>
                 </div>
                 <div className="lt_Volume">
                   <span className="lt_Volume_txt QUINOABody-1">${state.vaultInfo.totalVolume}</span>
@@ -252,27 +263,27 @@ function InvestingDetail({ currentAccount }: any) {
           </div>
           <div className="buyNsell">
             <div className="tab">
-              <div className={buySell=="buy" ?"buy_tab" : "sell_tab"}
+              <div className={buySell==="buy" ?"buy_tab" : "sell_tab"}
                 onClick={() => setBuySell(("buy"))}>
-                <span className={buySell=="buy" ?"buy_txt" : "sell_txt"}>Buy</span>
+                <span className={buySell==="buy" ?"buy_txt" : "sell_txt"}>Buy</span>
                 <div className="line"></div>
               </div>
-              <div className={buySell=="sell" ? "buy_tab" : "sell_tab"}
+              <div className={buySell==="sell" ? "buy_tab" : "sell_tab"}
                 onClick={() => setBuySell(("sell"))}>
-                <span className={buySell=="sell" ?"buy_txt" : "sell_txt"}>Sell</span>
+                <span className={buySell==="sell" ?"buy_txt" : "sell_txt"}>Sell</span>
                 <div className="line"></div>
               </div>
             </div>
-            <div className="buysection_wrap" style={buySell== "buy" ? {display:"flex"} : {display : "none"}}>
-              <div className="amountInvested">
+            <div className="buysection_wrap" style={buySell=== "buy" ? {display:"flex"} : {display : "none"}}>
+              {/* <div className="amountInvested">
                 <span className="ai_txt">amount invested</span>
                 <span className="ai_amount">{deposit} &nbsp; {state.vaultInfo.symbol}</span>
-              </div>
+              </div> */}
               <div className="investableAmount">
                 <span className="ia_txt">Investable amount</span>
-                <span className="ia_amount">$14,280,989.21</span>
+                <span className="ia_amount">{available?.availableBuyAmount} {state.vaultInfo.symbol}</span>
               </div>
-              <input className="inputAmount" placeholder="$0,000.0"></input>
+              <input className="inputAmount" placeholder="$0,000.0" value={amount.toString()} onChange={handleChange}></input>
               <div className="amount_select_btn">
                 <span className="amount_10%">10%</span>
                 <div className="spaceLine"></div>
@@ -287,16 +298,16 @@ function InvestingDetail({ currentAccount }: any) {
                 <span className="cv_amount">34.32</span>
                 <span className="eTH">ETH</span>
               </div>
-              <div className="buyBtn">
+              <div className="buyBtn" onClick={() => buy(amount, currentAccount, address, state.assetAddress)} >
                 <span className="buy_txt">Buy</span>
               </div>
             </div>
-            <div className="sellsection_wrap" style={buySell== "sell" ? {display:"flex"} : {display : "none"}}>
+            <div className="sellsection_wrap" style={buySell=== "sell" ? {display:"flex"} : {display : "none"}}>
               <div className="investablesaleAmount">
                 <span className="isa_txt">available sale amount</span>
-                <span className="isa_amount">$14,280,989.21</span>
+                <span className="isa_amount">{available?.availableSaleAmount} {state.vaultInfo.symbol}</span>
               </div>
-              <input className="inputAmount" placeholder="$0,000.0"></input>
+              <input className="inputAmount" placeholder="$0,000.0" value={sellAmount.toString()} onChange={handleSellChange}></input>
               <div className="amount_select_btn">
                 <span className="amount_10%">10%</span>
                 <div className="spaceLine"></div>
@@ -311,7 +322,7 @@ function InvestingDetail({ currentAccount }: any) {
                 <span className="cv_amount">34.32</span>
                 <span className="eTH">ETH</span>
               </div>
-              <div className="sellBtn">
+              <div className="sellBtn" onClick={() => sell(sellAmount)}>
                 <span className="sell_txt">Sell</span>
               </div>
             </div>

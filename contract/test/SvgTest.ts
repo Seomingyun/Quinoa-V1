@@ -106,8 +106,14 @@ async function deployContracts(){
     await router.deployed();
 
     // #4. Deploy sNFT Manager
-    const nftManager = await new NftWrappingManager__factory(deployer).deploy(router.address);
-    await nftManager.deployed();
+    const NftManager = await ethers.getContractFactory("NftWrappingManager", {
+        libraries: {
+          Utils: utils.address
+        }
+      });
+      const nftManager = await NftManager.connect(deployer).deploy(router.address, svgManager.address);
+      await nftManager.deployed();
+      console.log("NFT Manager address", nftManager.address);
 
     // #5. SetNFTWrappingManager to Router
     const setNFT = await router.connect(deployer).setNFTWrappingManager(nftManager.address);

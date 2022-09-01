@@ -54,21 +54,21 @@ library Utils {
             uint256 integerNum = totalVolume.mulDiv(1, 100, Math.Rounding.Down);
             string memory prefix = Strings.toString(integerNum);
             string memory postfix = Strings.toString(totalVolume - (integerNum*100));
-            return string(abi.encodePacked(prefix, ',', postfix));
+            return string(abi.encodePacked(prefix, '.', postfix));
         }
         else if(100000<=totalVolume && totalVolume<100000000){
             totalVolume = totalVolume.mulDiv(1, 1000, Math.Rounding.Down);
             uint256 integerNum = totalVolume.mulDiv(1, 100, Math.Rounding.Down);
             string memory prefix = Strings.toString(integerNum);
             string memory postfix = Strings.toString(totalVolume - (integerNum*100));
-            return string(abi.encodePacked(prefix, ',', postfix, 'K'));
+            return string(abi.encodePacked(prefix, '.', postfix, 'K'));
         }
         else if (100000000<=totalVolume && totalVolume<100000000000){
             totalVolume = totalVolume.mulDiv(1, 1000000, Math.Rounding.Down);
             uint256 integerNum = totalVolume.mulDiv(1, 100, Math.Rounding.Down);
             string memory prefix = Strings.toString(integerNum);
             string memory postfix = Strings.toString(totalVolume - (integerNum*100));
-            return string(abi.encodePacked(prefix, ',', postfix, 'M'));
+            return string(abi.encodePacked(prefix, '.', postfix, 'M'));
         }     
         else {
             return "MAX";

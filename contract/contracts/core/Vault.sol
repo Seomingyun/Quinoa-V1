@@ -6,32 +6,63 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "./interfaces/IVault.sol";
+import "../svg/ISvgManager.sol";
 import {Strategy, ERC20Strategy} from "./Strategy.sol";
+import "../libraries/Utils.sol";
+import 'base64-sol/base64.sol';
+
+import "hardhat/console.sol";
 
 contract Vault is ERC20, IVault, AccessControl {
     using Math for uint256;
 
     address private immutable _protocolTreasury;
+    address private immutable _svgManager;
     IERC20Metadata private immutable _asset;
     uint8 private _decimals;
+    
+    // vault params
+    string private _apy; // 임시 변수(추후 삭제 예정)
+    uint256 private _currentPrice; // 임시 변수(추후 삭제 예정) // dollar 기준(decimal : 18)
+    string private _color;
+    string public _dacName;
+    uint256 public _sinceDate;
 
     bytes32 public constant DAC_ROLE = keccak256("DAC_ROLE"); // strategy team
     bytes32 public constant ROUTER_ROLE = keccak256("ROUTER_ROLE"); // router에서만 호출 가능
 
     /// @notice 특정한 ERC20 token을 asset으로 받는 새로운 vault를 생성.
+    /// @param params vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
     /// @param asset_ asset으로 받을 ERC20 토큰.
     /// @param caller_ vault를 생성하고자 하는 유저. role의 admin이 되어 DAC 멤버들을 추가하거나 삭제할 수 있다.
     /// @param router_ vault와 소통할 수 있는 router.
-    constructor(IERC20Metadata asset_, address caller_, address router_, address protocolTreasury_) 
+    constructor(
+        string[] memory params,
+        IERC20Metadata asset_, 
+        address caller_,
+        address router_,
+        address protocolTreasury_,
+        address svgManager_)
         ERC20(
-            string(abi.encodePacked("Quinoa ", asset_.name(), " Vault")), 
-            string(abi.encodePacked("qv", asset_.symbol()))
+            params[0],
+            params[1]
         )
     {
+        // vault params
+        _dacName = params[2];
+        _color = params[3];
+        _apy = params[4];
+        _sinceDate = block.timestamp;
+
+        // vault setting
         _asset = asset_;
         _decimals = asset_.decimals();
         _protocolTreasury = protocolTreasury_;
+        _svgManager = svgManager_;
         performanceFeePercent = 15e16; // 기본 fee 세팅 : 15%
+
+        // current price(임시)
+        _currentPrice = 10**decimals(); 
 
         _grantRole(DEFAULT_ADMIN_ROLE, caller_);
         _setupRole(DAC_ROLE, caller_); // 나중에 caller_가 다른 DAC 멤버를 추가할 수 있음
@@ -45,6 +76,10 @@ contract Vault is ERC20, IVault, AccessControl {
     function isDAC(address user) public view override returns(bool) {
         return hasRole(DAC_ROLE, user);
     }
+    
+    function setCurrentPrice(uint256 newCurrentPrice) public override {
+        _currentPrice = newCurrentPrice * (10**decimals());
+    }
 
     /// @notice 이 vault contract의 decimal을 반환.
     /// @dev asset의 deciamal과 동일하게 overriding.
@@ -57,7 +92,7 @@ contract Vault is ERC20, IVault, AccessControl {
 
     event EmergencyUpdated(address user, bool isEmergency);
 
-    function setEmergencyExit(bool isEmergency) external onlyRole(DAC_ROLE){
+    function setEmergencyExit(bool isEmergency) external override onlyRole(DAC_ROLE){
         require(isEmergency != emergencyExit, "Vault: Already Set Emergency Shutdown");
         emergencyExit = isEmergency;
         strategy.setEmergency(isEmergency);
@@ -91,7 +126,6 @@ contract Vault is ERC20, IVault, AccessControl {
 
     function setHarvestDelay(uint256 newHarvestDelay) external override onlyRole(DAC_ROLE) {
         require(newHarvestDelay >= 6 hours, "Vault: Delay too short");
-        // Q. block.timestamp는 sec 단위 아님 ? 왜 365라고 하는지 알 수 X
         require(newHarvestDelay <= 365 days, "Vault: Delay too long");
         if(harvestDelay == 0){
             harvestDelay = newHarvestDelay;
@@ -388,5 +422,55 @@ contract Vault is ERC20, IVault, AccessControl {
 
             _withdrawFromStrategy(amountForTargetFloat + amountForWithdrawal);
         }
+    }
+
+    //vault 정보 넣어서 만든 완성된 svg
+    function vaultInfoSvg() 
+    public
+    view
+    returns(string memory) 
+    {   
+        uint256 totalVolume = _currentPrice.mulDiv(totalAssets(), 10**decimals(), Math.Rounding.Down);
+        string memory _vaultVolume = Utils.volumeToString(totalVolume);
+        (uint year, uint month, uint day) = Utils.timestampToDate(_sinceDate);
+        string memory _vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
+        string memory _vaultAddr = Strings.toHexString(uint256(uint160(address(this))), 20);
+        
+        string memory svg = ISvgManager(_svgManager).generateNftSvg(
+            ISvgManager.SvgParams(
+            _color, // #FFCCCC 형식
+            name(),
+            _vaultAddr,
+            _vaultDate,
+            _apy,
+            _vaultVolume,
+            _dacName,
+            "   --",
+            "   --"
+        ));
+        return svg;
+    }
+
+    function vaultSvgUri()
+    public
+    view
+    override
+    returns(string memory){
+        string memory nftImage = Base64.encode(bytes(vaultInfoSvg()));
+
+        return string(abi.encodePacked(
+            'data:image/svg+xml;base64,',
+            nftImage
+        ));
+    }
+
+    function vaultInfo() external view override returns(string[7] memory){
+        uint256 totalVolume = _currentPrice.mulDiv(totalAssets(), 10**decimals(), Math.Rounding.Down);
+        string memory _vaultVolume = Utils.volumeToString(totalVolume);
+        (uint year, uint month, uint day) = Utils.timestampToDate(_sinceDate);
+        string memory _vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
+        string memory _vaultAddr = Strings.toHexString(uint256(uint160(address(this))), 20);
+        
+        return [_color, name(), symbol(), _vaultAddr, _vaultDate, _vaultVolume, _dacName];
     }
 } 

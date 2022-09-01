@@ -29,9 +29,12 @@ const config: HardhatUserConfig | {} = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 10,
-      },
-    },
+        runs: 1_0,
+        details: {
+          yul: false
+        }
+      }
+    }
   },
   networks: {
     hardhat: {
@@ -61,7 +64,7 @@ const config: HardhatUserConfig | {} = {
     },
     matic: {
       url: process.env.MATIC_URL || "https://polygon-rpc.com/",
-      accounts: [process.env.PRIVATE_KEY],
+      accounts: [process.env.PRIVATE_KEY]
     },
     mumbai: {
       url: process.env.MUMBAI_URL || "https://rpc-mumbai.matic.today",

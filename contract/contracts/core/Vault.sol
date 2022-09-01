@@ -6,15 +6,16 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "./interfaces/IVault.sol";
+import "../svg/ISvgManager.sol";
 import {Strategy, ERC20Strategy} from "./Strategy.sol";
 import "../libraries/Utils.sol";
-import "../libraries/GenerateSvg.sol";
 import 'base64-sol/base64.sol';
 
 contract Vault is ERC20, IVault, AccessControl {
     using Math for uint256;
 
     address private immutable _protocolTreasury;
+    address private immutable _svgManager;
     IERC20Metadata private immutable _asset;
     uint8 private _decimals;
     
@@ -38,7 +39,8 @@ contract Vault is ERC20, IVault, AccessControl {
         IERC20Metadata asset_, 
         address caller_,
         address router_,
-        address protocolTreasury_)
+        address protocolTreasury_,
+        address svgManager_)
         ERC20(
             params[0],
             params[1]
@@ -54,6 +56,7 @@ contract Vault is ERC20, IVault, AccessControl {
         _asset = asset_;
         _decimals = asset_.decimals();
         _protocolTreasury = protocolTreasury_;
+        _svgManager = svgManager_;
         performanceFeePercent = 15e16; // 기본 fee 세팅 : 15%
 
         // current price(임시)
@@ -419,18 +422,43 @@ contract Vault is ERC20, IVault, AccessControl {
         }
     }
 
-    // vault 정보 넣어서 만든 완성된 svg
-    // function vaultInfoSvg() 
-    // public
-    // view
-    // returns(string memory) 
-    // {   
-    //     uint256 totalVolume = _currentPrice.mulDiv(totalAssets(), 10**decimals(), Math.Rounding.Down);
-    //     string memory vaultVolume = Utils.volumeToString(totalVolume);
-    //     (uint year, uint month, uint day) = Utils.timestampToDate(_sinceDate);
-    //     string memory vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
-    //     string vaultAddr = 
-    //     GanerateSvg.vaultInfoSvg(_color, name(), )
+    //vault 정보 넣어서 만든 완성된 svg
+    function vaultInfoSvg() 
+    public
+    view
+    returns(string memory) 
+    {   
+        uint256 totalVolume = _currentPrice.mulDiv(totalAssets(), 10**decimals(), Math.Rounding.Down);
+        string memory _vaultVolume = Utils.volumeToString(totalVolume);
+        (uint year, uint month, uint day) = Utils.timestampToDate(_sinceDate);
+        string memory _vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
+        string memory _vaultAddr = Strings.toHexString(uint256(uint160(address(this))), 20);
+        
 
-    // }
+        
+        string memory svg = ISvgManager(_svgManager).generateVaultSvg(
+            ISvgManager.SvgParams(
+            _color, // #FFCCCC 형식
+            name(),
+            _vaultAddr,
+            _vaultDate,
+            _apy,
+            _vaultVolume,
+            _dacName
+        ));
+        return svg;
+    }
+
+    function vaultSvgUri()
+    public
+    view
+    override
+    returns(string memory){
+        string memory nftImage = Base64.encode(bytes(vaultInfoSvg()));
+        return string(abi.encodePacked(
+            'data:image/svg+xml;base64,',
+            nftImage
+        ));
+    }
+
 } 

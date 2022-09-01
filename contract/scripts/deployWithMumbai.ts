@@ -151,45 +151,32 @@ async function deployContracts(){
 }
 
 
-describe("VaultDeployment",() => {
-
-    it("Should return vault address that was deployed", async () => {
-        const {vaultFactory, vaultAddress} = await deployContracts();
-        const get_vault = (await vaultFactory.getVault());
-        console.log(get_vault);
-        expect (get_vault[0]).to.equal(vaultAddress);
-    });
-
-    it("Should return 1 for vaults list length", async () => {
-        const {vaultFactory}  = await deployContracts();
-        const len = (await vaultFactory.getVault()).length;
-        expect(len).to.equal(1);
-    });
+// Buy logic
+async function main(){
+    const {deployer, user, router, testToken, nftManager, vaultAddress, treausry} = await deployContracts();
+    console.log('ming!!');
+    const tx = await testToken.connect(deployer).mint(user.address, "100000000000000000000000"); 
+    await tx.wait();
     
+    console.log("heu..!!");
+    console.log("userAddress:", user.address);
+    console.log("routerAddress:", router.address);
+    
+    console.log('ming.. 8ㅁ8');
+    const approve = await testToken.connect(user).approve(router.address, 100000000000000000000000n);
+    await approve.wait();
 
-});
+    console.log('why...');
+    const buy = await router.connect(user)["buy(address,uint256)"](vaultAddress, 10000000000000000000000n);
+    await buy.wait(); 
 
-describe("Buy fund NFT", () => {
-    it("Should mint fund NFT", async() => {
-        const {deployer, user, router, testToken, nftManager, vaultAddress, treausry} = await deployContracts();
-        const tx = await testToken.connect(deployer).mint(user.address, "100000000000000000000000"); 
-        await tx.wait();
-        const balance = await testToken.balanceOf(user.address);
-        expect(balance.toString()).to.equal("100000000000000000000000");
-        
-        console.log("userAddress:", user.address);
-        console.log("routerAddress:", router.address);
-        
-        await testToken.connect(user).approve(router.address, balance.toString());
-        const buy = await router.connect(user)["buy(address,uint256)"](vaultAddress, balance.toString());
-        await buy.wait(); 
+    console.log(await nftManager.tokenSvgUri(0));
+    console.log(await nftManager.tokenURI(0));
+}
 
-        const vault = await ethers.getContractAt("IVault", vaultAddress);
-        expect((await nftManager.balanceOf(user.address)).toNumber()).to.equal(1); // nft ~token 개수
-        expect((await vault.balanceOf(nftManager.address)).toString()).to.equal('98000000000000000000000');
-        expect((await testToken.balanceOf(treausry.address)).toString()).to.equal('2000000000000000000000');
-
-        console.log(await nftManager.tokenSvgUri(0));
-        console.log(await nftManager.tokenURI(0));
-    });
-});
+// We recommend this pattern to be able to use async/await everywhere
+// and properly handle errors.
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });

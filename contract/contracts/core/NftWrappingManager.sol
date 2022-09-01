@@ -130,7 +130,7 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
                             '", ',
                             '"attributes": [ ',
                                 '{"trait_type": "Vault",  "value": "', vaultInfo[1], '"}, ',
-                                '{"trait_type": "Signature-Color",  "value": "', vaultInfo[0], '"}',
+                                '{"trait_type": "Signature-Color",  "value": "', vaultInfo[0], '"},',
                                 '{"trait_type": "DAC",  "value": "', vaultInfo[7], '"}, ',
                                 '{"trait_type": "Vault-Volume",  "value": "', vaultInfo[6], '"}, ',
                                 '{"trait_type": "Current-APY",  "value": "', vaultInfo[5], '"}',

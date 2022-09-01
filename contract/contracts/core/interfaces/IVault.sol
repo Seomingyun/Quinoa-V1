@@ -22,13 +22,14 @@ interface IVault is IERC20, IERC20Metadata {
 
     // add interface for nft
     function setCurrentPrice(uint256 newCurrentPrice) external;
+    function getCurrentPrice() external view returns(uint256);
 
     // caller(msg.sender), owner(receiver)
     event Deposit(address indexed caller, address indexed owner, uint256 assets, uint256 shares);
     event Withdraw(address indexed caller, address receiver, address owner, uint256 assets, uint256 shares);
-
-    function asset() external view returns (address assetTokenAddress);
-    function totalAssets() external view returns (uint256 totalManagedAssets);
+    
+    function asset() external view returns (address);
+    function totalAssets() external view returns (uint256);
     function totalFloat() external view returns (uint256);
     function totalFreeFund() external view returns (uint256);
     function calculateLockedProfit() external view returns (uint256);
@@ -46,7 +47,7 @@ interface IVault is IERC20, IERC20Metadata {
 
 
     function vaultSvgUri() external view returns(string memory);
-    function vaultInfo() external view returns(string[7] memory);
+    function vaultInfo() external view returns(string[8] memory);
 
     function maxWithdraw(address owner) external view returns (uint256 maxAssets);
     function previewWithdraw(uint256 assets) external view returns (uint256 shares);

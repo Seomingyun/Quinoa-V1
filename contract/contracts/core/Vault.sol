@@ -81,6 +81,10 @@ contract Vault is ERC20, IVault, AccessControl {
         _currentPrice = newCurrentPrice * (10**decimals());
     }
 
+    function getCurrentPrice() public view override returns(uint256) {
+        return _currentPrice;
+    }
+
     /// @notice 이 vault contract의 decimal을 반환.
     /// @dev asset의 deciamal과 동일하게 overriding.
     function decimals() public view override(ERC20, IERC20Metadata) returns (uint8) { // _asset의 decimal과 같이 통일시킴
@@ -464,13 +468,13 @@ contract Vault is ERC20, IVault, AccessControl {
         ));
     }
 
-    function vaultInfo() external view override returns(string[7] memory){
+    function vaultInfo() external view override returns(string[8] memory){
         uint256 totalVolume = _currentPrice.mulDiv(totalAssets(), 10**decimals(), Math.Rounding.Down);
         string memory _vaultVolume = Utils.volumeToString(totalVolume);
         (uint year, uint month, uint day) = Utils.timestampToDate(_sinceDate);
         string memory _vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
         string memory _vaultAddr = Strings.toHexString(uint256(uint160(address(this))), 20);
         
-        return [_color, name(), symbol(), _vaultAddr, _vaultDate, _vaultVolume, _dacName];
+        return [_color, name(), _asset.symbol(), _vaultAddr, _vaultDate, _apy, _vaultVolume, _dacName];
     }
 } 

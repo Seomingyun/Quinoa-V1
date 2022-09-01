@@ -10,9 +10,23 @@ import {
     TestToken__factory, 
     GeneralNFT__factory, 
     GuruNFT__factory,
-    Qui__factory
+    Qui__factory,
+    SVG1__factory,
+    SVG2__factory,
+    SVG3__factory,
+    SVG4__factory,
+    SVG5__factory,
+    SVG6__factory,
+    SVG7__factory,
+    SVG8__factory,
+    SVG9__factory,
+    SVG10__factory,
+    SvgManager__factory,
+    Utils__factory
 } from "../typechain-types";
+import { svg } from "../typechain-types/contracts";
 //import "hardhat/console.sol";
+
 
 async function createMerkleRoot() {
     // get all addresses in hardhat network
@@ -31,6 +45,46 @@ async function createMerkleRoot() {
 async function main(){
 
     const [deployer, user] = await ethers.getSigners();
+
+    // #0. Deploy NFT Svg files
+    const Svg1 = await new SVG1__factory(deployer).deploy();
+    const svg1 = await Svg1.deployed();
+    const Svg2 = await new SVG2__factory(deployer).deploy();
+    const svg2 = await Svg2.deployed();
+    const Svg3 = await new SVG3__factory(deployer).deploy();
+    const svg3 = await Svg3.deployed();
+    const Svg4 = await new SVG4__factory(deployer).deploy();
+    const svg4 = await Svg4.deployed();
+    const Svg5 = await new SVG5__factory(deployer).deploy();
+    const svg5 = await Svg5.deployed();
+    const Svg6 = await new SVG6__factory(deployer).deploy();
+    const svg6 = await Svg6.deployed();
+    const Svg7 = await new SVG7__factory(deployer).deploy();
+    const svg7 = await Svg7.deployed();
+    const Svg8 = await new SVG8__factory(deployer).deploy();
+    const svg8 = await Svg8.deployed();
+    const Svg9 = await new SVG9__factory(deployer).deploy();
+    const svg9 = await Svg9.deployed();
+    const Svg10 = await new SVG10__factory(deployer).deploy();
+    const svg10 = await Svg10.deployed();
+
+    const Utils = await new Utils__factory(deployer).deploy();
+    const utils = await Utils.deployed();
+
+    const addrParams = {
+        svg1: svg1.address,
+        svg2: svg2.address,
+        svg3: svg3.address,
+        svg4: svg4.address,
+        svg5: svg5.address,
+        svg6: svg6.address,
+        svg7: svg7.address,
+        svg8: svg8.address,
+        svg9: svg9.address,
+        svg10: svg10.address
+    }
+    const SvgManager = await new SvgManager__factory(deployer).deploy(addrParams);
+    const svgManager = await SvgManager.deployed();
 
     // #1. Deploy Protocol Treasury
     const Treasury = await ethers.getContractFactory("ProtocolTreasury");
@@ -62,17 +116,24 @@ async function main(){
     await setNFT.wait();
 
     // #6. Deploy vaultFactory
-    const vaultFactory = await new VaultFactory__factory(deployer).deploy(router.address, treausry.address);
-    await vaultFactory.deployed();
-    console.log("Vault Factory address", vaultFactory.address);
+    const VaultFactory = await ethers.getContractFactory("VaultFactory", {
+      libraries: {
+          Utils: utils.address
+      }
+  });
+  const vaultFactory = await VaultFactory.connect(deployer).deploy(router.address, treausry.address, svgManager.address);
+  await vaultFactory.deployed();
 
     // #7. Deploy testToken and Deploy Vault through vaultFactory  X 5
     const testToken = await new TestToken__factory(deployer).deploy();
     await testToken.deployed();
     console.log("TestToken address", testToken.address);
 
+    const colors= ["#2097F6", "#93C69B", "#FF5A43", "#5452F6", "#F5CB35"];
     for(let i=0; i <5; i++ ) {
-      const tx = await vaultFactory.connect(user).deployVault(testToken.address);
+      const tx = await vaultFactory.connect(user).deployVault(
+        ["JENN Yeild Product", "JENN", "JENN", colors[i], "5.12"],     // vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
+        testToken.address);
       await tx.wait();
     }
 

@@ -11,6 +11,8 @@ import {Strategy, ERC20Strategy} from "./Strategy.sol";
 import "../libraries/Utils.sol";
 import 'base64-sol/base64.sol';
 
+import "hardhat/console.sol";
+
 contract Vault is ERC20, IVault, AccessControl {
     using Math for uint256;
 
@@ -434,8 +436,6 @@ contract Vault is ERC20, IVault, AccessControl {
         string memory _vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
         string memory _vaultAddr = Strings.toHexString(uint256(uint160(address(this))), 20);
         
-
-        
         string memory svg = ISvgManager(_svgManager).generateVaultSvg(
             ISvgManager.SvgParams(
             _color, // #FFCCCC 형식
@@ -455,6 +455,7 @@ contract Vault is ERC20, IVault, AccessControl {
     override
     returns(string memory){
         string memory nftImage = Base64.encode(bytes(vaultInfoSvg()));
+
         return string(abi.encodePacked(
             'data:image/svg+xml;base64,',
             nftImage

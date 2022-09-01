@@ -127,7 +127,7 @@ async function deployContracts(){
     const testToken = await new TestToken__factory(deployer).deploy();
     await testToken.deployed();
     const tx = await vaultFactory.connect(user).deployVault(
-        ["JENN Yeild", "JENN", "JENN DAC", "#4D9AFF", "5.12"],     // vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
+        ["JENN Yeild Product", "JENN", "JENN", "#4D9AFF", "5.12"],     // vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
         testToken.address);
     const rc = await tx.wait();
     const event = rc.events?.find(event => event.event === 'VaultDeployed');

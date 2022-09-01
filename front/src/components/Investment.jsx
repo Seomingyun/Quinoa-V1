@@ -5,17 +5,7 @@ import { PriceConversion } from "../utils/PriceConversion";
 
 const Investment = ({item}) => {
     const [like, setLike] = useState(false); 
-    const [fiatPrice, setFiatPrice] = useState(0);
     
-    const getFiatPrice = async () => {
-      const price = await PriceConversion(item.symbol, Number(ethers.utils.formatEther(item.totalAssets)));
-      console.log(price);
-      setFiatPrice(price);
-    }
-
-    useInsertionEffect(() => {
-      getFiatPrice();
-    },[]);
     return(
       <div className="list_strategy">
       <div className="ls_wishlist_wrap">
@@ -25,7 +15,7 @@ const Investment = ({item}) => {
       </div>
       <div className="ls_strategyname_wrap">
         <div className="list_Strategy_name">
-          <Link to={'./detail/'+ item.address} className="ls_name_title QUINOABody-2">
+          <Link to={'./detail/'+ item.address} className="ls_name_title QUINOABody-2" style={{ textDecoration: 'none' }}>
             {item.name}
           </Link>
           <div className="ls_STtoken">
@@ -51,7 +41,7 @@ const Investment = ({item}) => {
       </div>
       <div className="totalVolume_wrap">
         <span className="totalVolume QUINOABody-1">
-          ${fiatPrice.toFixed(2)}</span>
+          ${item.totalVolume}</span>
       </div>
       <div className="ls_underline"></div>
     </div>

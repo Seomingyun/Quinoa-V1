@@ -19,11 +19,10 @@ export const useVaultList = () => {
         const vaultList = await vaultFactory.getVault();
         for(let i=0; i<vaultList.length ; i++) {
             const vault = Vault__factory.connect(vaultList[i], provider);
-            const [name, totalAssets, asset] = await Promise.all([vault.name(), vault.totalAssets(),  vault.asset()]);
-            const baseAsset = ERC20__factory.connect(asset, provider);
-            const symbol = await baseAsset.symbol();
-            const address = vaultList[i];
-            setVaults((perv) => [...perv, {address, asset, name, totalAssets, symbol}]);
+            const [ , name, symbol, address, date, totalVolume, dacName] = await vault.vaultInfo();
+            const [svg, totalAssets, asset] = await Promise.all([vault.vaultSvgUri(), vault.totalAssets(),  vault.asset()]);
+            
+            setVaults((perv) => [...perv, {address, asset, name, symbol, totalAssets, totalVolume, svg, dacName, date}]);
             }
     }
 

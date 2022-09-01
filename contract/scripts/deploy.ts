@@ -120,16 +120,17 @@ async function main(){
       libraries: {
           Utils: utils.address
       }
-  });
-  const vaultFactory = await VaultFactory.connect(deployer).deploy(router.address, treausry.address, svgManager.address);
-  await vaultFactory.deployed();
+    });
+    const vaultFactory = await VaultFactory.connect(deployer).deploy(router.address, treausry.address, svgManager.address);
+    await vaultFactory.deployed();
+    console.log("Vault Factory address", vaultFactory.address);
 
     // #7. Deploy testToken and Deploy Vault through vaultFactory  X 5
     const testToken = await new TestToken__factory(deployer).deploy();
     await testToken.deployed();
     console.log("TestToken address", testToken.address);
 
-    const colors= ["#2097F6", "#93C69B", "#FF5A43", "#5452F6", "#F5CB35"];
+    const colors= ["#2097F6", "#93C69B","#F5CB35", "#FF5A43", "#5452F6"];
     for(let i=0; i <5; i++ ) {
       const tx = await vaultFactory.connect(user).deployVault(
         ["JENN Yeild Product", "JENN", "JENN", colors[i], "5.12"],     // vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)

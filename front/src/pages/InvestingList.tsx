@@ -116,7 +116,7 @@ function InvestingList({ currentAccount }: any) {
                 <div className="stateDefault">
                   <Link
                     to={"./detail/" + item.address}
-                    state={{ assetAddress: item.asset }}
+                    state={{ assetAddress: item.asset, vaultInfo: item }}
                     className="strategy_ctaBtn"
                     style={{ textDecoration: "none" }}
                   >
@@ -153,10 +153,11 @@ function InvestingList({ currentAccount }: any) {
                   </div>
                   <div className="hi_nftImg_wrap">
                     <div className="hi_nftImg">
-                      <img
-                        src="img/strategy_img_01.png"
-                        className="sTtoken_img"
-                      />
+                    <object 
+                      type = "image/svg+xml" 
+                      className = "hi_nftimg" 
+                      data = {item.svg}
+                    />
                     </div>
                   </div>
                   <div className="hi_description">
@@ -179,8 +180,7 @@ function InvestingList({ currentAccount }: any) {
                         Volume
                       </span>
                       <span className="volume_amount QUINOAheadline6">
-                        {ethers.utils.formatEther(item.totalAssets)}&nbsp;
-                        {item.symbol}
+                        ${item.totalVolume}
                       </span>
                     </div>
                   </div>
@@ -192,7 +192,7 @@ function InvestingList({ currentAccount }: any) {
                       />
                     </div>
                     <span className="By_Strategy_name">
-                      By SuperDAO friends
+                      By {item.dacName}
                     </span>
                   </div>
                 </div>
@@ -244,16 +244,6 @@ function InvestingList({ currentAccount }: any) {
           </div>
         </div>
       </section>
-      {/* <footer id="footer_wrap">
-        <div className="qui_footer">
-          <a className="footer_txtBtn">Docs</a>
-          <a className="footer_txtBtn">Governance</a>
-          <a className="channel_link twitter">a</a>
-          <a className="channel_link telegram">a</a>
-          <a className="channel_link discord">a</a>
-          <a className="coachBtn">need help?</a>
-        </div>
-      </footer> */}
     </div>
   );
 }

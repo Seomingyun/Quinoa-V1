@@ -3,12 +3,17 @@ import "./InvestingDetail.css";
 import { useBuy } from "../hooks/useBuy";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Toast } from "../components/Modals/Toast";
-import imgA from "../components/img/byIcon_img_01.png";
+import { VaultInfo } from "../models/VaultInfo";
 import { ReactComponent as WishList } from "../components/asset/wishlist_default.svg";
 import { ReactComponent as Infoicon } from "../components/asset/info_icon.svg";
+import {ethers} from "ethers";
+import { useDepositInfo } from "../hooks/useDepositInfo";
+import data from "../utils/TokenAddressMapper.json";
+
 interface RouteState {
   state: {
     assetAddress: string;
+    vaultInfo : VaultInfo;
   };
 }
 
@@ -26,6 +31,7 @@ interface toastProperties {
 function InvestingDetail({ currentAccount }: any) {
   const { address } = useParams();
   const { state } = useLocation() as RouteState;
+  const deposit = useDepositInfo(currentAccount, state.vaultInfo.address); 
 
   const [amount, setAmount] = useState("0");
   const [showMore, setShowMore] = useState(false);
@@ -83,6 +89,14 @@ function InvestingDetail({ currentAccount }: any) {
     setToastList(undefined);
   };
 
+  const formatDate = (date:string) => {
+    const split = date.split(".");
+  }
+
+  const getTokenIcon = (address:string) => {
+    return data.find(x => x.address === address)?.logo;
+  }
+
   useEffect(() => {
     showToast(txStatus);
   }, [txStatus]);
@@ -92,7 +106,10 @@ function InvestingDetail({ currentAccount }: any) {
       <div className="investingDetail_Wrap">
         <div className="investingDetail_info">
           <div className="investNft_wrap">
-            <div className="nft_img"></div> {/* nft svg 넣으면 됨 */}
+          <object 
+            type = "image/svg+xml" 
+            className = "nft_img" 
+            data = {state.vaultInfo.svg} />
           </div>
           <div className="iD_about">
             <div className="subTitle">
@@ -138,72 +155,25 @@ function InvestingDetail({ currentAccount }: any) {
               <div className="header_underline"></div>
               <div className="list_tokens">
                 <div className="lt_token">
-                  <img src="/img/eth_icon.png" className="lt_token_icon"></img>
-                  <span className="lt_token_txt QUINOABody-2">ETH</span>
+                  <img src={getTokenIcon(state.vaultInfo.asset)} className="lt_token_icon"></img>
+                  <span className="lt_token_txt QUINOABody-2">{state.vaultInfo.symbol}</span>
                 </div>
                 <div className="lt_Amount">
-                  <span className="lt_Amount_txt QUINOABody-1">82.0183</span>
+                  <span className="lt_Amount_txt QUINOABody-1">
+                    {ethers.utils.formatEther(state.vaultInfo.totalAssets)}</span>
                 </div>
                 <div className="lt_Volume">
-                  <span className="lt_Volume_txt QUINOABody-1">$2,346.7M</span>
+                  <span className="lt_Volume_txt QUINOABody-1">${state.vaultInfo.totalVolume}</span>
                 </div>
                 <div className="ratioLine_wrap">
                   <div
-                    style={{ left: "min(calc(515px * 0.84), 50%)" }}
+                    style={{ left: "min(calc(515px * 0.90), 100%)" }}
                     className="ratioLine_txt"
                   >
-                    <span className="ratioLine_txtIn">50%</span>
+                    <span className="ratioLine_txtIn">100%</span>
                   </div>
                   <div
-                    style={{ width: "calc(515px * 0.5 + 5px)" }}
-                    className="ratioLine"
-                  ></div>
-                </div>
-              </div>
-              <div className="list_tokens">
-                <div className="lt_token">
-                  <img src="/img/eth_icon.png" className="lt_token_icon"></img>
-                  <span className="lt_token_txt QUINOABody-2">ETH</span>
-                </div>
-                <div className="lt_Amount">
-                  <span className="lt_Amount_txt QUINOABody-1">82.0183</span>
-                </div>
-                <div className="lt_Volume">
-                  <span className="lt_Volume_txt QUINOABody-1">$2,346.7M</span>
-                </div>
-                <div className="ratioLine_wrap">
-                  <div
-                    style={{ left: "min(calc(515px * 0.84), 50%)" }}
-                    className="ratioLine_txt"
-                  >
-                    <span className="ratioLine_txtIn">50%</span>
-                  </div>
-                  <div
-                    style={{ width: "calc(515px * 0.5 + 5px)" }}
-                    className="ratioLine"
-                  ></div>
-                </div>
-              </div>
-              <div className="list_tokens">
-                <div className="lt_token">
-                  <img src="/img/eth_icon.png" className="lt_token_icon"></img>
-                  <span className="lt_token_txt QUINOABody-2">ETH</span>
-                </div>
-                <div className="lt_Amount">
-                  <span className="lt_Amount_txt QUINOABody-1">82.0183</span>
-                </div>
-                <div className="lt_Volume">
-                  <span className="lt_Volume_txt QUINOABody-1">$2,346.7M</span>
-                </div>
-                <div className="ratioLine_wrap">
-                  <div
-                    style={{ left: "min(calc(515px * 0.84), 50%)" }}
-                    className="ratioLine_txt"
-                  >
-                    <span className="ratioLine_txtIn">50%</span>
-                  </div>
-                  <div
-                    style={{ width: "calc(515px * 0.5 + 5px)" }}
+                    style={{ width: "calc(515px * 1 + 5px)" }}
                     className="ratioLine"
                   ></div>
                 </div>
@@ -222,11 +192,11 @@ function InvestingDetail({ currentAccount }: any) {
             {/* ------- row_01 ------ */}
             <div className="statRow_01">
               <div className="createBy">
-                <span className="mainTxt">SuperDAO</span>
+                <span className="mainTxt">{state.vaultInfo.dacName}</span>
                 <span className="subTxt">Create by</span>
               </div>
               <div className="totalVolume">
-                <span className="mainTxt">$13,021.71</span>
+                <span className="mainTxt">${state.vaultInfo.totalVolume}</span>
                 <span className="subTxt">Total Volume</span>
               </div>
               <div className="volume24h">
@@ -246,13 +216,13 @@ function InvestingDetail({ currentAccount }: any) {
               </div>
               <div className="volume24h">
                 <span className="mainTxt">$1,301.92</span>
-                <span className="subTxt">Creator's Balance</span>
+                <span className="subTxt">DAC's Deposit</span>
               </div>
             </div>
             {/* ------- row_03 ------ */}
             <div className="statRow_01">
               <div className="createBy">
-                <span className="mainTxt">2022.01.14</span>
+                <span className="mainTxt">{state.vaultInfo.date}</span>
                 <span className="subTxt">Inception Date</span>
               </div>
               <div className="totalVolume">
@@ -265,7 +235,7 @@ function InvestingDetail({ currentAccount }: any) {
         <div className="investingDetail_buyNsell">
           <div className="strategy_title_txt">
             <span className="strategy_Name_txt QUINOAheadline4">
-              Perfect Super Vault
+              {state.vaultInfo.name}
             </span>
             <div className="strategy_By_txt">
               <div className="id_byIcon">
@@ -274,7 +244,7 @@ function InvestingDetail({ currentAccount }: any) {
                   className="id_byIcon_img"
                 />
               </div>
-              <span className="sB_txtIn">By SuperDAO</span>
+              <span className="sB_txtIn">By {state.vaultInfo.dacName}</span>
             </div>
             <div className="wishlist">
               <div className="focused"></div>
@@ -296,7 +266,7 @@ function InvestingDetail({ currentAccount }: any) {
             <div className="buysection_wrap" style={buySell== "buy" ? {display:"flex"} : {display : "none"}}>
               <div className="amountInvested">
                 <span className="ai_txt">amount invested</span>
-                <span className="ai_amount">$4,280.21</span>
+                <span className="ai_amount">{deposit} &nbsp; {state.vaultInfo.symbol}</span>
               </div>
               <div className="investableAmount">
                 <span className="ia_txt">Investable amount</span>

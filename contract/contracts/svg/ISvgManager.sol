@@ -10,6 +10,8 @@ interface ISvgManager {
         string vaultApy;
         string vaultVolume;
         string vaultDacName;
+        string nftEarnings;
+        string nftHoldings;
     }
 
     struct SvgAddrs{
@@ -25,5 +27,5 @@ interface ISvgManager {
         address svg10;
     }
 
-    function generateVaultSvg(SvgParams memory params) external view returns(string memory);
+    function generateNftSvg(SvgParams memory params) external view returns(string memory);
 }

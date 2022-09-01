@@ -436,7 +436,7 @@ contract Vault is ERC20, IVault, AccessControl {
         string memory _vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
         string memory _vaultAddr = Strings.toHexString(uint256(uint160(address(this))), 20);
         
-        string memory svg = ISvgManager(_svgManager).generateVaultSvg(
+        string memory svg = ISvgManager(_svgManager).generateNftSvg(
             ISvgManager.SvgParams(
             _color, // #FFCCCC 형식
             name(),
@@ -444,7 +444,9 @@ contract Vault is ERC20, IVault, AccessControl {
             _vaultDate,
             _apy,
             _vaultVolume,
-            _dacName
+            _dacName,
+            "   --",
+            "   --"
         ));
         return svg;
     }
@@ -462,4 +464,13 @@ contract Vault is ERC20, IVault, AccessControl {
         ));
     }
 
+    function vaultInfo() external view override returns(string[7] memory){
+        uint256 totalVolume = _currentPrice.mulDiv(totalAssets(), 10**decimals(), Math.Rounding.Down);
+        string memory _vaultVolume = Utils.volumeToString(totalVolume);
+        (uint year, uint month, uint day) = Utils.timestampToDate(_sinceDate);
+        string memory _vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
+        string memory _vaultAddr = Strings.toHexString(uint256(uint160(address(this))), 20);
+        
+        return [_color, name(), symbol(), _vaultAddr, _vaultDate, _vaultVolume, _dacName];
+    }
 } 

@@ -194,7 +194,7 @@ describe("Generate NFT SVG", () => {
         } = await deployContracts();
         
         const vault = await ethers.getContractAt("IVault", vaultAddress);
-        console.log(await vault.connect(deployer).vaultSvgUri());    
+        console.log(await vault.connect(deployer).vaultInfo());    
     })
 
 })

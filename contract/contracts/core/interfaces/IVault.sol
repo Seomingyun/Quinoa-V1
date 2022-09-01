@@ -46,6 +46,7 @@ interface IVault is IERC20, IERC20Metadata {
 
 
     function vaultSvgUri() external view returns(string memory);
+    function vaultInfo() external view returns(string[7] memory);
 
     function maxWithdraw(address owner) external view returns (uint256 maxAssets);
     function previewWithdraw(uint256 assets) external view returns (uint256 shares);

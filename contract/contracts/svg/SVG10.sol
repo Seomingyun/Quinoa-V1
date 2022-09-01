@@ -81,25 +81,25 @@ contract SVG10 {
                 '<text class="cls-47" transform="translate(260.95 1335.24) rotate(-5.96)"><tspan x="0" y="0">', params.vaultDacName, '</tspan></text>', 
                 '<text class="cls-52" transform="translate(709.59 1321.5)"><tspan x="0" y="0">', params.vaultDacName, '</tspan></text>'
 
-                // '<text class="cls-58" transform="translate(179.39 1064.7)">', 
-                // '<tspan x="0" y="0">', 
-                // '$54.2k', 
-                // '</tspan>', 
-                // '</text>', 
-                // '<rect class="cls-31" x="185.84" y="942.02" width="471" height="1" rx=".5" ry=".5"/>', 
-                // '<text class="cls-45" transform="translate(183.31 919.09)">', 
-                // '<tspan x="0" y="0">Earnings</tspan>', 
-                // '</text>', 
+                '<text class="cls-58" transform="translate(179.39 1064.7)">', 
+                '<tspan x="0" y="0">', 
+                '$', params.nftEarnings, 
+                '</tspan>', 
+                '</text>', 
+                '<rect class="cls-31" x="185.84" y="942.02" width="471" height="1" rx=".5" ry=".5"/>', 
+                '<text class="cls-45" transform="translate(183.31 919.09)">', 
+                '<tspan x="0" y="0">Earnings</tspan>', 
+                '</text>', 
 
-                // '<text class="cls-58" transform="translate(774.67 1064.7)">', 
-                // '<tspan x="0" y="0">', 
-                // '$254.1k', 
-                // '</tspan>', 
-                // '</text>', 
-                // '<rect class="cls-31" x="781.12" y="942.02" width="471" height="1" rx=".5" ry=".5"/>', 
-                // '<text class="cls-45" transform="translate(778.59 919.09)">', 
-                // '<tspan x="0" y="0">Holdings</tspan>', 
-                // '</text>'
+                '<text class="cls-58" transform="translate(774.67 1064.7)">', 
+                '<tspan x="0" y="0">', 
+                '$', params.nftHoldings, 
+                '</tspan>', 
+                '</text>', 
+                '<rect class="cls-31" x="781.12" y="942.02" width="471" height="1" rx=".5" ry=".5"/>', 
+                '<text class="cls-45" transform="translate(778.59 919.09)">', 
+                '<tspan x="0" y="0">Holdings</tspan>', 
+                '</text>'
             )
         );
     }

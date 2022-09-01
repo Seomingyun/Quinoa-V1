@@ -29,7 +29,7 @@ contract SvgManager is ISvgManager{
         SVG_ADDRS = addrs;
     }
 
-    function generateVaultSvg(SvgParams memory params) external view override returns(string memory) {
+    function generateNftSvg(SvgParams memory params) external view override returns(string memory) {
         string memory svg = string(
             abi.encodePacked(
                 '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1437.17 1536.38">', 

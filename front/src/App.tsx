@@ -8,6 +8,7 @@ import InvestingList from "./pages/InvestingList";
 import { Navbar } from "./components/Navbar";
 import InvestingDetail from "./pages/InvestingDetail";
 import Portfolio from "./pages/Portfolio";
+import { Footer } from "./components/Footer";
 
 function App() {
   const [currentAccount, setCurrentAccount] = useState<String|undefined>();
@@ -142,6 +143,7 @@ function App() {
         <Route path='/investing/detail/:address' element={<InvestingDetail currentAccount={currentAccount}/>} />
         <Route path='/portfolio' element={<Portfolio currentAccount={currentAccount}/>} />
       </Routes>
+      <Footer/>
       </BrowserRouter>
     </div>
   )

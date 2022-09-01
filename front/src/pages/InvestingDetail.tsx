@@ -28,6 +28,9 @@ function InvestingDetail({ currentAccount }: any) {
   const { state } = useLocation() as RouteState;
 
   const [amount, setAmount] = useState("0");
+  const [showMore, setShowMore] = useState(false);
+  const [buySell, setBuySell] = useState<string>("buy");
+
   const { buy, txStatus } = useBuy(
     amount,
     currentAccount,
@@ -96,8 +99,12 @@ function InvestingDetail({ currentAccount }: any) {
               <span className="subTitle_txt QUINOAheadline6">About</span>
               <div className="st_underline"></div>
             </div>
-            <div className="about_txtwrap">
-              <span className="atBtn_default"></span>
+            <div className={showMore ? "about_txtwrap_active" : "about_txtwrap"}>
+              {/* CSS NEED TO BE FIXED */}
+              <span className={showMore ? "atBtn_focused" : "atBtn_default"} 
+              onClick = {() => setShowMore(!showMore)}
+              ></span>
+              
               <span className="about_txt">
                 This fund provides exposure to blue-chip companies, being those
                 which are large, stable and profitable. This includes household
@@ -275,16 +282,18 @@ function InvestingDetail({ currentAccount }: any) {
           </div>
           <div className="buyNsell">
             <div className="tab">
-              <div className="buy_tab">
-                <span className="buy_txt">Buy</span>
+              <div className={buySell=="buy" ?"buy_tab" : "sell_tab"}
+                onClick={() => setBuySell(("buy"))}>
+                <span className={buySell=="buy" ?"buy_txt" : "sell_txt"}>Buy</span>
                 <div className="line"></div>
               </div>
-              <div className="sell_tab">
-                <span className="sell_txt">Sell</span>
+              <div className={buySell=="sell" ? "buy_tab" : "sell_tab"}
+                onClick={() => setBuySell(("sell"))}>
+                <span className={buySell=="sell" ?"buy_txt" : "sell_txt"}>Sell</span>
                 <div className="line"></div>
               </div>
             </div>
-            <div className="buysection_wrap">
+            <div className="buysection_wrap" style={buySell== "buy" ? {display:"flex"} : {display : "none"}}>
               <div className="amountInvested">
                 <span className="ai_txt">amount invested</span>
                 <span className="ai_amount">$4,280.21</span>
@@ -312,7 +321,7 @@ function InvestingDetail({ currentAccount }: any) {
                 <span className="buy_txt">Buy</span>
               </div>
             </div>
-            <div className="sellsection_wrap">
+            <div className="sellsection_wrap" style={buySell== "sell" ? {display:"flex"} : {display : "none"}}>
               <div className="investablesaleAmount">
                 <span className="isa_txt">available sale amount</span>
                 <span className="isa_amount">$14,280,989.21</span>

@@ -244,7 +244,7 @@ function InvestingList({ currentAccount }: any) {
           </div>
         </div>
       </section>
-      <footer id="footer_wrap">
+      {/* <footer id="footer_wrap">
         <div className="qui_footer">
           <a className="footer_txtBtn">Docs</a>
           <a className="footer_txtBtn">Governance</a>
@@ -253,7 +253,7 @@ function InvestingList({ currentAccount }: any) {
           <a className="channel_link discord">a</a>
           <a className="coachBtn">need help?</a>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }

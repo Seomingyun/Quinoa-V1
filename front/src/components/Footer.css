@@ -1,0 +1,94 @@
+#footer_wrap {
+    position: relative;
+    width: 100%;
+    height: 94px;
+    border-top: 1px solid #d8d8d8;
+    box-sizing: border-box;
+    margin-top: 240px;
+  }
+  #footer_wrap .qui_footer {
+    position: relative;
+    display: flex;
+    width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+  }
+  #footer_wrap .qui_footer a {
+    height: 22px;
+    display: flex;
+    flex-grow: 0;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: 0;
+    margin-top: 37px;
+    color: var(--neutral-qui-neu-900);
+  }
+  #footer_wrap .qui_footer a:nth-child(2) {
+    margin-right: 746px;
+  }
+  #footer_wrap .qui_footer .footer_txtBtn {
+    margin-right: 44.6px;
+    cursor: pointer;
+  }
+  #footer_wrap .qui_footer .channel_link {
+    width: 21px;
+    height: 21px;
+    margin-right: 23px;
+    text-indent: -9999px;
+    cursor: pointer;
+  }
+  #footer_wrap .qui_footer .discord {
+    width: 25px;
+  }
+  .twitter {
+    background: url(../components/asset/icon_twitter.svg) no-repeat 0 0;
+  }
+  .telegram {
+    background: url(../components/asset/icon_telegram.svg) no-repeat 0 0;
+  }
+  .discord {
+    background: url(../components/asset/icon_discord.svg) no-repeat 0 0;
+  }
+  .twitter:hover {
+    background: url(../components/asset/icon_twitter_hovered.svg) no-repeat 0 0;
+  }
+  .telegram:hover {
+    background: url(../components/asset/icon_telegram_hovered.svg) no-repeat 0 0;
+  }
+  .discord:hover {
+    background: url(../components/asset/icon_discord_hovered.svg) no-repeat 0 0;
+  }
+  #footer_wrap .qui_footer .channel_link .discord {
+    margin-right: 0;
+  }
+  #footer_wrap .qui_footer .coachBtn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+    height: 48px;
+    width: 133px;
+    margin-top: 0;
+    text-align: center;
+    line-height: 48px;
+    background: #fff;
+    color: var(--primary-light-qui-green-400);
+    border: 1px solid var(--primary-light-qui-green-400);
+    user-select: none;
+    border-radius: 66.5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.075, 0.82, 0.165, 1) 0s;
+  }
+  #footer_wrap .qui_footer .coachBtn:hover {
+    background: var(--primary-light-qui-green-400);
+    color: var(--neutral-varient-qui-neu-vari-100);
+    transition: all 0.15s cubic-bezier(0.075, 0.82, 0.165, 1) 0s;
+  }

@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "./interfaces/IERC4907.sol";
 
-contract ERC4907 is ERC721, ERC721URIStorage, IERC4907 {
+contract ERC4907 is ERC721, IERC4907 {
   struct UserInfo {
     address user;
     uint64 expires;
@@ -48,16 +47,7 @@ contract ERC4907 is ERC721, ERC721URIStorage, IERC4907 {
     }
   }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
-        return super.tokenURI(tokenId);
-    }
-
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+    function _burn(uint256 tokenId) internal override(ERC721) {
         super._burn(tokenId);
     }
 }

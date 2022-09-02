@@ -1,0 +1,121 @@
+[
+    {
+        "id" : 2396,
+        "symbol" : "WETH",
+        "network" : "polygon",
+        "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+        "logo":"https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png"
+    },
+    {
+        "id" : 3717,
+        "symbol": "WBTC",
+        "network" : "polygon",
+        "address": "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/3717.png"
+    },
+    {
+        "id" : 3890,
+        "symbol" : "MATIC",
+        "network" : "polygon",
+        "address": "0x0000000000000000000000000000000000001010",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png"
+    },
+    {
+        "id" : 825,
+        "symbol" : "USDT",
+        "network" : "polygon",
+        "address": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png"
+    },
+    {
+        "id" : 3408,
+        "symbol" : "USDC",
+        "network" : "polygon",
+        "address": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png"
+    },
+    {
+        "id": 8925,
+        "symbol": "WMATIC",
+        "network" : "polygon",
+        "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/8925.png"
+    },
+    {
+        "id": 4943,
+        "symbol": "DAI",
+        "network" : "polygon",
+        "address": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+        "logo": "https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png"
+    },
+    {
+        "id": 6758,
+        "symbol": "SUSHI",
+        "network" : "polygon",
+        "address": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/6758.png"
+    },
+    {
+        "id": 7083,
+        "symbol": "UNI",
+        "network" : "polygon",
+        "address": "0xb33eaad8d922b1083446dc23f610c2567fb5180f",
+        "logo": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png"
+    },
+    {
+        "id": 2586,
+        "symbol": "SNX",
+        "network" : "polygon",
+        "address": "0x50b728d8d964fd00c2d0aad81718b71311fef68a",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/2586.png"
+    },
+    {
+        "id": 18934,
+        "symbol": "STG",
+        "network" : "polygon",
+        "address": "0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590"
+    },
+    {
+        "id": 5728,
+        "symbol": "BAL",
+        "network" : "polygon",
+        "address": "0x9a71012b13ca4d3d0cdc72a177df3ef03b0e76a3",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/5728.png"
+    },
+    {
+        "id": 1975,
+        "symbol": "LINK",
+        "network" : "polygon",
+        "address": "0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png"
+    },
+    {
+        "id": 9444,
+        "symbol": "KNC",
+        "network" : "polygon",
+        "address": "0xa8d394fe7380b8ce6145d5f85e6ac22d4e91acde",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/9444.png"
+    },
+    {
+        "id": 6952,
+        "symbol": "FRAX",
+        "network" : "polygon",
+        "address": "0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/6952.png"
+    },
+    {
+        "id": 7278,
+        "symbol": "AAVE",
+        "network" : "polygon",
+        "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/7278.png"
+    },
+    {
+        "id": 7278,
+        "symbol": "TTK",
+        "network" : "polygon",
+        "address": "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c",
+        "logo" : "https://s2.coinmarketcap.com/static/img/coins/64x64/12644.png"
+    }
+    
+]

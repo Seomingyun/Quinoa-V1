@@ -1,8 +1,7 @@
 import {BigNumber} from 'ethers';
-
+import { VaultInfo } from './VaultInfo';
 export interface NftInfo {
-    vault : String,
-    vaultName:String,
+    vaultInfo : VaultInfo,
     tokenId : BigNumber,
-    asset : String
+    nftSvg : string
 }

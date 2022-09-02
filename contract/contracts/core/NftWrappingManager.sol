@@ -2,18 +2,20 @@
 pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 import "./ERC4907.sol";
 import "base64-sol/base64.sol";
 import "./interfaces/INftWrappingManager.sol";
+import "../libraries/Utils.sol";
+import "../svg/ISvgManager.sol";
+import "./interfaces/IVault.sol";
 
 //@TODO NFT should include APY info. Currently only contains qTokenAmount
 
 contract NftWrappingManager is ERC4907, INFTWrappingManager{
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
-
-    // base image of NFT
-    string baseSvg = "";
+    using Math for uint256;
 
     event NewNFTMinted(address recipient, uint256 tokenId);
     event NFTImageUpdated(uint256 tokenId);
@@ -32,11 +34,13 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
     mapping (uint256 => DepositInfo) private _deposits; 
 
     address public router;
+    address public svgManager;
 
 
-    constructor( address router_) 
+    constructor( address router_, address svgManager_) 
     ERC4907("Quinoa Deposit Certificate NFT", "QUI-CER-NFT"){
         router = router_; 
+        svgManager = svgManager_;
     }
 
      /*///////////////////////////////////////////////////////////////
@@ -52,26 +56,95 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
     /*///////////////////////////////////////////////////////////////
                     Create NFT image and TokenURL
     //////////////////////////////////////////////////////////////*/
-    ///@dev NFT에 들어갈 정보 아직 미정. 현재 qTokenAmount만 표시
-    function _createURI(uint256 amount) internal view returns(string memory) {
-        ///@Todo fix creating svg considering fianl design and additional arguments, decimals
-        string memory svg = string(abi.encodePacked(baseSvg, Strings.toString(amount), "</text></svg>"));
-        string memory json = Base64.encode(
-            abi.encodePacked(
-                '{"name": "Quinoa Depsoit Certificate NFT", "description": "NFT can prove the vault deposit fact", "image": "data:image/svg+xml;base64,', Base64.encode(bytes(svg)),'"}'
+    function tokenInfoSvg(uint256 tokenId) public view override returns(string memory){
+        IVault tokenVault = IVault(_deposits[tokenId].vault);
+        string[8] memory vaultInfo = tokenVault.vaultInfo(); // vault 정보
+
+        uint256 totalHoldings = (tokenVault.totalAssets()).mulDiv(_deposits[tokenId].qTokenAmount, tokenVault.totalSupply());
+        totalHoldings = tokenVault.getCurrentPrice().mulDiv(totalHoldings, 10**tokenVault.decimals(), Math.Rounding.Down);
+        string memory _nftHoldings = Utils.volumeToString(totalHoldings);
+
+        uint256 totalEarnings = totalHoldings.mulDiv(1, 10, Math.Rounding.Down);
+        string memory _nftEarnings = Utils.volumeToString(totalEarnings);
+
+        return ISvgManager(svgManager).generateNftSvg(
+            ISvgManager.SvgParams(
+                vaultInfo[0], // color
+                vaultInfo[1], // name
+                vaultInfo[3], // vault addr
+                vaultInfo[4], // vault date
+                vaultInfo[5], // apy
+                vaultInfo[6], // vault volume
+                vaultInfo[7], // dac name
+                _nftEarnings,
+                _nftHoldings
             )
         );
 
-        string memory finalTokenUri = string(abi.encodePacked("data:application/json;base64,", json));
-        return finalTokenUri;
     }
 
-    ///@dev only router can update tokenURI
-    function _updateTokenURI(uint256 tokenId, uint256 amount) internal {
-        string memory newURI = _createURI(amount);
-        _setTokenURI(tokenId, newURI);
-        emit NFTImageUpdated(tokenId);
+    function tokenSvgUri(uint256 tokenId) public view override returns(string memory){
+        string memory nftImage = Base64.encode(bytes(tokenInfoSvg(tokenId)));
+
+        return string(abi.encodePacked(
+            'data:image/svg+xml;base64,',
+            nftImage
+        ));
     }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override
+        returns (string memory)
+    {   
+        IVault tokenVault = IVault(_deposits[tokenId].vault);
+        string[8] memory vaultInfo = tokenVault.vaultInfo(); // vault 정보
+
+        string memory nftName = string(abi.encodePacked(vaultInfo[1], " NFT #", Strings.toString(tokenId)));
+        string memory nftDescription = string(
+            abi.encodePacked(
+                'Quinoa Investments NFT - managed by ', vaultInfo[7], '.', '\\n\\n',
+                '\\nFund Product name: ', vaultInfo[1], '\\n',
+                '\\nSince At: ', vaultInfo[4], '\\n'
+            )
+        );
+
+        string memory nftExternalUrl = "https://quinoa.investments/";
+
+        string memory uri = string(
+            abi.encodePacked(
+                'data:application/json;base64,',
+                Base64.encode(
+                    bytes(
+                        abi.encodePacked(
+                            '{"name":"',
+                            nftName,
+                            '", "description":"',
+                            nftDescription,
+                            '", "image": "',
+                            tokenSvgUri(tokenId),
+                            '", "external_url":"',
+                            nftExternalUrl,
+                            '", ',
+                            '"attributes": [ ',
+                                '{"trait_type": "Vault",  "value": "', vaultInfo[1], '"}, ',
+                                '{"trait_type": "Signature-Color",  "value": "', vaultInfo[0], '"},',
+                                '{"trait_type": "DAC",  "value": "', vaultInfo[7], '"}, ',
+                                '{"trait_type": "Vault-Volume",  "value": "', vaultInfo[6], '"}, ',
+                                '{"trait_type": "Current-APY",  "value": "', vaultInfo[5], '"}',
+                            ']', 
+                            '}'
+                        )
+                    )
+                )
+            )
+        );
+
+        return uri;
+    }
+
+
 
     /*///////////////////////////////////////////////////////////////
                          Get NFT Information
@@ -120,7 +193,6 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
 
         } else{ // partial withdraw. update Nft info
             _deposits[tokenId].qTokenAmount -= amount;
-            _updateTokenURI(tokenId, _deposits[tokenId].qTokenAmount);
         }
         IERC20(vault).transfer(router, amount);
         
@@ -165,7 +237,6 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
         _tokenIdCounter.increment();
         _safeMint(user,tokenId);
         _userAssets[user][vault].push(tokenId);
-        _updateTokenURI(tokenId, qTokenAmount);
     }
 
     function deposit (
@@ -174,7 +245,6 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
     ) onlyRouter external
     {
         _deposits[tokenId].qTokenAmount += qTokenAmount;
-        _updateTokenURI(tokenId, _deposits[tokenId].qTokenAmount);
     }
     
 }

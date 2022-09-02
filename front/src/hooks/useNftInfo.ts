@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { NftInfo } from "../models/NftInfo"
 import {ethers} from 'ethers';
-import { Router__factory, VaultFactory__factory, Vault__factory } from "contract";
+import { NftWrappingManager__factory, Router__factory, VaultFactory__factory, Vault__factory } from "contract";
 import {BigNumber} from 'ethers';
 import { VaultInfo } from "../models/VaultInfo";
 
-export const useNftInfo = () => {
+export const useNftInfo = (currenctAccount:string) => {
     const [nfts, setNfts] = useState<NftInfo[]>([]);
     const {ethereum} = window;
     const provider = new ethers.providers.Web3Provider(ethereum);
@@ -19,13 +19,24 @@ export const useNftInfo = () => {
         const routerAddress = process.env.REACT_APP_ROUTER_ADDRESS || "";
         const router = Router__factory.connect(routerAddress, signer);
         for(let i =0; i<vaultList.length; i++) {
-            const nftList: BigNumber[] = await router.getNfts(vaultList[i]);
+            const tokenList: BigNumber[] = await router.getNfts(vaultList[i]);
+            console.log (tokenList);
             const vault = Vault__factory.connect(vaultList[i], provider);
-            const [vaultName, asset] = await Promise.all([vault.name(), vault.asset()]);
-            //console.log("vault", vaultList[i], nftList);
-            const info : NftInfo[] = nftList.map(item => <NftInfo>{vault: vaultList[i], vaultName: vaultName, tokenId: item, asset:asset});
+            const nftManager = NftWrappingManager__factory.connect(
+                process.env.REACT_APP_NFT_MANAGER_ADDRESS || "", provider);
+            const [ , name, symbol, address, date, apy, totalVolume, dacName] = await vault.vaultInfo(); 
+            const [totalAssets, asset] = await Promise.all([ vault.totalAssets(),  vault.asset()]);
+
+            const info : NftInfo[] = await Promise.all(tokenList.map(async (item) => <NftInfo> {
+                vaultInfo: {address, asset, name, symbol, totalAssets, totalVolume, dacName, date, apy},
+                tokenId : item,
+                nftSvg : await nftManager.tokenSvgUri(item)
+            }))
+    
             setNfts((prev) => [...prev, ...info]);
+            
         }
+        console.log(nfts)
     }
 
     useEffect(()=> {

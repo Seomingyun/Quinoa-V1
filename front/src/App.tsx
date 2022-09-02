@@ -8,11 +8,13 @@ import InvestingList from "./pages/InvestingList";
 import { Navbar } from "./components/Navbar";
 import InvestingDetail from "./pages/InvestingDetail";
 import Portfolio from "./pages/Portfolio";
+import { Footer } from "./components/Footer";
 
 function App() {
   const [currentAccount, setCurrentAccount] = useState<String|undefined>();
   const [currentNetwork, setCurrentNetwork] = useState('');
   const [correctNetwork, setCorrectNetwork] = useState(true);
+  const [currentPage, setCurrentPage] = useState("");
 
   const handleCurrentAccount = async (address:any) => {
     const provider = ethers.getDefaultProvider();
@@ -135,13 +137,24 @@ function App() {
           correctNetwork={correctNetwork}
           connectWallet={connectWallet}
           changeNetwork={changeNetwork}
+          currentPage={currentPage}
           />
       <Routes>
-        <Route path="/investing" element={<InvestingList currentAccount={currentAccount}/>}>
+        <Route path="/investing" element={<InvestingList 
+          currentAccount={currentAccount}
+          setCurrentPage={setCurrentPage}
+          />}>
         </Route>
-        <Route path='/investing/detail/:address' element={<InvestingDetail currentAccount={currentAccount}/>} />
-        <Route path='/portfolio' element={<Portfolio currentAccount={currentAccount}/>} />
+        <Route path='/investing/detail/:address' element={<InvestingDetail 
+        currentAccount={currentAccount}
+        setCurrentPage={setCurrentPage}
+        />} />
+        <Route path='/portfolio' element={<Portfolio
+         currentAccount={currentAccount}
+         setCurrentPage={setCurrentPage}
+         />} />
       </Routes>
+      <Footer/>
       </BrowserRouter>
     </div>
   )

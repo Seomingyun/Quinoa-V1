@@ -8,13 +8,15 @@ import { ReactComponent as ReceiveIcon } from "../components/asset/receive-icon.
 import { Link } from "react-router-dom";
 import { NftInfo } from "../models/NftInfo";
 import { useNftInfo } from "../hooks/useNftInfo";
-import { isConstructorDeclaration } from "typescript";
 import {useHoldingInfo} from "../hooks/useHoldingInfo";
+import { useWalletInfo } from "../hooks/useWalletInfo";
 
-function Portfolio ({currentAccount}:any) {
-    const tokenList  = useNftInfo();
+function Portfolio ({currentAccount, setCurrentPage}:any) {
+    setCurrentPage("portfolio");
+    const tokenList  = useNftInfo(currentAccount);
     const holdingInfo = useHoldingInfo(currentAccount);
-    console.log(tokenList);
+    const walletInfo = useWalletInfo(currentAccount);
+
     return(
       <div>
         <section className="totalBalance_wrap">
@@ -31,17 +33,21 @@ function Portfolio ({currentAccount}:any) {
                 <div className="tb_balance">
                   <Walleticon className="wallet_Icon"></Walleticon>
                   <div className="QUINOAheadline2">
-                    <span className="text_color_900" >$24,239</span>
-                    <span className="text_color_100">.21</span>  
+                    <span className="text_color_900" >${
+                      (walletInfo.reduce(
+                        (acc, cv) => {
+                          return acc + cv.balance;
+                        }, 0) + (holdingInfo?.totalHoldings || 0)).toFixed(2).split(".")[0]
+                    }</span>
+                    <span className="text_color_100">.{
+                      (walletInfo.reduce(
+                        (acc, cv) => {
+                          return acc + cv.balance;
+                        }, 0) + (holdingInfo?.totalHoldings || 0)).toFixed(2).split(".")[1]
+                    }</span>  
                   </div>
                 </div>
                 <div className="tb_buttons">
-                  {/* <div className="tb_contents_bnt cursor_pointer">
-                    <p>
-                      <ReceiveIcon className="tb_contents_bnt_icon"></ReceiveIcon>
-                      <span className="tb_contents_bnt_text">Receive</span>
-                    </p>
-                  </div> */}
                   <div className="tb_contents_bnt cursor_pointer">
                     <p>
                       <SendIcon className="tb_contents_bnt_icon"></SendIcon>
@@ -51,7 +57,10 @@ function Portfolio ({currentAccount}:any) {
                 </div>
               </div>
               <div className="tb_contents_sub">
-                available : $1,201.75
+                available : ${ (walletInfo.reduce(
+                  (acc, cv) => {
+                    return acc + cv.balance;
+                  }, 0)).toFixed(2)}
               </div>
             </div>
           </div>
@@ -67,82 +76,34 @@ function Portfolio ({currentAccount}:any) {
             </header>
             <div className="header_line"></div>
             {/* 1st */}
-            <div className="list_tokens">
+            {walletInfo.map((item) => (
+              <div className="list_tokens">
               <div className="ls_tokenname_wrap">
                 <div className="list_token_name">
-                  <ETHicon className="ls_token_icon"></ETHicon>
+                  <img src={item.logo}className="ls_token_icon" />
                   <span className="ls_name_title QUINOABody-2">
-                    ETH
+                    {item.symbol}
                   </span>
                 </div>
               </div>
               <div className="ls_tokenbalance_wrap">
                 <div className="list_token_balance">
                   <span className="ls_token_balance QUINOABody-2">
-                    $21,200.21
+                    ${(item.balance).toFixed(2)}
                   </span>
                 </div>
               </div>
               <div className="ls_tokenamount_wrap">
                 <div className="list_token_amount">
                   <span className="ls_token_amount QUINOABody-2">
-                    15.2072
+                    {item.amount}
                   </span>
                 </div>
               </div>
               <div className="ls_underline"></div>
             </div>
-            {/* 2nd */}
-            <div className="list_tokens">
-              <div className="ls_tokenname_wrap">
-                <div className="list_token_name">
-                  <AVAXicon className="ls_token_icon"></AVAXicon>
-                  <span className="ls_name_title QUINOABody-2">
-                    Matic
-                  </span>
-                </div>
-              </div>
-              <div className="ls_tokenbalance_wrap">
-                <div className="list_token_balance">
-                  <span className="ls_token_balance QUINOABody-2">
-                   $1,200
-                  </span>
-                </div>
-              </div>
-              <div className="ls_tokenamount_wrap">
-                <div className="list_token_amount">
-                  <span className="ls_token_amount QUINOABody-2">
-                    4028.2
-                  </span>
-                </div>
-              </div>
-              <div className="ls_underline"></div>
-            </div>
-            {/* 3rd */}
-            <div className="list_tokens">
-              <div className="ls_tokenname_wrap">
-                <div className="list_token_name">
-                  <AVAXicon className="ls_token_icon"></AVAXicon>
-                  <span className="ls_name_title QUINOABody-2">
-                    Avalanche
-                  </span>
-                </div>
-              </div>
-              <div className="ls_tokenbalance_wrap">
-                <div className="list_token_balance">
-                  <span className="ls_token_balance QUINOABody-2">
-                    $1,693
-                  </span>
-                </div>
-              </div>
-              <div className="ls_tokenamount_wrap">
-                <div className="list_token_amount">
-                  <span className="ls_token_amount QUINOABody-2">
-                    3,215.2072
-                  </span>
-                </div>
-              </div>
-            </div>
+            ))}
+        
             </div>
           </div>
         </section>
@@ -163,12 +124,12 @@ function Portfolio ({currentAccount}:any) {
               <div className="myTotal_Contents">
                 <div className="mTC_title QUINOASubTitle-1">Total Holdings</div>
                 <div className="mTC_contents QUINOAheadline4">
-                  <span className = "text_color_900">${Math.floor(holdingInfo?.totalHoldings||0)}</span>
+                  <span className = "text_color_900">${(holdingInfo?.totalHoldings||0).toFixed(2).split(".")[0]}</span>
                   <span className="text_color_100">.
-                  {(Number(((holdingInfo?.totalHoldings|| 0)%1).toFixed(2)))*100}
+                  {(holdingInfo?.totalHoldings||0).toFixed(2).split(".")[1]}
                   </span>
                 </div>                
-                <div className="text_color_green300">+ $201.15 (5.26%)</div>
+                <div className="text_color_green300">+ $132,204.52 (5.26%)</div>
               </div>
               <div className="myTotal_Contests_Splitter" />
               <div className="myTotal_Contents">
@@ -186,10 +147,10 @@ function Portfolio ({currentAccount}:any) {
               <div className="myTotal_Contents">
                 <div className="mTC_title QUINOASubTitle-1">QUI Tokens</div>
                 <div className="mTC_contents QUINOAheadline4">
-                  <span className="text_color_900">{Math.floor(holdingInfo?.quiTokens||0)}</span>
-                  <span className="text_color_100">.{Number(((holdingInfo?.quiTokens||0)%1).toFixed(2)) * 100}</span>
+                  <span className="text_color_900">{(holdingInfo?.quiTokens||0).toFixed(2).split(".")[0]}</span>
+                  <span className="text_color_100">.{(holdingInfo?.quiTokens||0).toFixed(2).split(".")[1]}</span>
                 </div>
-                <div className="text_color_200">USD 32.15</div>
+                <div className="text_color_200">USD {((holdingInfo?.quiTokens||0)*0.5).toFixed(2)}</div>
               </div>
             </div>
           </div>
@@ -205,14 +166,14 @@ function Portfolio ({currentAccount}:any) {
               {/* NFT Row #2 */}
               <div className="mIL_lists_row">
               {tokenList.map((item: NftInfo) => (
-                <Link to={'../investing/detail/'+ item.vault} state={{ assetAddress : item.asset}}  style={{ textDecoration: 'none' }} className="mIL_lists_NFT">
+                <Link to={'../investing/detail/'+ item.vaultInfo.address} state={{ assetAddress : item.vaultInfo.asset, vaultInfo: item.vaultInfo, svg : item.nftSvg}}  style={{ textDecoration: 'none' }} className="mIL_lists_NFT">
                 <div className="NFT_headline">
                   <div className="NFT_dac_name">
-                    By SuperDAC
+                    By {item.vaultInfo.dacName}
                   </div>
                   <div className="NFT_investments_desc">
                     <div className="NFT_investmetns_name">
-                      Super Yield farming Fund
+                      {item.vaultInfo.name}
                     </div>
                     <div className="NFT_sTtoken_list">
                         <img
@@ -232,12 +193,10 @@ function Portfolio ({currentAccount}:any) {
                 </div>
 
                   <div className="NFT_Img_wrap">
-                    <div className="NFT_Img">
-                      <img
-                        src="img/strategy_img_01.png"
-                        className="sTtoken_img"
-                      />
-                    </div>
+                  <object 
+                      type = "image/svg+xml" 
+                      className = "NFT_Img" 
+                      data = {item.nftSvg} />
                   </div>
               </Link>
               ))}

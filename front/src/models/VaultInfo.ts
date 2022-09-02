@@ -1,11 +1,16 @@
 import {BigNumberish} from 'ethers';
 
 export interface VaultInfo {
-    address: String,
-    asset : String,
-    name : String,
-    symbol : String,
+    address: string,
+    asset : string,
+    name : string,
+    symbol : string,
     totalAssets : BigNumberish,
-    totlaAssetsInDollar? : BigNumberish,
+    totalVolume : string,
+    vaultSvg? : string ,
+    dacName : string,
+    date : string,
+    apy : string
+    nftSvg? :string
 }
 

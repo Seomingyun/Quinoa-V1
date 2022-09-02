@@ -33,11 +33,11 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.7.3",
-    "ts-node": "^10.9.1",
-    "base64-sol": "1.0.1",
+    "base64-sol": "^1.1.0",
     "dotenv": "^16.0.1",
     "keccak256": "^1.0.6",
-    "merkletreejs": "^0.2.32"
+    "merkletreejs": "^0.2.32",
+    "ts-node": "^10.9.1"
   },
   "scripts": {
     "test": "hardhat test",

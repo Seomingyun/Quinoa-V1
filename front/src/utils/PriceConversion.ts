@@ -22,7 +22,6 @@ export const PriceConversion = async (symbol:string, amount:number) => {
         }
     )
     .then(response => {
-        console.log(response)
         price = response.data.data.quote.USD.price
     })
     .catch(error => {

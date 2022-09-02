@@ -67,7 +67,7 @@ const config: HardhatUserConfig | {} = {
       accounts: [process.env.PRIVATE_KEY1]
     },
     mumbai : {
-      url: process.env.MUMBAI_URL || "https://polygon-mumbai.g.alchemy.com/v2/KaJfntzKcNlXoo2JtsuxBPU1nZpJNOm7",
+      url: process.env.MUMBAI_URL || "https://rpc-mumbai.maticvigil.com/",
       accounts: [process.env.PRIVATE_KEY1, process.env.PRIVATE_KEY2, process.env.PRIVATE_KEY3]
     }
   },

@@ -123,7 +123,6 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
                             '", "description":"',
                             nftDescription,
                             '", "image": "',
-                            'data:image/svg+xml;base64,',
                             tokenSvgUri(tokenId),
                             '", "external_url":"',
                             nftExternalUrl,

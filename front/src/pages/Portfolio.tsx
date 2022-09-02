@@ -11,7 +11,8 @@ import { useNftInfo } from "../hooks/useNftInfo";
 import {useHoldingInfo} from "../hooks/useHoldingInfo";
 import { useWalletInfo } from "../hooks/useWalletInfo";
 
-function Portfolio ({currentAccount}:any) {
+function Portfolio ({currentAccount, setCurrentPage}:any) {
+    setCurrentPage("portfolio");
     const tokenList  = useNftInfo(currentAccount);
     const holdingInfo = useHoldingInfo(currentAccount);
     const walletInfo = useWalletInfo(currentAccount);

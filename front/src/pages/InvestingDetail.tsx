@@ -33,7 +33,8 @@ interface toastProperties {
   close: () => void;
 }
 
-function InvestingDetail({ currentAccount }: any) {
+function InvestingDetail({ currentAccount, setCurrentPage }: any) {
+  setCurrentPage("");
   const { address } = useParams();
   const { state } = useLocation() as RouteState;
   const available = useAvailableInfo(currentAccount, state.vaultInfo); 

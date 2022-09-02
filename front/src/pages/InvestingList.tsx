@@ -23,7 +23,8 @@ import { useHoldingInfo } from "../hooks/useHoldingInfo";
 
 SwiperCore.use([Navigation, Pagination, Scrollbar]);
 // {key :val, key:val}
-function InvestingList({ currentAccount }: any) {
+function InvestingList({ currentAccount, setCurrentPage }:any) {
+  setCurrentPage("investing");
   const vaultList = useVaultList(currentAccount);
   const holdingInfo = useHoldingInfo(currentAccount);
   const [like, setLike] = useState<Map<number, boolean>>(new Map());

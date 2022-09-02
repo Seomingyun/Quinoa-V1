@@ -172,35 +172,24 @@ describe("VaultDeployment",() => {
 describe("Buy fund NFT", () => {
     it("Should mint fund NFT", async() => {
         const {deployer, user, router, testToken, nftManager, vaultAddress, treausry} = await deployContracts();
-        const tx = await testToken.connect(deployer).mint(user.address, "100000"); 
+        const tx = await testToken.connect(deployer).mint(user.address, "100000000000000000000000"); 
         await tx.wait();
         const balance = await testToken.balanceOf(user.address);
-        expect(balance.toNumber()).to.equal(100000);
+        expect(balance.toString()).to.equal("100000000000000000000000");
         
         console.log("userAddress:", user.address);
         console.log("routerAddress:", router.address);
         
-        await testToken.connect(user).approve(router.address, balance);
-        const buy = await router.connect(user)["buy(address,uint256)"](vaultAddress, 10**2);
+        await testToken.connect(user).approve(router.address, balance.toString());
+        const buy = await router.connect(user)["buy(address,uint256)"](vaultAddress, balance.toString());
         await buy.wait(); 
 
         const vault = await ethers.getContractAt("IVault", vaultAddress);
-        expect((await nftManager.balanceOf(user.address)).toNumber()).to.equal(1);
-        expect((await vault.balanceOf(nftManager.address)).toNumber()).to.equal(98);
-        expect((await testToken.balanceOf(treausry.address)).toNumber()).to.equal(2);
+        expect((await nftManager.balanceOf(user.address)).toNumber()).to.equal(1); // nft ~token 개수
+        expect((await vault.balanceOf(nftManager.address)).toString()).to.equal('98000000000000000000000');
+        expect((await testToken.balanceOf(treausry.address)).toString()).to.equal('2000000000000000000000');
+
+        console.log(await nftManager.tokenSvgUri(0));
+        console.log(await nftManager.tokenURI(0));
     });
 });
-
-describe("Generate NFT SVG", () => {
-    it("generate nft uri",async () => {
-        const {deployer, 
-            user,
-            vaultFactory,
-            vaultAddress,
-        } = await deployContracts();
-        
-        const vault = await ethers.getContractAt("IVault", vaultAddress);
-        console.log(await vault.connect(deployer).vaultInfo());    
-    })
-
-})

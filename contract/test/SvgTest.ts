@@ -189,7 +189,10 @@ describe("Buy fund NFT", () => {
         expect((await vault.balanceOf(nftManager.address)).toString()).to.equal('98000000000000000000000');
         expect((await testToken.balanceOf(treausry.address)).toString()).to.equal('2000000000000000000000');
 
-        console.log(await nftManager.tokenSvgUri(0));
-        console.log(await nftManager.tokenURI(0));
+        // console.log(await nftManager.tokenURI(0));
+
+        const tokenList = await router.connect(user).getNfts(vaultAddress);
+        console.log(await nftManager.tokenSvgUri(tokenList[0]));
+
     });
 });

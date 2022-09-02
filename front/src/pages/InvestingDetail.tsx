@@ -18,6 +18,7 @@ interface RouteState {
   state: {
     assetAddress: string;
     vaultInfo : VaultInfo;
+    svg : string;
   };
 }
 
@@ -120,7 +121,7 @@ function InvestingDetail({ currentAccount }: any) {
           <object 
             type = "image/svg+xml" 
             className = "nft_img" 
-            data = {state.vaultInfo.svg} />
+            data = {state.svg} />
           </div>
           <div className="iD_about">
             <div className="subTitle">

@@ -7,9 +7,10 @@ export interface VaultInfo {
     symbol : string,
     totalAssets : BigNumberish,
     totalVolume : string,
-    svg : string ,
+    vaultSvg? : string ,
     dacName : string,
     date : string,
     apy : string
+    nftSvg? :string
 }
 

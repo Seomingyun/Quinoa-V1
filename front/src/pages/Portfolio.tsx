@@ -15,7 +15,7 @@ function Portfolio ({currentAccount}:any) {
     const tokenList  = useNftInfo(currentAccount);
     const holdingInfo = useHoldingInfo(currentAccount);
     const walletInfo = useWalletInfo(currentAccount);
-    
+
     return(
       <div>
         <section className="totalBalance_wrap">
@@ -165,14 +165,14 @@ function Portfolio ({currentAccount}:any) {
               {/* NFT Row #2 */}
               <div className="mIL_lists_row">
               {tokenList.map((item: NftInfo) => (
-                <Link to={'../investing/detail/'+ item.vaultInfo.address} state={{ assetAddress : item.vaultInfo.asset, vaultInfo: item.vaultInfo}}  style={{ textDecoration: 'none' }} className="mIL_lists_NFT">
+                <Link to={'../investing/detail/'+ item.vaultInfo.address} state={{ assetAddress : item.vaultInfo.asset, vaultInfo: item.vaultInfo, svg : item.nftSvg}}  style={{ textDecoration: 'none' }} className="mIL_lists_NFT">
                 <div className="NFT_headline">
                   <div className="NFT_dac_name">
-                    By SuperDAC
+                    By {item.vaultInfo.dacName}
                   </div>
                   <div className="NFT_investments_desc">
                     <div className="NFT_investmetns_name">
-                      Super Yield farming Fund
+                      {item.vaultInfo.name}
                     </div>
                     <div className="NFT_sTtoken_list">
                         <img
@@ -192,12 +192,10 @@ function Portfolio ({currentAccount}:any) {
                 </div>
 
                   <div className="NFT_Img_wrap">
-                    <div className="NFT_Img">
-                      <img
-                        src="img/strategy_img_01.png"
-                        className="sTtoken_img"
-                      />
-                    </div>
+                  <object 
+                      type = "image/svg+xml" 
+                      className = "NFT_Img" 
+                      data = {item.nftSvg} />
                   </div>
               </Link>
               ))}

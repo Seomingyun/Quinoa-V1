@@ -24,7 +24,7 @@ import { useHoldingInfo } from "../hooks/useHoldingInfo";
 SwiperCore.use([Navigation, Pagination, Scrollbar]);
 // {key :val, key:val}
 function InvestingList({ currentAccount }: any) {
-  const vaultList = useVaultList();
+  const vaultList = useVaultList(currentAccount);
   const holdingInfo = useHoldingInfo(currentAccount);
   const [like, setLike] = useState<Map<number, boolean>>(new Map());
   //const [like, setLike] = useState([false])
@@ -116,7 +116,8 @@ function InvestingList({ currentAccount }: any) {
                 <div className="stateDefault">
                   <Link
                     to={"./detail/" + item.address}
-                    state={{ assetAddress: item.asset, vaultInfo: item }}
+                    state={!!item.nftSvg ? { assetAddress: item.asset, vaultInfo: item, svg: item.nftSvg }
+                    : { assetAddress: item.asset, vaultInfo: item, svg: item.vaultSvg }}
                     className="strategy_ctaBtn"
                     style={{ textDecoration: "none" }}
                   >
@@ -156,7 +157,7 @@ function InvestingList({ currentAccount }: any) {
                     <object 
                       type = "image/svg+xml" 
                       className = "hi_nftimg" 
-                      data = {item.svg}
+                      data = {!!item.vaultSvg ? item.vaultSvg : item.nftSvg}
                     />
                     </div>
                   </div>

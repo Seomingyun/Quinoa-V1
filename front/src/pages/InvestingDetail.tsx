@@ -275,10 +275,10 @@ function InvestingDetail({ currentAccount }: any) {
               </div>
             </div>
             <div className="buysection_wrap" style={buySell=== "buy" ? {display:"flex"} : {display : "none"}}>
-              {/* <div className="amountInvested">
+              <div className="amountInvested">
                 <span className="ai_txt">amount invested</span>
-                <span className="ai_amount">{deposit} &nbsp; {state.vaultInfo.symbol}</span>
-              </div> */}
+                <span className="ai_amount">{available?.availableSaleAmount} {state.vaultInfo.symbol}</span>
+              </div>
               <div className="investableAmount">
                 <span className="ia_txt">Investable amount</span>
                 <span className="ia_amount">{available?.availableBuyAmount} {state.vaultInfo.symbol}</span>

@@ -24,7 +24,7 @@ interface RouteState {
 
 interface toastProperties {
   data:
-    | {
+    {
         title: string;
         description: string;
         backgroundColor: string;
@@ -111,7 +111,8 @@ function InvestingDetail({ currentAccount }: any) {
 
   useEffect(() => {
     showToast(txStatus);
-  }, [txStatus]);
+    showToast(sellTxStatus);
+  }, [txStatus, sellTxStatus]);
 
   return (
     <div>

@@ -23,13 +23,12 @@ export const useNftInfo = (currenctAccount:string) => {
             console.log (tokenList);
             const vault = Vault__factory.connect(vaultList[i], provider);
             const nftManager = NftWrappingManager__factory.connect(
-                // CHECK .ENV 
                 process.env.REACT_APP_NFT_MANAGER_ADDRESS || "", provider);
             const [ , name, symbol, address, date, apy, totalVolume, dacName] = await vault.vaultInfo(); 
-            const [vaultSvg, totalAssets, asset] = await Promise.all([vault.vaultSvgUri(), vault.totalAssets(),  vault.asset()]);
+            const [totalAssets, asset] = await Promise.all([ vault.totalAssets(),  vault.asset()]);
 
             const info : NftInfo[] = await Promise.all(tokenList.map(async (item) => <NftInfo> {
-                vaultInfo: {address, asset, name, symbol, totalAssets, totalVolume, svg:vaultSvg, dacName, date, apy},
+                vaultInfo: {address, asset, name, symbol, totalAssets, totalVolume, dacName, date, apy},
                 tokenId : item,
                 nftSvg : await nftManager.tokenSvgUri(item)
             }))

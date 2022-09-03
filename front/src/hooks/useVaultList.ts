@@ -29,7 +29,7 @@ export const useVaultList = (currentAddress : string) => {
             const [ , name, symbol, address, date, apy, totalVolume, dacName] = await vault.vaultInfo();
             const tokens = await router.getNfts(vaultList[i]);
             if (tokens.length > 0 ) {
-                const [nftSvg, totalAssets, asset] = await Promise.all([nftManager.tokenSvgUri(tokens[0]), vault.totalAssets(), vault.asset()]);
+                const [nftSvg, totalAssets, asset, tokenId] = await Promise.all([nftManager.tokenSvgUri(tokens[0]), vault.totalAssets(), vault.asset(), tokens[0]]);
                 setVaults((prev) => [
                     ...prev,{
                         address:address, 
@@ -41,7 +41,9 @@ export const useVaultList = (currentAddress : string) => {
                         dacName:dacName,
                         date: date,
                         apy: apy,
-                        nftSvg: nftSvg }]);
+                        nftSvg: nftSvg,
+                        tokenId : tokenId
+                     }]);
                 
             }
             else {

@@ -6,7 +6,7 @@ import { Toast } from "../components/Modals/Toast";
 import { VaultInfo } from "../models/VaultInfo";
 import { ReactComponent as WishList } from "../components/asset/wishlist_default.svg";
 import { ReactComponent as Infoicon } from "../components/asset/info_icon.svg";
-import {ethers} from "ethers";
+import {ethers, BigNumber} from "ethers";
 import { IERC20__factory, NftWrappingManager__factory } from "contract";
 import { useDepositInfo } from "../hooks/useDepositInfo";
 import data from "../utils/TokenAddressMapper.json";
@@ -19,6 +19,7 @@ interface RouteState {
     assetAddress: string;
     vaultInfo : VaultInfo;
     svg : string;
+    tokenId? : BigNumber;
   };
 }
 
@@ -37,6 +38,7 @@ function InvestingDetail({ currentAccount, setCurrentPage }: any) {
   setCurrentPage("");
   const { address } = useParams();
   const { state } = useLocation() as RouteState;
+  console.log("TOKENID: ", state.tokenId);
   const available = useAvailableInfo(currentAccount, state.vaultInfo); 
 
   const [amount, setAmount] = useState("0");
@@ -48,7 +50,8 @@ function InvestingDetail({ currentAccount, setCurrentPage }: any) {
     amount,
     currentAccount,
     address,
-    state.assetAddress
+    state.assetAddress,
+    state.vaultInfo.tokenId
   );
 
   const {sell, sellTxStatus} = useSell(state.vaultInfo);
@@ -112,8 +115,11 @@ function InvestingDetail({ currentAccount, setCurrentPage }: any) {
 
   useEffect(() => {
     showToast(txStatus);
+  }, [txStatus]);
+
+  useEffect(() => {
     showToast(sellTxStatus);
-  }, [txStatus, sellTxStatus]);
+  }, [sellTxStatus]);
 
   return (
     <div>

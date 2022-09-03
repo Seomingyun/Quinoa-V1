@@ -104,7 +104,7 @@ function InvestingList({ currentAccount, setCurrentPage }:any) {
             speed={400}
             loop={false}
             loopFillGroupWithBlank={true}
-            pagination={{
+            pagination={{ 
               clickable: true,
             }}
             navigation={true}
@@ -117,7 +117,7 @@ function InvestingList({ currentAccount, setCurrentPage }:any) {
                 <div className="stateDefault">
                   <Link
                     to={"./detail/" + item.address}
-                    state={!!item.nftSvg ? { assetAddress: item.asset, vaultInfo: item, svg: item.nftSvg }
+                    state={!!item.nftSvg ? { assetAddress: item.asset, vaultInfo: item, svg: item.nftSvg, tokenId: item.tokenId}
                     : { assetAddress: item.asset, vaultInfo: item, svg: item.vaultSvg }}
                     className="strategy_ctaBtn"
                     style={{ textDecoration: "none" }}

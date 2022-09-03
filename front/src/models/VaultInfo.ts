@@ -1,4 +1,4 @@
-import {BigNumberish} from 'ethers';
+import {BigNumberish, BigNumber} from 'ethers';
 
 export interface VaultInfo {
     address: string,
@@ -11,6 +11,7 @@ export interface VaultInfo {
     dacName : string,
     date : string,
     apy : string
-    nftSvg? :string
+    nftSvg? :string,
+    tokenId? :BigNumber
 }
 

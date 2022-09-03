@@ -166,7 +166,7 @@ function Portfolio ({currentAccount, setCurrentPage}:any) {
               {/* NFT Row #2 */}
               <div className="mIL_lists_row">
               {tokenList.map((item: NftInfo) => (
-                <Link to={'../investing/detail/'+ item.vaultInfo.address} state={{ assetAddress : item.vaultInfo.asset, vaultInfo: item.vaultInfo, svg : item.nftSvg}}  style={{ textDecoration: 'none' }} className="mIL_lists_NFT">
+                <Link to={'../investing/detail/'+ item.vaultInfo.address} state={{ assetAddress : item.vaultInfo.asset, vaultInfo: item.vaultInfo, svg : item.nftSvg, tokenId: item.tokenId}}  style={{ textDecoration: 'none' }} className="mIL_lists_NFT">
                 <div className="NFT_headline">
                   <div className="NFT_dac_name">
                     By {item.vaultInfo.dacName}

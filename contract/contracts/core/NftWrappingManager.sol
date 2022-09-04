@@ -64,7 +64,7 @@ contract NftWrappingManager is ERC4907, INFTWrappingManager{
         totalHoldings = tokenVault.getCurrentPrice().mulDiv(totalHoldings, 10**tokenVault.decimals(), Math.Rounding.Down);
         string memory _nftHoldings = Utils.volumeToString(totalHoldings);
 
-        uint256 totalEarnings = totalHoldings.mulDiv(1, 10, Math.Rounding.Down);
+        uint256 totalEarnings = totalHoldings.mulDiv(16, 10000, Math.Rounding.Down);
         string memory _nftEarnings = Utils.volumeToString(totalEarnings);
 
         return ISvgManager(svgManager).generateNftSvg(

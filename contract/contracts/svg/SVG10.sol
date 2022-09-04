@@ -79,7 +79,7 @@ contract SVG10 {
                 '</text>', 
                 '<rect class="cls-31" x="187.77" y="1362.23" width="1061.64" height="1" rx=".5" ry=".5"/>', 
                 '<text class="cls-47" transform="translate(260.95 1335.24) rotate(-5.96)"><tspan x="0" y="0">', params.vaultDacName, '</tspan></text>', 
-                '<text class="cls-52" transform="translate(709.59 1321.5)"><tspan x="0" y="0">', params.vaultDacName, '</tspan></text>'
+                '<text class="cls-52" transform="translate(1250 1321.5)"><tspan x="0" y="0">', params.vaultDacName, '</tspan></text>'
 
                 '<text class="cls-58" transform="translate(179.39 1064.7)">', 
                 '<tspan x="0" y="0">', 

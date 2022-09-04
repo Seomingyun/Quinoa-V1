@@ -78,7 +78,7 @@ contract Vault is ERC20, IVault, AccessControl {
     }
     
     function setCurrentPrice(uint256 newCurrentPrice) public override {
-        _currentPrice = newCurrentPrice * (10**decimals());
+        _currentPrice = newCurrentPrice * (10**(decimals()-2));
     }
 
     function getCurrentPrice() public view override returns(uint256) {

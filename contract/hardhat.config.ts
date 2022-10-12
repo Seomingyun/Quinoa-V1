@@ -69,7 +69,19 @@ const config: HardhatUserConfig | {} = {
     mumbai : {
       url: process.env.MUMBAI_URL || "https://rpc-mumbai.maticvigil.com/",
       accounts: [process.env.PRIVATE_KEY1, process.env.PRIVATE_KEY2, process.env.PRIVATE_KEY3]
-    }
+    },
+    cypress: {
+      url: process.env.KLAYTN_URL || "https://public-node-api.klaytnapi.com/v1/cypress",
+      gasPrice: 250000000000,
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    baobab: {
+      url: process.env.KLAYTN_URL || "https://public-node-api.klaytnapi.com/v1/baobab",
+      gasPrice: 250000000000,
+      accounts:
+        process.env.PRIVATE_KEY1 !== undefined ? [process.env.PRIVATE_KEY, process.env.PRIVATE_KEY1] : [process.env.PRIVATE_KEY],
+    },
   },
   gasReporter: {
     enabled: true,

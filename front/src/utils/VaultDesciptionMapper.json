@@ -1,0 +1,18 @@
+[
+    {
+        "name": "Yield Farming USDC",
+        "desc": "The vault deposits the user's USDC-USDC.e JLP in a Trader Joe farm, earning the platform's governance token. Earned token is swapped for and in order to acquire more of the same LP token. To complete the compounding cycle, the new USDC-USDC.e JLP is added to the farm, ready to go for the next earning event. The transaction cost required to do all this is socialized among the vault's users."
+    },
+    {
+        "name": "Recursive Lending AAVE",
+        "desc": "When a user deposits AVAX into this vault, protocol borrows against the position at a safe level of collateral. The borrowed AVAX is then redeposited into the same protocol, and this procedure is repeated multiple times in order to maximize interest earned, earnings which are used to acquire more AVAX. Note that this 'leveraged' multi-lending and -borrowing involves only AVAX; therefore price swings present no liquidation risk."
+    },
+    {
+        "name": "DAI Leveraged Farming",
+        "desc": "With deposited token and borrowed tokens of USDC or DAI, the vault earns the platform's governance token. Earned token is swapped for and in order to acquire more of the same LP token. It occurs when the revenue from farming is bigger than borrowing fee. "
+    },
+    {
+        "name": "Defi Pulse Indexes",
+        "desc": "The DeFi Pulse Index is a digital asset index designed to track tokens’ performance within the Decentralized Finance industry. The index is weighted based on the value of each token’s circulating supply. The DeFi Pulse Index aims to track projects in Decentralized Finance that have significant usage and show a commitment to ongoing maintenance and development."
+    }
+]

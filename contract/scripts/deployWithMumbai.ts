@@ -98,11 +98,11 @@ async function deployContracts(){
     /// General NFT - price 1qui, fee percent 1/100
     const generalNFT = await new GeneralNFT__factory(deployer).deploy(10**5, 100, treausry.address);
     await generalNFT.deployed();
-    const gurulNFT = await new GuruNFT__factory(deployer).deploy(createMerkleRoot());
-    await gurulNFT.deployed();
+    const guruNFT = await new GuruNFT__factory(deployer).deploy(createMerkleRoot());
+    await guruNFT.deployed();
 
     // #3. Deploy Router
-    const router = await new Router__factory(deployer).deploy(treausry.address, generalNFT.address, gurulNFT.address );
+    const router = await new Router__factory(deployer).deploy(treausry.address, generalNFT.address, guruNFT.address );
     await router.deployed();
 
     // #4. Deploy sNFT Manager
@@ -129,49 +129,154 @@ async function deployContracts(){
     const vaultFactory = await VaultFactory.connect(deployer).deploy(router.address, treausry.address, svgManager.address);
     await vaultFactory.deployed();
 
-    // #7. Deploy testToken and Deploy Vault through vaultFactory
-    const testToken = await new TestToken__factory(deployer).deploy();
-    await testToken.deployed();
-    const tx = await vaultFactory.connect(user).deployVault(
-        ["JENN Yeild Product", "JENN", "JENN", "#4D9AFF", "5.12"],     // vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
-        testToken.address);
-    const rc = await tx.wait();
-    const event = rc.events?.find(event => event.event === 'VaultDeployed');
-    const [vaultAddress, , , , ,]:Result= event?.args || [];
+    console.log("svg1 address: ", svg1.address);
+    console.log("svg2 address: ", svg2.address);
+    console.log("svg3 address: ", svg3.address);
+    console.log("svg4 address: ", svg4.address);
+    console.log("svg5 address: ", svg5.address);
+    console.log("svg6 address: ", svg6.address);
+    console.log("svg7 address: ", svg7.address);
+    console.log("svg8 address: ", svg8.address);
+    console.log("svg9 address: ", svg9.address);
+    console.log("svg10 address: ", svg10.address);
+    console.log("utils address: ", utils.address);
+
+    console.log("protocol treasury address: ", treausry.address);
+    console.log("generalNFT address: ", generalNFT.address);
+    console.log("guruNFT address: ", guruNFT.address);
+    console.log("router address: ", router.address);
+    console.log("nft manager address: ", nftManager.address);
+    console.log("vault factory address: ", vaultFactory.address);
 
     return {deployer, 
             user,
             router,
-            testToken,
             nftManager,
             vaultFactory,
-            vaultAddress,
             treausry
             };
 }
 
+// - Yield Farming USDC : 6.28% (Real) 
+// - Beefy Finance
+// - color #396EB0
+async function vault1(deployer: any, user: any, router: any, nftManager: any, vaultFactory: any) {
 
-// Buy logic
-async function main(){
-    const {deployer, user, router, testToken, nftManager, vaultAddress, treausry} = await deployContracts();
-    console.log('ming!!');
-    const tx = await testToken.connect(deployer).mint(user.address, "100000000000000000000000"); 
+    // 우선 asset token 배포
+    const testToken = await new TestToken__factory(deployer).deploy("USD Coin", "USDC");
+    await testToken.deployed();
+
+    // vault 생성
+    // vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
+    const vault = await vaultFactory.connect(user).deployVault(
+        ["Yield Farming USDC", "qvUSDC", "Beefy Finance", "#396EB0", "6.28"],     
+        testToken.address);
+    const rc = await vault.wait();
+    const event = rc.events?.find((event: { event: string; }) => event.event === 'VaultDeployed');
+    const [vaultAddress, , , , ,]:Result= event?.args || [];
+    
+    const tx = await testToken.connect(deployer).mint(user.address, "258100000000000000000000"); 
     await tx.wait();
-    
-    console.log("heu..!!");
-    console.log("userAddress:", user.address);
-    console.log("routerAddress:", router.address);
-    
-    console.log('ming.. 8ㅁ8');
-    const approve = await testToken.connect(user).approve(router.address, 100000000000000000000000n);
+
+    const approve = await testToken.connect(user).approve(router.address, 258100000000000000000000n);
     await approve.wait();
 
-    console.log('why...');
-    const buy = await router.connect(user)["buy(address,uint256)"](vaultAddress, 10000000000000000000000n);
+    const buy = await router.connect(user)["buy(address,uint256)"](vaultAddress, 258100000000000000000000n);
     await buy.wait(); 
 
-    console.log(await nftManager.tokenSvgUri(0));
-    console.log(await nftManager.tokenURI(0));
+    console.log('USDC test token Address: ', testToken.address);
+    //console.log(await nftManager.tokenURI(0));
+}
+
+// - Recursive Lending AAVE : 4.23% (Pseudo) 
+// - Quinoa DAC
+// - color #DD4A48
+async function vault2(deployer: any, user: any, router: any, nftManager: any, vaultFactory: any) {
+
+    // 우선 asset token 배포
+    const testToken = await new TestToken__factory(deployer).deploy("Avalanche", "AVAX");
+    await testToken.deployed();
+
+    // vault 생성
+    // vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
+    const vault = await vaultFactory.connect(user).deployVault(
+        ["Recursive Lending AAVE", "qvAVAX", "Quinoa DAC", "#DD4A48", "4.23"],     
+        testToken.address);
+    const rc = await vault.wait();
+    const event = rc.events?.find((event: { event: string; }) => event.event === 'VaultDeployed');
+    const [vaultAddress, , , , ,]:Result= event?.args || [];
+    
+    const tx = await testToken.connect(deployer).mint(user.address, "93654000000000000000000"); 
+    await tx.wait();
+
+    const approve = await testToken.connect(user).approve(router.address, 93654000000000000000000n);
+    await approve.wait();
+
+    const buy = await router.connect(user)["buy(address,uint256)"](vaultAddress, 93654000000000000000000n);
+    await buy.wait(); 
+
+    console.log('AVAX test token Address: ', testToken.address);
+    //console.log(await nftManager.tokenURI(0));
+}
+
+// - DAI Leveraged Farming : 4.19% (Pseudo) 
+// - Alpha Homora
+// - color #F0BB62
+async function vault3(deployer: any, user: any, router: any, nftManager: any, vaultFactory: any) {
+
+    // vault 생성
+    // vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
+    const vault = await vaultFactory.connect(user).deployVault(
+        ["DAI Leveraged Farming", "qvDAI", "Alpha Homora", "#F0BB62", "4.19"],     
+        "0xcB1e72786A6eb3b44C2a2429e317c8a2462CFeb1");
+    const rc = await vault.wait();
+    const event = rc.events?.find((event: { event: string; }) => event.event === 'VaultDeployed');
+    const [vaultAddress, , , , ,]:Result= event?.args || [];
+
+    console.log('Mumbai DAI token Address: ', "0xcB1e72786A6eb3b44C2a2429e317c8a2462CFeb1");
+    //console.log(await nftManager.tokenURI(0));
+    
+    const vaultContract = await ethers.getContractAt("Vault", vaultAddress);
+    console.log(await vaultContract.vaultSvgUri());
+}
+
+// - Defi Pulse Indexes : 0.24%
+// - Defi Pulse
+// - color #80558C
+async function vault4(deployer: any, user: any, router: any, nftManager: any, vaultFactory: any) {
+
+    // 우선 asset token 배포
+    const testToken = await new TestToken__factory(deployer).deploy("DeFi Pulse Index", "DPI");
+    await testToken.deployed();
+
+    // vault 생성
+    // vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
+    const vault = await vaultFactory.connect(user).deployVault(
+        ["Defi Pulse Indexes", "qvDFI", "Defi Pulse", "#80558C", "0.24"],     
+        testToken.address);
+    const rc = await vault.wait();
+    const event = rc.events?.find((event: { event: string; }) => event.event === 'VaultDeployed');
+    const [vaultAddress, , , , ,]:Result= event?.args || [];
+    
+    const tx = await testToken.connect(deployer).mint(user.address, "34504900000000000000000000"); 
+    await tx.wait();
+
+    const approve = await testToken.connect(user).approve(router.address, 34504900000000000000000000n);
+    await approve.wait();
+
+    const buy = await router.connect(user)["buy(address,uint256)"](vaultAddress, 34504900000000000000000000n);
+    await buy.wait(); 
+
+    console.log('DPI test token Address: ', testToken.address);
+    //console.log(await nftManager.tokenURI(0));
+}
+
+async function main(){
+    const {deployer, user, router, nftManager, vaultFactory} = await deployContracts();
+    await vault3(deployer, user, router, nftManager, vaultFactory);
+    await vault1(deployer, user, router, nftManager, vaultFactory);
+    await vault2(deployer, user, router, nftManager, vaultFactory);
+    await vault4(deployer, user, router, nftManager, vaultFactory);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

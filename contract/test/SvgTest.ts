@@ -130,7 +130,7 @@ async function deployContracts(){
     await vaultFactory.deployed();
 
     // #7. Deploy testToken and Deploy Vault through vaultFactory
-    const testToken = await new TestToken__factory(deployer).deploy();
+    const testToken = await new TestToken__factory(deployer).deploy("Test token", "TTK");
     await testToken.deployed();
     const tx = await vaultFactory.connect(user).deployVault(
         ["JENN Yeild Product", "JENN", "JENN", "#4D9AFF", "5.12"],     // vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)

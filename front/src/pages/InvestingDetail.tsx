@@ -12,6 +12,7 @@ import { useDepositInfo } from "../hooks/useDepositInfo";
 import data from "../utils/TokenAddressMapper.json";
 import { useAvailableInfo } from "../hooks/useAvailableInfo";
 import { useSell } from "../hooks/useSell";
+import descriptions from "../utils/VaultDesciptionMapper.json";
 
 
 interface RouteState {
@@ -143,20 +144,25 @@ function InvestingDetail({ currentAccount, setCurrentPage }: any) {
               ></span>
               
               <span className="about_txt">
-                This fund provides exposure to blue-chip companies, being those
-                which are large, stable and profitable. This includes household
-                names such as Apple, Nike, Amazon, Nestle and Microsoft. With
-                global diversification across all sectors, this fund provides
-                reliable long-term capital growth. All blue-chip companies in
-                this fund have global exposure, meaning they generate a
-                significant amount of their revenues and hold a large amount of
-                their assets abroad. The global presence, combined with their
-                large nature and competitive positioning, means these companies
-                will be more resilient to the business cycle and domestic
-                shocks. This fund tracks the S&P Global 100 Ex-Controversial
-                Weapons Index with key criteria for selection being market
-                capitalisation. The index includes transnational companies that
-                have a minimum float-adjusted market cap of USD 5 billion.
+                {
+                  descriptions.find(x => x.name === state.vaultInfo.name) ?
+                  descriptions.find(x => x.name === state.vaultInfo.name)?.desc
+                  :
+                  "This fund provides exposure to blue-chip companies, being those \
+                  which are large, stable and profitable. This includes household \
+                  names such as Apple, Nike, Amazon, Nestle and Microsoft. With \
+                  global diversification across all sectors, this fund provides \
+                  reliable long-term capital growth. All blue-chip companies in \
+                  this fund have global exposure, meaning they generate a \
+                  significant amount of their revenues and hold a large amount of \
+                  their assets abroad. The global presence, combined with their \
+                  large nature and competitive positioning, means these companies \
+                  will be more resilient to the business cycle and domestic \
+                  shocks. This fund tracks the S&P Global 100 Ex-Controversial \
+                  Weapons Index with key criteria for selection being market \
+                  capitalisation. The index includes transnational companies that \
+                  have a minimum float-adjusted market cap of USD 5 billion."
+                }
               </span>
             </div>
           </div>

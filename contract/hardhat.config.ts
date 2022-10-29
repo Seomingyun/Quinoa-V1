@@ -41,11 +41,13 @@ const config: HardhatUserConfig | {} = {
       accounts: {
         count: 20,
       },
-      chainId: 1337,
-      // forking : {
-      //   url : "https://polygon-mumbai.g.alchemy.com/v2/" + process.env.ALCHEMY_MUMBAI_KEY,
-      //   enabled : false
-      // }
+      // chainId: 1337,
+      chainId: 137,
+      forking: {
+        url: process.env.ALCHEMY_MATIC_URL || "https://polygon-rpc.com/",
+        blockNumber : 34624917
+      },
+      loggingEnabled: true
     },
     rinkeby: {
       url: process.env.RINKEBY_URL || "",
@@ -68,8 +70,20 @@ const config: HardhatUserConfig | {} = {
     },
     mumbai : {
       url: process.env.MUMBAI_URL || "https://rpc-mumbai.maticvigil.com/",
-      accounts: [process.env.PRIVATE_KEY1, process.env.PRIVATE_KEY2, process.env.PRIVATE_KEY3]
-    }
+      accounts: [process.env.PRIVATE_KEY, process.env.PRIVATE_KEY1, process.env.PRIVATE_KEY2]
+    },
+    cypress: {
+      url: process.env.KLAYTN_URL || "https://public-node-api.klaytnapi.com/v1/cypress",
+      gasPrice: 250000000000,
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    baobab: {
+      url: process.env.KLAYTN_URL || "https://public-node-api.klaytnapi.com/v1/baobab",
+      gasPrice: 250000000000,
+      accounts:
+        process.env.PRIVATE_KEY1 !== undefined ? [process.env.PRIVATE_KEY, process.env.PRIVATE_KEY1] : [process.env.PRIVATE_KEY],
+    },
   },
   gasReporter: {
     enabled: true,

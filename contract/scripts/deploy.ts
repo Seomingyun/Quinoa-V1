@@ -131,7 +131,7 @@ async function main(){
     console.log("Vault Factory address", vaultFactory.address);
 
     // #7. Deploy testToken and Deploy Vault through vaultFactory  X 5
-    const testToken = await new TestToken__factory(deployer).deploy();
+    const testToken = await new TestToken__factory(deployer).deploy("Test token", "TTK");
     await testToken.deployed();
     console.log("TestToken address", testToken.address);
 

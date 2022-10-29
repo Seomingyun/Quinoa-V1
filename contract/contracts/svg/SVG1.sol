@@ -125,7 +125,7 @@ contract SVG1 {
                         '.cls-15 {stroke-width: 2.2px;}', 
                         '.cls-52 {', 
                         "font-family: MrsSaintDelafield-Regular, 'Mrs Saint Delafield';", 
-                        'font-size: 172px;', 
+                        'font-size: 172px; text-align:right; text-anchor:end;', 
                         '}', 
                         '.cls-53 {letter-spacing: -.03em;}', 
                         '.cls-54 {letter-spacing: -.02em;}', 

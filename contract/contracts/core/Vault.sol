@@ -30,6 +30,19 @@ contract Vault is ERC20, IVault, AccessControl {
 
     bytes32 public constant DAC_ROLE = keccak256("DAC_ROLE"); // strategy team
     bytes32 public constant ROUTER_ROLE = keccak256("ROUTER_ROLE"); // router에서만 호출 가능
+    struct sharePrice {
+        uint256 blocknumbesr;
+        uint256 date;
+        uint256 price;
+    }
+
+    // sharePrice를 30일치 동안 저장해야 함
+    // 일반 array로 하되, circular array로 저장하는 방식을 택할 예정
+    uint8 start = 0;
+    bool isFlow = false; // 30개 넘었는지 아닌지 확인
+
+    sharePrice[30] sharePrices;
+    
 
     /// @notice 특정한 ERC20 token을 asset으로 받는 새로운 vault를 생성.
     /// @param params vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
@@ -203,11 +216,47 @@ contract Vault is ERC20, IVault, AccessControl {
 
         emit Harvest(_msgSender(), strategy);
 
+        // share price 저장 -> 이때, fee를 제외하고 난 후의 share price를 확인한다
+        // 1개에 해당하는 share의 가격이 asset으로 얼만큼의 가치를 가지는지 확인하고(=shareprice)
+        // 해당 값을 sharePrices array에 저장
+        sharePrices[start] = sharePrice(block.number, block.timestamp ,convertToAssets(10**decimals()));
+        start += 1;
+        // start == 30이면, array가 꽉 찼다는 의미
+        if(start == 30){
+            start = 0;
+            isFlow = true;
+        }
+
         uint256 newHarvestDelay = nextHarvestDelay;
         if(newHarvestDelay != 0) {
             harvestDelay  = newHarvestDelay;
             nextHarvestDelay = 0;
             emit HarvestDelayUpdated(_msgSender(), newHarvestDelay);
+        }
+    }
+
+    function getSharePricePoints() external view 
+        returns (uint256 today, 
+                 uint256 oneday, 
+                 uint256 oneweek, 
+                 uint256 onemonth)
+    {
+        // 오늘, 1일 전, 7일 전, 30일 전 데이터 가져와서 반환
+        // 오늘 : start -1
+        // 1일 전 : start -2
+        // 7일 전 : start -8
+        // 30일 전 : 0 or start
+        if(isFlow == false) { // 30개 미만
+            start == 0 ? onemonth = 0 : onemonth = sharePrices[0].price; // 비어있지 않다면, 가장 처음의 기록을 가져옴
+            start >= 8 ? oneweek = sharePrices[start-8].price : oneweek = 0;
+            start >= 2 ? oneday = sharePrices[start-2].price : oneday = 0;
+            start >= 1 ? today = sharePrices[start-1].price : today = 0;
+        }
+        else { // 30개 이상
+            start-1 < 0 ? today = sharePrices[29].price : today = sharePrices[start-1].price;
+            start-2 < 0 ? oneday = sharePrices[start-2+30].price : oneday = sharePrices[start -2].price;
+            start-8 < 0 ? oneweek = sharePrices[start-8+30].price : oneweek = sharePrices[start-8].price;
+            onemonth = sharePrices[start].price;
         }
     }
 

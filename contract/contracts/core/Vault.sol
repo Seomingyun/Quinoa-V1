@@ -22,8 +22,8 @@ contract Vault is ERC20, IVault, AccessControl {
     uint8 private _decimals;
     
     // vault params
-    string private _apy; // 임시 변수(추후 삭제 예정)
-    uint256 private _currentPrice; // 임시 변수(추후 삭제 예정) // dollar 기준(decimal : 18)
+    string private _apy; // 수정 필요
+    uint256 private _currentPrice; // 수정 필요
     string private _color;
     string public _dacName;
     uint256 public _sinceDate;
@@ -43,12 +43,6 @@ contract Vault is ERC20, IVault, AccessControl {
 
     sharePrice[30] sharePrices;
     
-
-    /// @notice 특정한 ERC20 token을 asset으로 받는 새로운 vault를 생성.
-    /// @param params vaultName/vaultSymbol/dacName/color/apy(apy는 그냥 임시로 param 넣어주는 것)
-    /// @param asset_ asset으로 받을 ERC20 토큰.
-    /// @param caller_ vault를 생성하고자 하는 유저. role의 admin이 되어 DAC 멤버들을 추가하거나 삭제할 수 있다.
-    /// @param router_ vault와 소통할 수 있는 router.
     constructor(
         string[] memory params,
         IERC20Metadata asset_, 
@@ -64,7 +58,7 @@ contract Vault is ERC20, IVault, AccessControl {
         // vault params
         _dacName = params[2];
         _color = params[3];
-        _apy = params[4];
+        _apy = params[4]; // constructor 자체를 수정할 필요 있음
         _sinceDate = block.timestamp;
 
         // vault setting
@@ -74,7 +68,7 @@ contract Vault is ERC20, IVault, AccessControl {
         _svgManager = svgManager_;
         performanceFeePercent = 15e16; // 기본 fee 세팅 : 15%
 
-        // current price(임시)
+        // 수정 필요(price feed)
         _currentPrice = 10**decimals(); 
 
         _grantRole(DEFAULT_ADMIN_ROLE, caller_);
@@ -90,22 +84,22 @@ contract Vault is ERC20, IVault, AccessControl {
         return hasRole(DAC_ROLE, user);
     }
     
+    // 수정 필요(price feed)
     function setCurrentPrice(uint256 newCurrentPrice) public override {
         _currentPrice = newCurrentPrice * (10**(decimals()-2));
     }
 
+    // 수정 필요(price feed)
     function getCurrentPrice() public view override returns(uint256) {
         return _currentPrice;
     }
 
-    /// @notice 이 vault contract의 decimal을 반환.
-    /// @dev asset의 deciamal과 동일하게 overriding.
+
     function decimals() public view override(ERC20, IERC20Metadata) returns (uint8) { // _asset의 decimal과 같이 통일시킴
         return _decimals;
     }
 
-    /// @notice strategy에서 모든 underlying 회수, deposit 불가능
-    bool emergencyExit = false; // true면 emergency exit 진행
+    bool emergencyExit = false;
 
     event EmergencyUpdated(address user, bool isEmergency);
 
@@ -121,7 +115,6 @@ contract Vault is ERC20, IVault, AccessControl {
         emit EmergencyUpdated(_msgSender(), isEmergency);
     }
 
-    /// @notice DAC들이 가져가는 performance fee. 단위는 %
     uint256 public performanceFeePercent;
 
     event PerformanceFeePercentUpdated(address indexed user, uint256 newPerformanceFeePercent);
@@ -132,9 +125,6 @@ contract Vault is ERC20, IVault, AccessControl {
         emit PerformanceFeePercentUpdated(_msgSender(), newPerformanceFeePercent);
     }
 
-    /// @notice harvest와 harvest 사이의 delay를 지정. 만약 nextHarvest가 0이라면 계속 똑같은 harvestDelay를 유지.
-    /// vault 당 strategy가 1개라고 가정했기 때문에, harvest 기간 동안 harvest 역시 1번만 일어남
-    /// (=> window가 의미가 없다고 생각해 삭제함)
     uint256 public harvestDelay;
     uint256 public nextHarvestDelay;
 
@@ -155,7 +145,6 @@ contract Vault is ERC20, IVault, AccessControl {
 
     }
     
-    /// @notice vault가 갖고 있는 _asset의 비중. 1e18이 100%를 의미.
     uint256 public targetFloatPercent; 
     event targetFloatPercentUpdated(address indexed user, uint256 newTargetFloatPercent);
 
@@ -165,11 +154,7 @@ contract Vault is ERC20, IVault, AccessControl {
         emit targetFloatPercentUpdated(_msgSender(), newTargetFloatPercent);
     }
 
-    /// @notice strategy가 갖고 있는 _asset의 양.
-    /// 이때, quinoa는 하나의 vault 당 하나의 strategy만이 있다고 가정.
-    /// lockedProfit 포함
     uint256 public strategyDebt; 
-    /// @notice 이 vault에서 사용하는 strategy. 
     Strategy public strategy;
 
     event StrategyUpdated(address indexed user, Strategy newStrategy);
@@ -181,14 +166,11 @@ contract Vault is ERC20, IVault, AccessControl {
         emit StrategyUpdated(_msgSender(), newStrategy);
     }
 
-    /// @notice 제일 최근에 진행된 harvest. harvest는 딱 한번만 실행되며, strategy는 1개로 고정되어 있음.
     uint64 public lastHarvest;
-    /// @notice 마지막 harvest에서의 locked profit 양. delay 기간에 천천히 풀림.
     uint256 public maxLockedProfit; 
     
     event Harvest(address indexed user, Strategy strategy);
 
-    /// @notice harvest를 진행. strategy에서 얻은 수익들이 실제 수익이라고 인정됨.
     function harvest() external override onlyRole(DAC_ROLE) {
         require(!emergencyExit, "Vault: It is Emergency Situation");
         if(block.timestamp >= lastHarvest + harvestDelay) {
@@ -262,7 +244,6 @@ contract Vault is ERC20, IVault, AccessControl {
 
     event FeesClaimed(address indexed user, uint256 rvTokenAmount);
 
-    /// @notice DAC는 자신의 fee(qvToken)를 claim할 수 있음.
     function claimFees(uint256 qvTokenAmount) external override onlyRole(ROUTER_ROLE) {
         emit FeesClaimed(_msgSender(), qvTokenAmount);
         SafeERC20.safeTransfer(this, _msgSender(), qvTokenAmount);
@@ -271,14 +252,10 @@ contract Vault is ERC20, IVault, AccessControl {
     event StrategyDeposit(address indexed user, Strategy indexed strategy, uint256 assetAmount);
     event StrategyWithdrawal(address indexed user, Strategy indexed strategy, uint256 assetAmount);
 
-    /// @notice assetAmount만큼 strategy로 deposit.
-    /// 외부에서 호출 가능한 함수로, DAC만이 이를 호출 가능.
     function depositIntoStrategy(uint256 assetAmount) external override onlyRole(DAC_ROLE) {
         _depositIntoStrategy(assetAmount);
     }
 
-    /// @dev assetAmount만큼 strategy로 deposit.
-    /// internal 함수로, 실질적으로 deposit(실제로는 approve)이 이뤄짐.
     function _depositIntoStrategy(uint256 assetAmount) internal {
         strategyDebt += assetAmount;
         
@@ -287,12 +264,10 @@ contract Vault is ERC20, IVault, AccessControl {
         require(ERC20Strategy(address(strategy)).mint(assetAmount) == 0, "Vault: Deposit into strategy failed");
     }
 
-    /// @notice assetAmount만큼 strategy에서 withdraw.
     function withdrawFromStrategy(uint256 assetAmount) external override onlyRole(DAC_ROLE) {
         _withdrawFromStrategy(assetAmount);
     }
 
-    /// @dev assetAmount만큼 strategy에서 withdraw.
     function _withdrawFromStrategy(uint256 assetAmount) internal {
         require(assetAmount <= strategyDebt, "Vault: Too much amount");
         strategyDebt -= assetAmount;
@@ -322,7 +297,6 @@ contract Vault is ERC20, IVault, AccessControl {
     }
 
     /// @notice 현재 시점에서의 locked profit이 얼마나 되는지 계산.
-    /// harvest delay동안 locked profit이 풀리게 되므로, 남은 delay 시간에 비례해서 locked profit을 계산함.
     function calculateLockedProfit() public view override returns (uint256) {
         uint256 previousHarvest = lastHarvest;
         uint256 harvestInterval = harvestDelay;
@@ -464,7 +438,7 @@ contract Vault is ERC20, IVault, AccessControl {
         emit Withdraw(caller, receiver, owner, assets, shares);
     }
 
-    /// @dev vault에서 withdraw나 redeem 전에 float이 부족할 것 같으면 float을 충당할 수 있을 만큼의 양을 strategy에서 withdraw
+    // vault에서 withdraw나 redeem 전에 float이 부족할 것 같으면 float을 충당할 수 있을 만큼의 양을 strategy에서 withdraw
     function _fillFloat(uint256 assets) internal {
         uint256 float = totalFloat();
         if(assets > float) {
@@ -483,6 +457,7 @@ contract Vault is ERC20, IVault, AccessControl {
     view
     returns(string memory) 
     {   
+        // 수정 필요(current price -> price feed)
         uint256 totalVolume = _currentPrice.mulDiv(totalAssets(), 10**decimals(), Math.Rounding.Down);
         string memory _vaultVolume = Utils.volumeToString(totalVolume);
         (uint year, uint month, uint day) = Utils.timestampToDate(_sinceDate);
@@ -495,7 +470,7 @@ contract Vault is ERC20, IVault, AccessControl {
             name(),
             _vaultAddr,
             _vaultDate,
-            _apy,
+            _apy, // 수정 필요
             _vaultVolume,
             _dacName,
             "   --",
@@ -518,12 +493,13 @@ contract Vault is ERC20, IVault, AccessControl {
     }
 
     function vaultInfo() external view override returns(string[8] memory){
+        // 수정 필요(current price -> price feed)
         uint256 totalVolume = _currentPrice.mulDiv(totalAssets(), 10**decimals(), Math.Rounding.Down);
         string memory _vaultVolume = Utils.volumeToString(totalVolume);
         (uint year, uint month, uint day) = Utils.timestampToDate(_sinceDate);
         string memory _vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
         string memory _vaultAddr = Strings.toHexString(uint256(uint160(address(this))), 20);
         
-        return [_color, name(), _asset.symbol(), _vaultAddr, _vaultDate, _apy, _vaultVolume, _dacName];
+        return [_color, name(), _asset.symbol(), _vaultAddr, _vaultDate, _apy, _vaultVolume, _dacName]; // 수정 필요
     }
 } 

@@ -32,10 +32,10 @@ contract VaultFactory {
         return vaults;
     }
 
-    // 맞게 돌아갈까가 걱정이네욥 ;;;;;;
-    // 뭔가 이것 저것 .. 부동 소숫점을 못 쓴다는게 이렇게 힘들 줄이야 ;; 
+    // roi 계산(yearn 참고)
     function calculateRoi(uint256 before, uint256 present, uint8 dayCnt) internal pure returns (uint256) {
         // 1 share(=10**decimals) 당 asset 가격이 before, present 파라미터로 들어옴
+        if(before == 0) before = 1;
         uint256 pps_delta = (present - before) / before;
         uint256 annualized_roi = (1 + pps_delta) ** (365 / dayCnt) - 1;
         return annualized_roi;

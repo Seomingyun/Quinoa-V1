@@ -9,6 +9,7 @@ import "./interfaces/IVault.sol";
 import "../svg/ISvgManager.sol";
 import {Strategy, ERC20Strategy} from "./Strategy.sol";
 import "../libraries/Utils.sol";
+import "../libraries/Apys.sol";
 import 'base64-sol/base64.sol';
 
 import "hardhat/console.sol";
@@ -22,8 +23,7 @@ contract Vault is ERC20, IVault, AccessControl {
     uint8 private _decimals;
     
     // vault params
-    string private _apy; // 수정 필요
-    uint256 private _currentPrice; // 수정 필요
+    uint256 private _currentPrice; // 수정 필요 -> mumbai network test때 확인해보기
     string private _color;
     string public _dacName;
     uint256 public _sinceDate;
@@ -44,7 +44,7 @@ contract Vault is ERC20, IVault, AccessControl {
     sharePrice[30] sharePrices;
     
     constructor(
-        string[] memory params,
+        string[] memory params, // params [4] : apys -> 해당 내용 삭제 필요
         IERC20Metadata asset_, 
         address caller_,
         address router_,
@@ -58,7 +58,6 @@ contract Vault is ERC20, IVault, AccessControl {
         // vault params
         _dacName = params[2];
         _color = params[3];
-        _apy = params[4]; // constructor 자체를 수정할 필요 있음
         _sinceDate = block.timestamp;
 
         // vault setting
@@ -463,6 +462,10 @@ contract Vault is ERC20, IVault, AccessControl {
         (uint year, uint month, uint day) = Utils.timestampToDate(_sinceDate);
         string memory _vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
         string memory _vaultAddr = Strings.toHexString(uint256(uint160(address(this))), 20);
+        (uint256 today, , , uint256 onemonth) = this.getSharePricePoints();
+        // test 하면서 해당 apy 값이 어떻게 나오는지 살펴보고 적당한 값으로 파싱해주어야함
+        uint256 monthApy = Apys.calculateRoi(onemonth, today, 30);
+        string memory _vaultApy = Strings.toHexString(monthApy);
         
         string memory svg = ISvgManager(_svgManager).generateNftSvg(
             ISvgManager.SvgParams(
@@ -470,7 +473,7 @@ contract Vault is ERC20, IVault, AccessControl {
             name(),
             _vaultAddr,
             _vaultDate,
-            _apy, // 수정 필요
+            _vaultApy,
             _vaultVolume,
             _dacName,
             "   --",
@@ -499,7 +502,10 @@ contract Vault is ERC20, IVault, AccessControl {
         (uint year, uint month, uint day) = Utils.timestampToDate(_sinceDate);
         string memory _vaultDate = string(abi.encodePacked(Strings.toString(year), '.', Strings.toString(month), '.', Strings.toString(day)));        
         string memory _vaultAddr = Strings.toHexString(uint256(uint160(address(this))), 20);
+        (uint256 today, , , uint256 onemonth) = this.getSharePricePoints();
+        uint256 monthApy = Apys.calculateRoi(onemonth, today, 30);
+        string memory _vaultApy = Strings.toHexString(monthApy);
         
-        return [_color, name(), _asset.symbol(), _vaultAddr, _vaultDate, _apy, _vaultVolume, _dacName]; // 수정 필요
+        return [_color, name(), _asset.symbol(), _vaultAddr, _vaultDate, _vaultApy, _vaultVolume, _dacName]; // 수정 필요
     }
 } 
